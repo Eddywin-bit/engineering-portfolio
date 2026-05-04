@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Site Manual — Edwin Gyasi Owusu Portfolio</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --gold:    #b8904a;
+    --gold-lt: #f0d898;
+    --ink:     #1a1a1a;
+    --ink-2:   #444;
+    --ink-3:   #777;
+    --rule:    #e0e0e0;
+    --code-bg: #f4f4f2;
+    --warn-bg: #fffbf0;
+    --warn-br: #e0c060;
+    --tip-bg:  #f0f8f0;
+    --tip-br:  #5a9a5a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { font-size: 14px; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-weight: 400;
+    color: var(--ink);
+    background: #fff;
+    line-height: 1.7;
+  }
+
+  /* ── PAGE LAYOUT ── */
+  .page {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 60px 48px;
+  }
+
+  /* ── COVER ── */
+  .cover {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-bottom: 3px solid var(--gold);
+    padding: 80px 48px 60px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .cover-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 32px;
+  }
+  .cover-title {
+    font-size: 42px;
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--ink);
+    margin-bottom: 16px;
+  }
+  .cover-sub {
+    font-size: 18px;
+    font-weight: 300;
+    color: var(--ink-2);
+    margin-bottom: 48px;
+  }
+  .cover-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    border-top: 1px solid var(--rule);
+    padding-top: 32px;
+  }
+  .cover-meta-row {
+    display: flex;
+    gap: 16px;
+    font-size: 13px;
+  }
+  .cover-meta-label {
+    font-weight: 600;
+    color: var(--ink-3);
+    width: 100px;
+    flex-shrink: 0;
+  }
+  .cover-meta-val { color: var(--ink-2); }
+
+  /* ── TOC ── */
+  .toc { padding: 64px 48px; max-width: 800px; margin: 0 auto; border-bottom: 1px solid var(--rule); }
+  .toc-title { font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 28px; }
+  .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+  .toc-item { display: flex; align-items: baseline; gap: 0; }
+  .toc-num { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--gold); width: 36px; flex-shrink: 0; }
+  .toc-name { font-size: 15px; font-weight: 500; color: var(--ink); flex: 1; }
+  .toc-dots { flex: 1; border-bottom: 1px dotted var(--rule); margin: 0 10px; position: relative; top: -4px; }
+  .toc-pg { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-3); }
+
+  /* ── SECTION HEADER ── */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--gold);
+  }
+  .section-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--gold);
+    background: #fdf7ec;
+    border: 1px solid var(--gold-lt);
+    padding: 4px 10px;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  /* ── TYPOGRAPHY ── */
+  h3 { font-size: 16px; font-weight: 600; color: var(--ink); margin: 36px 0 12px; }
+  h4 { font-size: 13px; font-weight: 600; color: var(--ink-2); text-transform: uppercase; letter-spacing: 0.08em; margin: 28px 0 10px; }
+  p  { font-size: 14px; color: var(--ink-2); margin-bottom: 14px; line-height: 1.75; }
+  ul, ol { padding-left: 20px; margin-bottom: 14px; }
+  li { font-size: 14px; color: var(--ink-2); line-height: 1.8; margin-bottom: 4px; }
+  strong { color: var(--ink); font-weight: 600; }
+  a { color: var(--gold); }
+
+  /* ── CODE ── */
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    background: var(--code-bg);
+    padding: 2px 6px;
+    border-radius: 3px;
+    color: #c0392b;
+  }
+  pre {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    background: #1e1e1e;
+    color: #d4d4d4;
+    padding: 20px 24px;
+    border-radius: 6px;
+    margin: 16px 0 24px;
+    overflow-x: auto;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+  pre .comment { color: #6a9955; }
+  pre .string  { color: #ce9178; }
+  pre .keyword { color: #569cd6; }
+  pre .tag     { color: #4ec9b0; }
+  pre .attr    { color: #9cdcfe; }
+  pre .gold    { color: #d4ad65; }
+
+  /* ── CALLOUTS ── */
+  .tip {
+    background: var(--tip-bg);
+    border-left: 3px solid var(--tip-br);
+    padding: 14px 18px;
+    border-radius: 0 6px 6px 0;
+    margin: 16px 0 24px;
+  }
+  .tip-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--tip-br); margin-bottom: 4px; }
+  .tip p { margin: 0; color: #2d5a2d; }
+
+  .warn {
+    background: var(--warn-bg);
+    border-left: 3px solid var(--warn-br);
+    padding: 14px 18px;
+    border-radius: 0 6px 6px 0;
+    margin: 16px 0 24px;
+  }
+  .warn-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #a07820; margin-bottom: 4px; }
+  .warn p { margin: 0; color: #5a4010; }
+
+  /* ── TABLES ── */
+  table { width: 100%; border-collapse: collapse; margin: 16px 0 24px; font-size: 13px; }
+  th { background: #f8f8f8; font-weight: 600; text-align: left; padding: 10px 14px; border: 1px solid var(--rule); color: var(--ink); }
+  td { padding: 9px 14px; border: 1px solid var(--rule); color: var(--ink-2); vertical-align: top; }
+  tr:nth-child(even) td { background: #fafafa; }
+  td code { background: #eeeeec; }
+
+  /* ── STEP BOXES ── */
+  .steps { display: flex; flex-direction: column; gap: 0; margin: 16px 0 24px; }
+  .step { display: flex; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--rule); }
+  .step:last-child { border-bottom: none; }
+  .step-num {
+    width: 28px; height: 28px;
+    background: var(--gold);
+    color: #fff;
+    font-weight: 700;
+    font-size: 13px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .step-body { flex: 1; }
+  .step-body p { margin: 0; }
+  .step-title { font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+
+  /* ── COLOR SWATCHES ── */
+  .swatches { display: flex; flex-wrap: wrap; gap: 12px; margin: 16px 0 24px; }
+  .swatch { display: flex; flex-direction: column; gap: 6px; width: 120px; }
+  .swatch-color { height: 48px; border-radius: 6px; border: 1px solid rgba(0,0,0,0.08); }
+  .swatch-name { font-size: 11px; font-weight: 600; color: var(--ink); }
+  .swatch-val  { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--ink-3); }
+
+  /* ── SECTION WRAP ── */
+  .section { padding: 64px 48px; max-width: 800px; margin: 0 auto; border-bottom: 1px solid var(--rule); }
+  .section:last-child { border-bottom: none; }
+
+  /* ── FILE TREE ── */
+  .tree { font-family: 'JetBrains Mono', monospace; font-size: 12px; background: var(--code-bg); padding: 20px 24px; border-radius: 6px; margin: 16px 0 24px; line-height: 2; }
+  .tree-folder { color: var(--gold); font-weight: 500; }
+  .tree-file   { color: var(--ink); }
+  .tree-note   { color: var(--ink-3); }
+
+  /* ── PRINT ── */
+  @media print {
+    @page { margin: 20mm 18mm; size: A4; }
+    .cover { min-height: auto; padding: 60px 0 48px; page-break-after: always; }
+    .toc   { padding: 48px 0; page-break-after: always; }
+    .section { padding: 48px 0; page-break-before: always; }
+    .section:first-child { page-break-before: auto; }
+    .page  { padding: 0; max-width: 100%; }
+    pre { font-size: 11px; }
+    a { color: inherit; text-decoration: none; }
+    .no-break { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════
+     COVER
+════════════════════════════════════════ -->
+<div class="cover">
+  <p class="cover-label">Portfolio Site Manual</p>
+  <h1 class="cover-title">Edwin Gyasi Owusu<br>Portfolio — Site Manual</h1>
+  <p class="cover-sub">A complete reference guide for managing, editing, and deploying your portfolio website. Written for non-coders.</p>
+  <div class="cover-meta">
+    <div class="cover-meta-row"><span class="cover-meta-label">Live URL</span><span class="cover-meta-val">https://eddywin-bit.github.io/engineering-portfolio/</span></div>
+    <div class="cover-meta-row"><span class="cover-meta-label">Repository</span><span class="cover-meta-val">https://github.com/Eddywin-bit/engineering-portfolio</span></div>
+    <div class="cover-meta-row"><span class="cover-meta-label">Main file</span><span class="cover-meta-val">index.html (all content + styles in one file)</span></div>
+    <div class="cover-meta-row"><span class="cover-meta-label">Last updated</span><span class="cover-meta-val">May 2026</span></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     TABLE OF CONTENTS
+════════════════════════════════════════ -->
+<div class="toc">
+  <p class="toc-title">Table of Contents</p>
+  <ul class="toc-list">
+    <li class="toc-item"><span class="toc-num">01</span><span class="toc-name">Folder Structure</span><span class="toc-dots"></span></li>
+    <li class="toc-item"><span class="toc-num">02</span><span class="toc-name">How to Edit Content</span><span class="toc-dots"></span></li>
+    <li class="toc-item"><span class="toc-num">03</span><span class="toc-name">How to Add or Remove a Project</span><span class="toc-dots"></span></li>
+    <li class="toc-item"><span class="toc-num">04</span><span class="toc-name">How to Update Your Resume</span><span class="toc-dots"></span></li>
+    <li class="toc-item"><span class="toc-num">05</span><span class="toc-name">How to Change Colors and Fonts</span><span class="toc-dots"></span></li>
+    <li class="toc-item"><span class="toc-num">06</span><span class="toc-name">How to Deploy (Push to Live Site)</span><span class="toc-dots"></span></li>
+    <li class="toc-item"><span class="toc-num">07</span><span class="toc-name">How to Add New Pages</span><span class="toc-dots"></span></li>
+    <li class="toc-item"><span class="toc-num">08</span><span class="toc-name">Troubleshooting</span><span class="toc-dots"></span></li>
+    <li class="toc-item"><span class="toc-num">09</span><span class="toc-name">Design System Reference</span><span class="toc-dots"></span></li>
+  </ul>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     01 — FOLDER STRUCTURE
+════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Folder Structure</h2>
+  </div>
+
+  <p>Your project lives in a folder called <strong>Engineering Site</strong> on your Desktop. Here is everything inside it and what each piece does:</p>
+
+  <div class="tree">
+<span class="tree-folder">engineering-portfolio/</span>  <span class="tree-note">← the GitHub repository root</span>
+│
+├── <span class="tree-file">index.html</span>               <span class="tree-note">← YOUR MAIN PORTFOLIO. All sections live here.</span>
+├── <span class="tree-file">Edwin_Gyasi_Resume.pdf</span>  <span class="tree-note">← Resume file. The "Resume" button links here.</span>
+├── <span class="tree-file">Site Manual (...).html</span>  <span class="tree-note">← This document.</span>
+│
+├── <span class="tree-folder">designs/</span>               <span class="tree-note">← Eon Designs / graphic design portfolio site</span>
+│   ├── <span class="tree-file">index.html</span>           <span class="tree-note">← Design portfolio homepage</span>
+│   ├── <span class="tree-folder">Assets/</span>            <span class="tree-note">← All images used in the design portfolio</span>
+│   └── <span class="tree-folder">js/</span>               <span class="tree-note">← JavaScript files for the design portfolio</span>
+│       ├── <span class="tree-file">app.js</span>           <span class="tree-note">← App logic</span>
+│       └── <span class="tree-file">data.js</span>          <span class="tree-note">← Portfolio project data</span>
+│
+├── <span class="tree-folder">vault/</span>                 <span class="tree-note">← Prompt Vault progressive web app</span>
+│   ├── <span class="tree-file">index.html</span>           <span class="tree-note">← PWA homepage</span>
+│   ├── <span class="tree-file">manifest.json</span>        <span class="tree-note">← App install configuration (name, icons)</span>
+│   ├── <span class="tree-file">sw.js</span>               <span class="tree-note">← Service worker (makes it work offline)</span>
+│   ├── <span class="tree-file">icon-192.png</span>         <span class="tree-note">← App icon, small size</span>
+│   └── <span class="tree-file">icon-512.png</span>         <span class="tree-note">← App icon, large size</span>
+│
+└── <span class="tree-folder">ledger/</span>                <span class="tree-note">← My Ledger finance app</span>
+    └── <span class="tree-file">index.html</span>           <span class="tree-note">← Ledger app (fully self-contained)</span>
+  </div>
+
+  <div class="tip">
+    <p class="tip-label">Important rule</p>
+    <p>Never rename or move <code>index.html</code> from the root folder. GitHub Pages specifically looks for a file named exactly <code>index.html</code> at the root to serve your site. Renaming it will break your live URL.</p>
+  </div>
+
+  <h3>How the site is hosted</h3>
+  <p>Your site is hosted on <strong>GitHub Pages</strong> — a free service that turns your GitHub repository into a live website. Every time you push changes to the <code>main</code> branch, the live site updates automatically within 1–2 minutes.</p>
+  <p>Your live URL is: <strong>https://eddywin-bit.github.io/engineering-portfolio/</strong></p>
+
+  <table>
+    <tr><th>URL path</th><th>What it serves</th></tr>
+    <tr><td><code>/</code></td><td>index.html — your engineering portfolio</td></tr>
+    <tr><td><code>/designs/</code></td><td>Eon Designs portfolio</td></tr>
+    <tr><td><code>/vault/</code></td><td>Prompt Vault PWA</td></tr>
+    <tr><td><code>/ledger/</code></td><td>My Ledger app</td></tr>
+    <tr><td><code>/Edwin_Gyasi_Resume.pdf</code></td><td>Your resume (opened by the Resume button)</td></tr>
+  </table>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     02 — HOW TO EDIT CONTENT
+════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2 class="section-title">How to Edit Content</h2>
+  </div>
+
+  <p>All the content of your portfolio lives inside <strong>one file: <code>index.html</code></strong>. To edit it, open it with a text editor. The best free option is <strong>Notepad++</strong> (Windows) or <strong>Visual Studio Code</strong>. Do not use Microsoft Word — it will corrupt the file.</p>
+
+  <p>The golden rule for finding things: use <strong>Ctrl + F</strong> to search for the exact text you see on the website. Find it in the file, change just that text, and save.</p>
+
+  <div class="warn">
+    <p class="warn-label">Before editing</p>
+    <p>Always make a backup copy of <code>index.html</code> before editing. Right-click the file → Copy → Paste in the same folder. Rename it <code>index-backup.html</code>. If anything breaks, you can restore from this copy.</p>
+  </div>
+
+  <!-- NAV -->
+  <h3>Navigation Bar</h3>
+  <p>The nav is at the very top of the page. It shows your name on the left and a "Projects" link + LinkedIn icon on the right.</p>
+
+  <table>
+    <tr><th>What to change</th><th>Search for this text in the file</th><th>What to edit</th></tr>
+    <tr><td>Your name (left side)</td><td><code>Edwin Gyasi Owusu</code> inside <code>nav-brand</code></td><td>Change the text between the <code>&lt;a&gt;</code> tags</td></tr>
+    <tr><td>LinkedIn URL</td><td><code>linkedin.com/in/edwin-gyasi</code></td><td>Replace the whole URL with your profile URL</td></tr>
+  </table>
+
+  <!-- HERO -->
+  <h3>Hero Section (the full-screen intro)</h3>
+  <p>The hero takes up the full screen when visitors first land. It contains your name, subtitle, location, and two buttons.</p>
+
+  <table>
+    <tr><th>What to change</th><th>Search for this text</th><th>What to edit</th></tr>
+    <tr><td>Small gold label above name</td><td><code>class="hero-label"</code></td><td>Change <code>Geological Engineer</code></td></tr>
+    <tr><td>Your name</td><td><code>class="hero-name"</code></td><td>Change <code>Edwin</code>, <code>Gyasi</code>, <code>Owusu</code> (on separate lines)</td></tr>
+    <tr><td>Subtitle / specialisms</td><td><code>class="hero-sub"</code></td><td>Edit the text after the tag</td></tr>
+    <tr><td>Location / degree line</td><td><code>class="hero-loc"</code></td><td>Edit the sentence inside that tag</td></tr>
+    <tr><td>Year shown top-right</td><td><code>class="hero-meta-year"</code></td><td>Change <code>2026</code></td></tr>
+    <tr><td>"Available" status dot</td><td><code>class="hero-meta-dot"</code></td><td>Change <code>Available</code> to e.g. <code>Open to Work</code></td></tr>
+    <tr><td>Resume button link</td><td><code>Edwin_Gyasi_Resume.pdf</code></td><td>Change filename if you rename the PDF</td></tr>
+  </table>
+
+  <!-- ABOUT -->
+  <h3>About Me Section</h3>
+  <p>The two-column section with the large "About Me" heading and your bio text on the right.</p>
+
+  <table>
+    <tr><th>What to change</th><th>Search for this text</th><th>What to edit</th></tr>
+    <tr><td>First paragraph</td><td><code>sharp eye for data</code></td><td>Edit the full paragraph inside that <code>&lt;p class="about-para"&gt;</code> block</td></tr>
+    <tr><td>Second paragraph</td><td><code>national conferences</code></td><td>Edit the second <code>&lt;p class="about-para"&gt;</code> block</td></tr>
+    <tr><td>Eon Designs link URL</td><td><code>href="/designs/"</code></td><td>Change the URL in the <code>&lt;a&gt;</code> tag</td></tr>
+    <tr><td>Skill chips (tags)</td><td><code>class="chip"</code></td><td>Each chip is a <code>&lt;span class="chip"&gt;TEXT&lt;/span&gt;</code> — add or delete these freely</td></tr>
+  </table>
+
+  <h4>To add a skill chip</h4>
+  <p>Find the <code>skill-chips</code> section and copy this pattern:</p>
+  <pre><span class="tag">&lt;span</span> <span class="attr">class</span>=<span class="string">"chip"</span><span class="tag">&gt;</span>Your Skill<span class="tag">&lt;/span&gt;</span></pre>
+
+  <!-- PROJECTS -->
+  <h3>Projects Section (Case Studies)</h3>
+  <p>Three expandable case study cards. Each card has a header (always visible) and an expandable body.</p>
+  <p>To find a specific card, search for its title text, e.g. <code>Concrete Batching System</code>.</p>
+
+  <table>
+    <tr><th>What to change</th><th>Where it is inside each card</th></tr>
+    <tr><td>Project number (01, 02, 03)</td><td><code>class="cs-num"</code></td></tr>
+    <tr><td>Project title</td><td><code>class="cs-title"</code></td></tr>
+    <tr><td>One-line summary (shown collapsed)</td><td><code>class="cs-summary"</code></td></tr>
+    <tr><td>Section labels (Problem, Insight, etc.)</td><td><code>class="cs-section-label"</code></td></tr>
+    <tr><td>Section body text</td><td><code>class="cs-section-text"</code></td></tr>
+    <tr><td>Tags at bottom of expanded card</td><td><code>class="tag"</code> inside <code>class="cs-tags"</code></td></tr>
+  </table>
+
+  <!-- EXPERIENCE -->
+  <h3>Experience &amp; Leadership Section</h3>
+  <p>A list of roles with impact statements. Each row has a role title, organisation, and impact line.</p>
+  <p>Search for the role name, e.g. <code>PRO, AusIMM</code>, to find it in the file.</p>
+
+  <table>
+    <tr><th>What to change</th><th>Tag to find</th></tr>
+    <tr><td>Role title</td><td><code>class="exp-role"</code></td></tr>
+    <tr><td>Organisation / company name</td><td><code>class="exp-org"</code></td></tr>
+    <tr><td>Impact statement (right column)</td><td><code>class="exp-impact"</code></td></tr>
+  </table>
+
+  <!-- SKILLS -->
+  <h3>Skills Section</h3>
+  <p>Three columns: Engineering, Data, Creative. Each skill is a simple line of text.</p>
+  <p>Search for <code>class="skills-group-label"</code> to find the column headings.</p>
+  <p>Each skill is written like this:</p>
+  <pre><span class="tag">&lt;span</span> <span class="attr">class</span>=<span class="string">"skill-item"</span><span class="tag">&gt;</span>QGIS<span class="tag">&lt;/span&gt;</span></pre>
+  <p>Add or remove <code>&lt;span class="skill-item"&gt;...&lt;/span&gt;</code> lines to change skills. Keep them inside the correct <code>class="skills-items"</code> group.</p>
+
+  <!-- FOOTER -->
+  <h3>Footer</h3>
+  <p>The footer has your LinkedIn link, email, and copyright.</p>
+
+  <table>
+    <tr><th>What to change</th><th>Search for</th></tr>
+    <tr><td>LinkedIn URL</td><td><code>linkedin.com/in/edwin-gyasi</code> in the footer section</td></tr>
+    <tr><td>Email address (link and display text)</td><td><code>gyasiedwin14@gmail.com</code> — change both occurrences (the href and the visible text)</td></tr>
+    <tr><td>Copyright year</td><td><code>&copy; 2026 Edwin Gyasi Owusu</code></td></tr>
+  </table>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     03 — ADD / REMOVE PROJECTS
+════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2 class="section-title">How to Add or Remove a Project</h2>
+  </div>
+
+  <h3>Adding a new project card</h3>
+
+  <div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-body"><p class="step-title">Open index.html in your text editor</p><p>Use Notepad++ or VS Code. Do not use Word.</p></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-body"><p class="step-title">Find the end of the last project card</p><p>Press Ctrl+F and search for <code>&lt;!-- 03 --&gt;</code>. Scroll down until you see the closing <code>&lt;/article&gt;</code> tag for that card.</p></div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-body"><p class="step-title">Paste a new card after it</p><p>After the closing <code>&lt;/article&gt;</code>, paste the template below. Replace all the placeholder text with your content.</p></div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-body"><p class="step-title">Update the project count label</p><p>Search for <code>03 case studies</code> and change it to <code>04 case studies</code>.</p></div></div>
+    <div class="step"><div class="step-num">5</div><div class="step-body"><p class="step-title">Save and deploy</p><p>Save the file, then follow Section 06 to push to GitHub.</p></div></div>
+  </div>
+
+  <h4>New project card template — copy everything below</h4>
+  <pre><span class="comment">&lt;!-- 04 --&gt;</span>
+<span class="tag">&lt;article</span> <span class="attr">class</span>=<span class="string">"cs-card reveal d4"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="string">"cs-header"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;span</span> <span class="attr">class</span>=<span class="string">"cs-num"</span><span class="tag">&gt;</span>04<span class="tag">&lt;/span&gt;</span>
+    <span class="tag">&lt;h3</span> <span class="attr">class</span>=<span class="string">"cs-title"</span><span class="tag">&gt;</span>YOUR PROJECT TITLE<span class="tag">&lt;/h3&gt;</span>
+    <span class="tag">&lt;p</span> <span class="attr">class</span>=<span class="string">"cs-summary"</span><span class="tag">&gt;</span>Your one-line summary goes here<span class="tag">&lt;/p&gt;</span>
+    <span class="tag">&lt;button</span> <span class="attr">class</span>=<span class="string">"cs-toggle"</span> <span class="attr">aria-expanded</span>=<span class="string">"false"</span><span class="tag">&gt;</span>
+      <span class="tag">&lt;span</span> <span class="attr">class</span>=<span class="string">"cs-toggle-text"</span><span class="tag">&gt;</span>View Case Study<span class="tag">&lt;/span&gt;</span>
+      <span class="tag">&lt;span</span> <span class="attr">class</span>=<span class="string">"cs-toggle-arrow"</span><span class="tag">&gt;</span>
+        <span class="tag">&lt;svg</span> <span class="attr">width</span>=<span class="string">"12"</span> <span class="attr">height</span>=<span class="string">"12"</span> <span class="attr">viewBox</span>=<span class="string">"0 0 12 12"</span> <span class="attr">fill</span>=<span class="string">"none"</span> <span class="attr">stroke</span>=<span class="string">"currentColor"</span> <span class="attr">stroke-width</span>=<span class="string">"1.5"</span> <span class="attr">stroke-linecap</span>=<span class="string">"round"</span><span class="tag">&gt;</span>
+          <span class="tag">&lt;line</span> <span class="attr">x1</span>=<span class="string">"6"</span> <span class="attr">y1</span>=<span class="string">"1"</span> <span class="attr">x2</span>=<span class="string">"6"</span> <span class="attr">y2</span>=<span class="string">"11"</span><span class="tag">/&gt;</span>
+          <span class="tag">&lt;line</span> <span class="attr">x1</span>=<span class="string">"1"</span> <span class="attr">y1</span>=<span class="string">"6"</span> <span class="attr">x2</span>=<span class="string">"11"</span> <span class="attr">y2</span>=<span class="string">"6"</span><span class="tag">/&gt;</span>
+        <span class="tag">&lt;/svg&gt;</span>
+      <span class="tag">&lt;/span&gt;</span>
+    <span class="tag">&lt;/button&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="string">"cs-body"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="string">"cs-body-inner"</span><span class="tag">&gt;</span>
+      <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="string">"cs-body-content"</span><span class="tag">&gt;</span>
+        <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="string">"cs-sections"</span><span class="tag">&gt;</span>
+          <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="string">"cs-section"</span><span class="tag">&gt;</span>
+            <span class="tag">&lt;span</span> <span class="attr">class</span>=<span class="string">"cs-section-label"</span><span class="tag">&gt;</span>Context<span class="tag">&lt;/span&gt;</span>
+            <span class="tag">&lt;p</span> <span class="attr">class</span>=<span class="string">"cs-section-text"</span><span class="tag">&gt;</span>Your context text here.<span class="tag">&lt;/p&gt;</span>
+          <span class="tag">&lt;/div&gt;</span>
+          <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="string">"cs-section"</span><span class="tag">&gt;</span>
+            <span class="tag">&lt;span</span> <span class="attr">class</span>=<span class="string">"cs-section-label"</span><span class="tag">&gt;</span>What I Did<span class="tag">&lt;/span&gt;</span>
+            <span class="tag">&lt;p</span> <span class="attr">class</span>=<span class="string">"cs-section-text"</span><span class="tag">&gt;</span>Your description here.<span class="tag">&lt;/p&gt;</span>
+          <span class="tag">&lt;/div&gt;</span>
+          <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="string">"cs-section"</span><span class="tag">&gt;</span>
+            <span class="tag">&lt;span</span> <span class="attr">class</span>=<span class="string">"cs-section-label"</span><span class="tag">&gt;</span>Outcome<span class="tag">&lt;/span&gt;</span>
+            <span class="tag">&lt;p</span> <span class="attr">class</span>=<span class="string">"cs-section-text"</span><span class="tag">&gt;</span>Your outcome text here.<span class="tag">&lt;/p&gt;</span>
+          <span class="tag">&lt;/div&gt;</span>
+        <span class="tag">&lt;/div&gt;</span>
+        <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="string">"cs-tags"</span><span class="tag">&gt;</span>
+          <span class="tag">&lt;span</span> <span class="attr">class</span>=<span class="string">"tag"</span><span class="tag">&gt;</span>Tag One<span class="tag">&lt;/span&gt;</span>
+          <span class="tag">&lt;span</span> <span class="attr">class</span>=<span class="string">"tag"</span><span class="tag">&gt;</span>Tag Two<span class="tag">&lt;/span&gt;</span>
+        <span class="tag">&lt;/div&gt;</span>
+      <span class="tag">&lt;/div&gt;</span>
+    <span class="tag">&lt;/div&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/article&gt;</span></pre>
+
+  <div class="tip">
+    <p class="tip-label">Section labels</p>
+    <p>You can use any labels you like for the left-side labels inside each case study row — "Problem", "Method", "Insight", "Context", "What I Did", "Outcome", "The Question", "The Data". Use whatever makes sense for your project.</p>
+  </div>
+
+  <h3>Removing a project card</h3>
+  <div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-body"><p class="step-title">Find the card you want to remove</p><p>Search for the title text of that card using Ctrl+F.</p></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-body"><p class="step-title">Select from its comment to its closing tag</p><p>The card starts with <code>&lt;!-- 02 --&gt;</code> (or whichever number) and ends with <code>&lt;/article&gt;</code>. Select everything between those two points and delete it.</p></div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-body"><p class="step-title">Renumber remaining cards</p><p>If you remove card 02, update card 03 to show <code>02</code>. Search for <code>class="cs-num"</code> to find all numbers.</p></div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-body"><p class="step-title">Update the count label</p><p>Search for <code>case studies</code> and update the number.</p></div></div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     04 — HOW TO UPDATE RESUME
+════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2 class="section-title">How to Update Your Resume</h2>
+  </div>
+
+  <p>The Resume button on the hero links to a PDF file stored alongside <code>index.html</code>. Swapping it is simple:</p>
+
+  <div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-body"><p class="step-title">Export your updated resume as a PDF</p><p>Name it exactly <code>Edwin_Gyasi_Resume.pdf</code> — same name as the current file. Underscores, capitalisation, and the <code>.pdf</code> extension must match exactly.</p></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-body"><p class="step-title">Replace the old PDF</p><p>Copy the new PDF into the <code>Engineering Site</code> folder. Windows will ask if you want to replace the existing file — click <strong>Replace</strong>.</p></div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-body"><p class="step-title">Deploy to GitHub</p><p>Open your terminal in the project folder and run the three deploy commands from Section 06. The live site will serve the new PDF within a minute.</p></div></div>
+  </div>
+
+  <div class="warn">
+    <p class="warn-label">If you rename the PDF</p>
+    <p>If you choose a different filename, you must also update <code>index.html</code>. Search for <code>Edwin_Gyasi_Resume.pdf</code> in the file and change it to match your new filename exactly.</p>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     05 — COLORS & FONTS
+════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <h2 class="section-title">How to Change Colors and Fonts</h2>
+  </div>
+
+  <p>All colors and fonts are controlled from one place at the very top of the <code>&lt;style&gt;</code> section in <code>index.html</code>. Search for <code>DESIGN TOKENS</code> to jump straight to it. You will see a block that looks like this:</p>
+
+  <pre><span class="tag">:root</span> {
+  <span class="gold">--bg</span>:          #080808;   <span class="comment">/* Page background — near-black */</span>
+  <span class="gold">--surface</span>:     #111111;   <span class="comment">/* Card background */</span>
+  <span class="gold">--surface-2</span>:   #161616;   <span class="comment">/* Hovered / open card background */</span>
+  <span class="gold">--border</span>:      rgba(255,255,255,0.06); <span class="comment">/* Subtle dividers */</span>
+  <span class="gold">--border-mid</span>:  rgba(255,255,255,0.1);  <span class="comment">/* Slightly stronger borders */</span>
+
+  <span class="gold">--text-1</span>: #f0ece4;   <span class="comment">/* Primary text — warm white */</span>
+  <span class="gold">--text-2</span>: #8a8580;   <span class="comment">/* Secondary text — mid gray */</span>
+  <span class="gold">--text-3</span>: #504e4b;   <span class="comment">/* Tertiary text — dark gray, labels */</span>
+
+  <span class="gold">--gold</span>:     #d4ad65;              <span class="comment">/* Accent color — warm gold */</span>
+  <span class="gold">--gold-dim</span>: rgba(212,173,101,0.10); <span class="comment">/* Faint gold for button backgrounds */</span>
+
+  <span class="gold">--ff-display</span>: 'Cormorant Garamond', Georgia, serif; <span class="comment">/* Headings */</span>
+  <span class="gold">--ff-body</span>:    'DM Sans', -apple-system, sans-serif;  <span class="comment">/* Body text */</span>
+  <span class="gold">--ff-mono</span>:    'Space Mono', monospace;              <span class="comment">/* Labels, tags */</span>
+}</pre>
+
+  <h3>Changing the accent (gold) color</h3>
+  <p>Find <code>--gold:     #d4ad65;</code> and replace <code>#d4ad65</code> with your new color hex code. Then update <code>--gold-dim</code> to be the same color at low opacity.</p>
+  <p>Example — to change to a cool blue accent:</p>
+  <pre><span class="gold">--gold</span>:     #5b9bd5;
+<span class="gold">--gold-dim</span>: rgba(91,155,213,0.10);</pre>
+
+  <h3>Changing the background color</h3>
+  <p>Find <code>--bg: #080808;</code> and change the hex value. The page background, all cards, and borders all adapt automatically because they reference this variable.</p>
+
+  <h3>Changing fonts</h3>
+  <p>The fonts are loaded from Google Fonts. To use a different heading font:</p>
+
+  <div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-body"><p class="step-title">Go to fonts.google.com and pick a font</p><p>Click "Get font" then "Get embed code". Copy the <code>&lt;link&gt;</code> tag.</p></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-body"><p class="step-title">Replace the Google Fonts link in index.html</p><p>Search for <code>fonts.googleapis.com/css2?family=Cormorant</code> and replace the entire <code>&lt;link href="..."&gt;</code> line with your new one.</p></div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-body"><p class="step-title">Update the CSS variable</p><p>Find <code>--ff-display: 'Cormorant Garamond'</code> and replace <code>Cormorant Garamond</code> with the exact name of your new font.</p></div></div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     06 — HOW TO DEPLOY
+════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <h2 class="section-title">How to Deploy (Push to Live Site)</h2>
+  </div>
+
+  <p>After making any changes to your files, you need to push them to GitHub to update the live site. This takes three commands. Run them in <strong>Git Bash</strong> or <strong>Windows Terminal</strong>, inside your project folder.</p>
+
+  <div class="tip">
+    <p class="tip-label">Opening a terminal in your project folder</p>
+    <p>Open File Explorer, navigate to the <em>Engineering Site</em> folder on your Desktop, then right-click in an empty area and select <strong>"Open Git Bash here"</strong> (or "Open in Terminal" on Windows 11).</p>
+  </div>
+
+  <h3>The three deploy commands</h3>
+  <p>Run these in order. Copy each line exactly:</p>
+
+  <pre><span class="comment"># Step 1 — Stage all your changed files</span>
+git add .
+
+<span class="comment"># Step 2 — Save a snapshot with a description of what changed</span>
+<span class="comment"># Replace the message in quotes with your own description</span>
+git commit -m <span class="string">"Update about section text"</span>
+
+<span class="comment"># Step 3 — Send to GitHub (this updates the live site)</span>
+git push origin main</pre>
+
+  <p>After Step 3, wait 1–2 minutes, then refresh your live URL to see the changes.</p>
+
+  <h3>What if git push asks for a username and password?</h3>
+  <p>GitHub no longer accepts passwords. You need a <strong>Personal Access Token</strong>:</p>
+  <div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-body"><p>Go to <strong>github.com → Settings → Developer Settings → Personal Access Tokens → Tokens (classic)</strong></p></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-body"><p>Click <strong>Generate new token</strong>. Give it a name. Check the <strong>repo</strong> scope. Set expiry to 1 year. Click <strong>Generate</strong>.</p></div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-body"><p>Copy the token. When git asks for your password, paste the token instead. Your system will remember it.</p></div></div>
+  </div>
+
+  <h3>Useful extra commands</h3>
+  <table>
+    <tr><th>Command</th><th>What it does</th></tr>
+    <tr><td><code>git status</code></td><td>Shows which files have been changed but not yet committed</td></tr>
+    <tr><td><code>git log --oneline</code></td><td>Shows your recent commits as a short list</td></tr>
+    <tr><td><code>git diff</code></td><td>Shows exactly what text changed in your files</td></tr>
+  </table>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     07 — ADDING NEW PAGES
+════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">07</span>
+    <h2 class="section-title">How to Add New Pages</h2>
+  </div>
+
+  <p>GitHub Pages serves any <code>index.html</code> found inside a subfolder as a page at that folder's URL. So to add a new page, you just create a new folder with an <code>index.html</code> inside it.</p>
+
+  <h3>Example: adding a blog page at /blog/</h3>
+  <div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-body"><p class="step-title">Create the folder</p><p>Inside <em>Engineering Site</em>, create a new folder called <code>blog</code>.</p></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-body"><p class="step-title">Create an index.html inside it</p><p>Create a file called <code>index.html</code> inside the <code>blog</code> folder. This can be any HTML page you like.</p></div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-body"><p class="step-title">Link to it from the main portfolio</p><p>In <code>index.html</code>, add a link like: <code>&lt;a href="/blog/"&gt;Blog&lt;/a&gt;</code></p></div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-body"><p class="step-title">Deploy</p><p>Run the three deploy commands. Your new page will be live at <code>https://eddywin-bit.github.io/engineering-portfolio/blog/</code></p></div></div>
+  </div>
+
+  <h3>Linking back to the portfolio from a subpage</h3>
+  <p>Inside any subpage's HTML, use this to link back to the main portfolio:</p>
+  <pre><span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="string">"/"</span><span class="tag">&gt;</span>Back to Portfolio<span class="tag">&lt;/a&gt;</span>
+<span class="comment">&lt;!-- or, using the full path: --&gt;</span>
+<span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="string">"/engineering-portfolio/"</span><span class="tag">&gt;</span>Back to Portfolio<span class="tag">&lt;/a&gt;</span></pre>
+
+  <div class="warn">
+    <p class="warn-label">Paths on GitHub Pages</p>
+    <p>Because your site lives at <code>/engineering-portfolio/</code> (not the root domain), absolute paths like <code>/images/photo.jpg</code> will break. Always use <strong>relative paths</strong> from within subpages, e.g. <code>../images/photo.jpg</code> to go up one level, or link from the root using the full subfolder path.</p>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     08 — TROUBLESHOOTING
+════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">08</span>
+    <h2 class="section-title">Troubleshooting</h2>
+  </div>
+
+  <table>
+    <tr>
+      <th width="32%">Problem</th>
+      <th>Likely cause</th>
+      <th>Fix</th>
+    </tr>
+    <tr>
+      <td>Live site not updating after push</td>
+      <td>GitHub Pages takes 1–2 minutes to rebuild</td>
+      <td>Wait 2 minutes and hard-refresh (Ctrl+Shift+R). Also check the <em>Actions</em> tab on GitHub for build errors.</td>
+    </tr>
+    <tr>
+      <td>Site shows a 404 error</td>
+      <td>GitHub Pages not enabled, or <code>index.html</code> not at root</td>
+      <td>Go to repo → Settings → Pages → set Source to <em>Deploy from a branch</em>, branch = <code>main</code>, folder = <code>/ (root)</code>.</td>
+    </tr>
+    <tr>
+      <td>Resume button opens a blank page or 404</td>
+      <td>PDF filename doesn't match the link in <code>index.html</code></td>
+      <td>Confirm the PDF file is named exactly <code>Edwin_Gyasi_Resume.pdf</code> and is in the root folder. Check for typos — capitalisation matters.</td>
+    </tr>
+    <tr>
+      <td>Accordion (case study) not expanding</td>
+      <td>JavaScript error in the page</td>
+      <td>Open the browser, press F12, click the <em>Console</em> tab. Look for any red error message and note what it says.</td>
+    </tr>
+    <tr>
+      <td>Fonts not loading (showing Times New Roman)</td>
+      <td>No internet connection, or Google Fonts blocked</td>
+      <td>The site requires an internet connection to load fonts from Google. This only affects offline viewing.</td>
+    </tr>
+    <tr>
+      <td><code>git push</code> fails with "rejected"</td>
+      <td>Remote has changes you don't have locally</td>
+      <td>Run <code>git pull origin main</code> first, then push again.</td>
+    </tr>
+    <tr>
+      <td><code>git push</code> asks for password and fails</td>
+      <td>Password auth is disabled on GitHub</td>
+      <td>Use a Personal Access Token as your password. See Section 06 for instructions.</td>
+    </tr>
+    <tr>
+      <td>Page looks broken on mobile</td>
+      <td>You edited CSS and broke a responsive rule</td>
+      <td>Restore from your backup copy of <code>index.html</code>. The responsive rules live near the bottom of the CSS, under <code>@media (max-width: 960px)</code>.</td>
+    </tr>
+    <tr>
+      <td>Images in <code>designs/</code> not showing on live site</td>
+      <td>Filename case mismatch (Windows is case-insensitive, GitHub is not)</td>
+      <td>Make sure filenames and their references in the HTML match exactly — including capitalisation. <code>Photo.jpg</code> ≠ <code>photo.jpg</code> on GitHub.</td>
+    </tr>
+    <tr>
+      <td>Accidentally deleted something</td>
+      <td>—</td>
+      <td>Run <code>git checkout HEAD index.html</code> to restore the last committed version of <code>index.html</code>. This undoes any unsaved edits.</td>
+    </tr>
+  </table>
+
+  <h3>How to undo the last deploy</h3>
+  <p>If you pushed a broken change and want to roll back to the previous version:</p>
+  <pre><span class="comment"># See your recent commits — note the ID of the one you want to go back to</span>
+git log --oneline
+
+<span class="comment"># Revert the most recent commit (creates a new "undo" commit)</span>
+git revert HEAD
+
+<span class="comment"># Push the revert to update the live site</span>
+git push origin main</pre>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     09 — DESIGN SYSTEM
+════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">09</span>
+    <h2 class="section-title">Design System Reference</h2>
+  </div>
+
+  <p>Use this reference when adding any new elements to keep the site visually consistent.</p>
+
+  <h3>Color Palette</h3>
+  <div class="swatches">
+    <div class="swatch">
+      <div class="swatch-color" style="background:#080808; border:1px solid #333;"></div>
+      <span class="swatch-name">Page Background</span>
+      <span class="swatch-val">--bg / #080808</span>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#111111; border:1px solid #333;"></div>
+      <span class="swatch-name">Card Surface</span>
+      <span class="swatch-val">--surface / #111111</span>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#161616; border:1px solid #333;"></div>
+      <span class="swatch-name">Hover Surface</span>
+      <span class="swatch-val">--surface-2 / #161616</span>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#f0ece4;"></div>
+      <span class="swatch-name">Primary Text</span>
+      <span class="swatch-val">--text-1 / #f0ece4</span>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#8a8580;"></div>
+      <span class="swatch-name">Secondary Text</span>
+      <span class="swatch-val">--text-2 / #8a8580</span>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#504e4b;"></div>
+      <span class="swatch-name">Tertiary Text</span>
+      <span class="swatch-val">--text-3 / #504e4b</span>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#d4ad65;"></div>
+      <span class="swatch-name">Gold Accent</span>
+      <span class="swatch-val">--gold / #d4ad65</span>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:rgba(212,173,101,0.10); border:1px solid #ddd;"></div>
+      <span class="swatch-name">Gold Dim</span>
+      <span class="swatch-val">--gold-dim / 10% opacity</span>
+    </div>
+  </div>
+
+  <h3>Typography</h3>
+  <table>
+    <tr><th>Role</th><th>Font</th><th>Used for</th><th>CSS variable</th></tr>
+    <tr><td>Display / Headings</td><td>Cormorant Garamond</td><td>Section headings, project titles, hero name</td><td><code>--ff-display</code></td></tr>
+    <tr><td>Body</td><td>DM Sans</td><td>Paragraphs, nav links, buttons, descriptions</td><td><code>--ff-body</code></td></tr>
+    <tr><td>Monospace</td><td>Space Mono</td><td>Labels, tags, project numbers, skill chips</td><td><code>--ff-mono</code></td></tr>
+  </table>
+
+  <h3>Heading sizes</h3>
+  <table>
+    <tr><th>Element</th><th>Size</th><th>Weight</th><th>Notes</th></tr>
+    <tr><td>Hero name</td><td>clamp(60px, 9.5vw, 148px)</td><td>300 (Light)</td><td>Scales with viewport width</td></tr>
+    <tr><td>Section headings (About, Projects…)</td><td>clamp(52px, 7vw, 104px)</td><td>300 (Light)</td><td>Scales with viewport width</td></tr>
+    <tr><td>Project titles (cs-title)</td><td>clamp(22px, 2.4vw, 32px)</td><td>400 (Regular)</td><td>—</td></tr>
+    <tr><td>Experience role names</td><td>20px</td><td>400 (Regular)</td><td>—</td></tr>
+    <tr><td>Body text (about paragraphs)</td><td>17px</td><td>300 (Light)</td><td>—</td></tr>
+    <tr><td>General body / descriptions</td><td>14–15px</td><td>300 (Light)</td><td>—</td></tr>
+    <tr><td>Labels / eyebrows / tags</td><td>10px</td><td>400 (Regular)</td><td>All-caps, letter-spacing 0.12–0.2em</td></tr>
+  </table>
+
+  <h3>Spacing</h3>
+  <table>
+    <tr><th>Context</th><th>Value</th></tr>
+    <tr><td>Section padding (desktop)</td><td>128px top/bottom, 64px left/right</td></tr>
+    <tr><td>Section padding (tablet, ≤960px)</td><td>96px top/bottom, 36px left/right</td></tr>
+    <tr><td>Section padding (mobile, ≤600px)</td><td>80px top/bottom, 24px left/right</td></tr>
+    <tr><td>Horizontal rule margins</td><td>64px left/right (matches section padding)</td></tr>
+    <tr><td>Card internal padding</td><td>40px all sides</td></tr>
+    <tr><td>Gap between project cards</td><td>2px (nearly touching)</td></tr>
+  </table>
+
+  <h3>Animation</h3>
+  <table>
+    <tr><th>Type</th><th>Value</th><th>Used for</th></tr>
+    <tr><td>Easing (custom)</td><td><code>cubic-bezier(0.16, 1, 0.3, 1)</code></td><td>All expansions, reveals, transforms</td></tr>
+    <tr><td>Scroll reveal</td><td>0.8s duration, 36px Y offset</td><td>All <code>.reveal</code> elements</td></tr>
+    <tr><td>Fast transitions</td><td>0.22s ease</td><td>Hover color changes</td></tr>
+    <tr><td>Medium transitions</td><td>0.5s custom ease</td><td>Card background/shadow changes</td></tr>
+    <tr><td>Accordion expand</td><td>0.65s custom ease</td><td>Case study open/close</td></tr>
+    <tr><td>Hero stagger delays</td><td>0.15s, 0.35s, 0.6s, 0.72s, 0.88s</td><td>Label → name → subtitle → location → buttons</td></tr>
+  </table>
+
+  <h3>Borders</h3>
+  <table>
+    <tr><th>Variable</th><th>Value</th><th>Used for</th></tr>
+    <tr><td><code>--border</code></td><td>rgba(255,255,255,0.06)</td><td>Section rules, card borders, skill item separators</td></tr>
+    <tr><td><code>--border-mid</code></td><td>rgba(255,255,255,0.1)</td><td>Button borders, footer separators</td></tr>
+    <tr><td>Gold accent bar</td><td>2px solid #d4ad65</td><td>Left edge of hovered/open project cards</td></tr>
+  </table>
+
+  <h3>Key design principles to follow</h3>
+  <ul>
+    <li><strong>Gold is used sparingly.</strong> It appears on: the hero label, the small "Available" dot, project numbers, toggle buttons, card left-bars on hover, and skill chip hover states. Do not use gold for large areas of text or backgrounds.</li>
+    <li><strong>Use italic Cormorant Garamond for contrast.</strong> Section headings use the italic form (in a lighter gray) to create rhythm alongside the regular weight. E.g. "About / <em>Me</em>".</li>
+    <li><strong>Everything fades in on scroll.</strong> Any new content block you add should include <code>class="reveal"</code> so it animates in. Add <code>d1</code> through <code>d6</code> for staggered delays.</li>
+    <li><strong>Monospace font stays small.</strong> Space Mono is always used at 9–11px, all-caps, with generous letter-spacing. Never use it for body text.</li>
+    <li><strong>Negative space is intentional.</strong> The generous padding between sections is a design choice — resist the urge to fill empty space with extra elements.</li>
+  </ul>
+</div>
+
+</body>
+</html>
