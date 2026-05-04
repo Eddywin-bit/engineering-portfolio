@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/webp" href="Assets/logo.png" />
+    <title>Eon Designs | Edwin Gyasi Owusu</title>
+
+    <!-- SOCIAL SHARE PREVIEW (The "Link Card") -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://edwingyasi.online/">
+    <meta property="og:title" content="Eon Designs | Edwin Gyasi Owusu">
+    <meta property="og:description" content="Senior Graphic Designer & Creative Director. Crafting timeless visual identities. Explore the portfolio.">
+    
+    <!-- IMPORTANT: Make sure you added 'social-preview.jpg' to your Assets folder! -->
+    <meta property="og:image" content="https://edwingyasi.online/Assets/logo.webp">
+
+    <!-- TWITTER / X CARD -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://edwingyasi.online/">
+    <meta name="twitter:title" content="Eon Designs | Edwin Gyasi Owusu">
+    <meta name="twitter:description" content="Senior Graphic Designer & Creative Director. Crafting timeless visual identities. Explore the portfolio.">
+    <meta name="twitter:image" content="https://edwingyasi.online/Assets/logo.webp">
+    
+    <!-- ANALYTICS: Replace G-XXXXXXXXXX with your Google Analytics Measurement ID -->
+    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXXX');
+    </script> -->
+
+    <!-- TAILWIND CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- CONFIGURATION -->
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                50: '#f9f8f6',
+                500: '#E0D4C5', // Premium Champagne
+                600: '#b8a688',
+              },
+              dark: {
+                950: '#050505', // Deep Black
+                900: '#0a0a0a', 
+              }
+            },
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+              display: ['Playfair Display', 'serif'], // Luxury Serif
+              mono: ['Fira Code', 'monospace'],
+            },
+            animation: {
+              'fade-in': 'fadeIn 0.5s ease-out forwards',
+              'slide-up': 'slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+              'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            },
+            keyframes: {
+              fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+              slideUp: { '0%': { transform: 'translateY(40px)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } }
+            }
+          },
+        },
+      }
+    </script>
+
+    <!-- FONTS -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
+    
+    <!-- ICONS -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- CUSTOM CSS -->
+    <style>
+        body { background-color: #050505; color: #e5e5e5; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* SMOOTH MASONRY */
+        .masonry-grid { column-count: 1; column-gap: 2rem; }
+        @media (min-width: 768px) { .masonry-grid { column-count: 3; } }
+        
+        /* Mobile: 2 columns for full vault looks better/more pro than 1 massive column */
+        .masonry-grid-full { column-count: 2; column-gap: 1rem; }
+        @media (min-width: 768px) { .masonry-grid-full { column-count: 4; column-gap: 1.5rem; } }
+        @media (min-width: 1280px) { .masonry-grid-full { column-count: 5; } }
+        
+        .break-inside { break-inside: avoid; margin-bottom: 1.5rem; }
+
+        /* PREVENT IMAGE DRAG */
+        img { user-select: none; -webkit-user-drag: none; }
+    </style>
+
+    <!-- AI LIBRARY -->
+    <script type="importmap">
+{
+  "imports": {
+    "@google/genai": "https://esm.run/@google/genai",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0"
+  }
+}
+</script>
+</head>
+<body class="antialiased selection:bg-brand-500 selection:text-black">
+
+    <!-- ========================================= -->
+    <!-- SECTION: NAVIGATION                       -->
+    <!-- ========================================= -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500 py-6 md:py-8 bg-dark-950/80 backdrop-blur-md border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+            
+            <!-- LOGO -->
+            <div class="flex items-center gap-3 cursor-pointer group" onclick="scrollToSection('hero')">
+                <div class="relative h-10 w-auto flex items-center justify-center">
+                    <!-- LOGO IMAGE: The source is set in the JS Configuration at the bottom -->
+                    <img id="logo-img" src="Assets/logo.webp" alt="Eon" class="h-full w-auto object-contain" onerror="this.style.display='none'; document.getElementById('logo-text').classList.remove('hidden');" />
+                    <!-- Fallback Text if logo file is missing/broken -->
+                    <span id="logo-text" class="hidden text-xl font-display font-bold tracking-wide text-white">EON</span>
+                </div>
+            </div>
+
+            <!-- DESKTOP MENU -->
+            <div class="hidden md:flex items-center gap-12">
+                <button onclick="scrollToSection('work')" class="nav-link text-[10px] uppercase tracking-[0.2em] font-medium text-gray-500 hover:text-white transition-colors relative group">
+                    Work <span class="absolute -bottom-2 left-0 w-0 h-[1px] bg-brand-500 transition-all group-hover:w-full"></span>
+                </button>
+                <button onclick="scrollToSection('vault')" class="nav-link text-[10px] uppercase tracking-[0.2em] font-medium text-gray-500 hover:text-white transition-colors relative group">
+                    The Vault <span class="absolute -bottom-2 left-0 w-0 h-[1px] bg-brand-500 transition-all group-hover:w-full"></span>
+                </button>
+                <button onclick="scrollToSection('about')" class="nav-link text-[10px] uppercase tracking-[0.2em] font-medium text-gray-500 hover:text-white transition-colors relative group">
+                    About <span class="absolute -bottom-2 left-0 w-0 h-[1px] bg-brand-500 transition-all group-hover:w-full"></span>
+                </button>
+                <button onclick="scrollToSection('journal')" class="nav-link text-[10px] uppercase tracking-[0.2em] font-medium text-gray-500 hover:text-white transition-colors relative group">
+                    Journal <span class="absolute -bottom-2 left-0 w-0 h-[1px] bg-brand-500 transition-all group-hover:w-full"></span>
+                </button>
+                <button onclick="scrollToSection('contact')" class="px-6 py-2 border border-white/20 text-white font-medium text-[10px] tracking-widest uppercase hover:bg-brand-500 hover:text-black hover:border-brand-500 transition-all duration-500">Book Session</button>
+            </div>
+
+            <!-- MOBILE MENU BTN -->
+            <button class="md:hidden text-white hover:text-brand-500 transition-colors" onclick="toggleMobileMenu()">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ========================================= -->
+    <!-- SECTION: HERO (With Parallax)             -->
+    <!-- ========================================= -->
+    <section id="hero" class="min-h-screen flex items-center justify-center relative overflow-hidden pt-20">
+        <!-- Parallax Background -->
+        <div id="hero-bg" class="absolute top-0 left-0 w-full h-full bg-dark-950 pointer-events-none z-0 transform-gpu will-change-transform">
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] md:w-[600px] h-[300px] md:h-[600px] bg-brand-500/5 rounded-full blur-[100px] md:blur-[150px] animate-pulse-slow"></div>
+        </div>
+        
+        <!-- ABSTRACT LINES (BACKGROUND ONLY) -->
+        <div class="absolute inset-0 pointer-events-none opacity-[0.05] z-0 flex items-center justify-center overflow-hidden">
+             <svg class="w-[120%] h-[120%] animate-pulse-slow" viewBox="0 0 200 200" preserveAspectRatio="none">
+                 <path d="M-50 100 C 50 0, 150 200, 250 100" stroke="white" stroke-width="0.5" fill="none" />
+                 <path d="M-50 120 C 50 20, 150 220, 250 120" stroke="white" stroke-width="0.3" fill="none" />
+                 <path d="M-50 80 C 50 -20, 150 180, 250 80" stroke="white" stroke-width="0.3" fill="none" />
+             </svg>
+        </div>
+
+        <div id="hero-content" class="max-w-7xl mx-auto px-6 text-center z-10 relative transform-gpu will-change-transform">
+            <div class="inline-block mb-8 md:mb-10 animate-fade-in opacity-0" style="animation-delay: 0.2s">
+                <span class="py-2 px-4 border border-brand-500/30 rounded-full text-brand-500 text-[10px] md:text-xs tracking-[0.2em] md:tracking-[0.3em] uppercase backdrop-blur-md font-medium">Portfolio 2026</span>
+            </div>
+            
+            <h1 class="text-4xl sm:text-5xl md:text-7xl lg:text-9xl font-display font-medium text-white mb-6 md:mb-8 leading-[1.1] md:leading-tight animate-slide-up opacity-0" style="animation-delay: 0.3s">
+                Edwin Gyasi Owusu.
+            </h1>
+            
+            <p class="text-gray-400 max-w-xl mx-auto text-sm md:text-lg leading-relaxed mb-10 md:mb-12 font-light animate-slide-up opacity-0 px-4 md:px-0" style="animation-delay: 0.5s">
+                Senior Graphic Designer & Creative Director. <br/>
+                Crafting <span class="text-brand-500 italic font-display text-lg md:text-xl">timeless</span> visual identities.
+            </p>
+            
+            <div class="flex flex-col md:flex-row gap-4 md:gap-6 justify-center items-center animate-slide-up opacity-0" style="animation-delay: 0.7s">
+               <button onclick="scrollToSection('work')" class="w-full md:w-auto px-10 py-4 bg-brand-500 text-dark-950 text-xs font-bold tracking-widest uppercase hover:bg-white transition-all duration-300 min-w-[160px] shadow-[0_0_20px_rgba(224,212,197,0.2)]">Selected Works</button>
+               <button onclick="scrollToSection('vault')" class="w-full md:w-auto px-10 py-4 border border-white/20 text-white text-xs font-bold tracking-widest uppercase hover:border-brand-500 hover:text-brand-500 transition-all duration-300 min-w-[160px]">The Vault</button>
+            </div>
+        </div>
+
+        <!-- BOUNCING ARROW (Centered Flex Container) -->
+        <div class="absolute bottom-6 md:bottom-8 w-full flex justify-center z-20 pointer-events-none">
+            <div class="animate-bounce cursor-pointer hover:text-brand-500 text-white transition-colors p-4 pointer-events-auto" onclick="scrollToSection('work')">
+                <i data-lucide="arrow-down" class="w-5 h-5 md:w-6 md:h-6"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================= -->
+    <!-- SECTION: SELECTED WORKS (PROJECTS)        -->
+    <!-- ========================================= -->
+    <section id="work" class="py-20 md:py-32 bg-dark-900 relative">
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="flex justify-between items-end mb-16 md:mb-24 border-b border-white/5 pb-8">
+                <div>
+                    <h2 class="text-3xl md:text-6xl font-display font-medium text-white mb-2">Selected Works</h2>
+                    <p class="text-gray-500 font-light text-sm md:text-base">Curated projects from the last 12 months.</p>
+                </div>
+                <span class="hidden md:block text-brand-500/50 text-sm font-mono">01 — 03</span>
+            </div>
+            <div id="projects-container" class="space-y-24 md:space-y-40"></div>
+        </div>
+    </section>
+
+    <!-- PROJECT MODAL (CASE STUDY) - SOLID BACKGROUND -->
+    <div id="project-modal" class="hidden fixed inset-0 z-[60] bg-dark-950 overflow-y-auto animate-fade-in" style="background-color: #050505 !important;">
+        <div class="fixed top-4 right-4 md:top-6 md:right-6 z-50">
+            <button onclick="closeProjectModal()" class="p-2 md:p-3 bg-white text-black rounded-full hover:bg-brand-500 transition-colors shadow-lg group">
+                <i data-lucide="x" class="w-5 h-5 md:w-6 md:h-6 group-hover:rotate-90 transition-transform duration-300"></i>
+            </button>
+        </div>
+        <div id="modal-content" class="min-h-screen pb-20 bg-dark-950"></div>
+    </div>
+
+    <!-- ========================================= -->
+    <!-- SECTION: THE VAULT (PREVIEW)              -->
+    <!-- ========================================= -->
+    <section id="vault" class="py-20 md:py-32 bg-dark-950 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-12 md:mb-16 gap-6">
+                <div>
+                    <div class="flex items-center gap-2 text-brand-500 mb-4">
+                        <i data-lucide="lock" class="w-3 h-3"></i>
+                        <span class="text-[10px] font-mono uppercase tracking-[0.2em]">Concept Archive</span>
+                    </div>
+                    <h2 class="text-3xl md:text-6xl font-display font-medium tracking-tight text-white">The Vault</h2>
+                </div>
+                <p class="text-gray-400 max-w-sm text-sm leading-relaxed text-left md:text-left font-light">
+                    Internal design repository. 50+ raw outputs, daily renders, and visual experiments. 
+                </p>
+            </div>
+
+            <!-- PREVIEW GRID (Only shows 3-4 items) -->
+            <!-- FIXED: Added 'block' to ensure it shows on MD screens -->
+            <div id="vault-preview-grid" class="hidden md:block masonry-grid">
+                <!-- Desktop Masonry Injected by JS -->
+            </div>
+            
+            <!-- MOBILE GRID (2 Columns for optimized size) -->
+            <div id="vault-preview-grid-mobile" class="md:hidden grid grid-cols-2 gap-4">
+                 <!-- Mobile Items Injected by JS -->
+            </div>
+
+            <div class="mt-16 md:mt-24 text-center">
+                <button onclick="openFullVault()" class="w-full md:w-auto group inline-flex items-center justify-center gap-3 px-12 py-4 border border-white/10 rounded-none text-gray-400 hover:text-brand-500 hover:border-brand-500 transition-all duration-500">
+                    <i data-lucide="grid" class="w-4 h-4 group-hover:text-brand-500 transition-colors"></i>
+                    <span class="text-xs tracking-[0.2em] uppercase">Load All Artifacts</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================= -->
+    <!-- OVERLAY: FULL VAULT (SORTING SYSTEM)      -->
+    <!-- ========================================= -->
+    <div id="full-vault-overlay" class="hidden fixed inset-0 z-[80] bg-dark-950 overflow-y-auto animate-fade-in" style="background-color: #050505 !important;">
+        
+        <!-- Sticky Filter Header -->
+        <div class="sticky top-0 bg-dark-950 border-b border-white/10 z-50 px-4 py-4 md:px-6 md:py-6">
+             <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 md:gap-6">
+                 <div class="w-full md:w-auto flex justify-between items-center">
+                     <div>
+                        <h2 class="text-xl md:text-2xl font-display text-white">The Archive</h2>
+                        <p class="text-[10px] text-gray-500 uppercase tracking-widest mt-1">Total Artifacts: <span id="artifact-count" class="text-white invisible">0</span></p>
+                     </div>
+                     <!-- Mobile Close Button (Visible only on small screens) -->
+                     <button onclick="closeFullVault()" class="md:hidden p-2 text-gray-400">
+                         <i data-lucide="x" class="w-5 h-5"></i>
+                     </button>
+                 </div>
+                 
+                 <!-- FILTER BUTTONS -->
+                 <div class="flex flex-wrap justify-center gap-2" id="vault-filters">
+                     <!-- Buttons injected by JS (All, Commercial, Food, etc) -->
+                 </div>
+
+                 <!-- Desktop Close Button -->
+                 <button onclick="closeFullVault()" class="hidden md:flex items-center gap-2 text-gray-400 hover:text-white uppercase text-[10px] tracking-widest group">
+                     Close <i data-lucide="x" class="w-4 h-4 group-hover:rotate-90 transition-transform"></i>
+                 </button>
+             </div>
+        </div>
+
+        <!-- Full Grid -->
+        <div class="max-w-[1920px] mx-auto p-4 md:p-12">
+            <div id="full-vault-grid" class="masonry-grid-full">
+                <!-- All items injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- LIGHTBOX -->
+    <div id="lightbox" class="hidden fixed inset-0 z-[90] bg-black flex items-center justify-center p-4 animate-fade-in" onclick="closeLightbox()">
+        <button class="absolute top-4 right-4 md:top-6 md:right-6 text-white hover:text-brand-500 transition-colors p-2 z-[100] cursor-pointer" onclick="event.stopPropagation(); closeLightbox()">
+            <i data-lucide="x" class="w-8 h-8"></i>
+        </button>
+        <div class="max-w-7xl max-h-[90vh] relative w-full" onclick="event.stopPropagation()">
+            <img id="lightbox-img" src="" alt="" class="w-full max-h-[70vh] md:max-h-[85vh] object-contain mx-auto" />
+            <div class="mt-4 flex flex-col md:flex-row justify-between items-start md:items-center text-white gap-2">
+                <div>
+                    <h3 id="lightbox-title" class="text-2xl md:text-3xl font-display font-medium italic"></h3>
+                    <p id="lightbox-cat" class="text-sm text-brand-500 font-mono mt-1"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ========================================= -->
+    <!-- SECTION: ABOUT                            -->
+    <!-- ========================================= -->
+    <section id="about" class="py-20 md:py-32 bg-dark-950 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row gap-12 md:gap-20 items-start">
+                
+                <!-- Image/Visual -->
+                <div class="w-full md:w-5/12 relative group">
+                    <div class="aspect-[3/4] overflow-hidden relative max-w-sm mx-auto md:max-w-none">
+                        <!-- ▼▼▼ USER EDIT: PROFILE PIC ▼▼▼ -->
+                        <!-- If your file is named profile.jpg it will load automatically. -->
+                        <img id="profile-img" src="profile.jpg" onerror="this.src='Assets/1000007946.webp'" alt="Edwin Gyasi Owusu" class="w-full h-full object-cover transition-all duration-1000 group-hover:scale-105" />
+                        <div class="absolute inset-0 bg-black/10"></div>
+                    </div>
+                    <!-- Decoration -->
+                    <div class="absolute -bottom-4 -right-4 w-full h-full border border-brand-500/20 -z-10 group-hover:translate-x-2 group-hover:translate-y-2 transition-transform duration-500 hidden md:block"></div>
+                </div>
+
+                <!-- Content -->
+                <div class="w-full md:w-7/12">
+                    <span class="text-brand-500 font-mono text-xs tracking-[0.2em] uppercase mb-4 md:mb-6 block">The Designer</span>
+                    
+                    <h2 class="text-3xl md:text-5xl font-display font-medium tracking-tight text-white mb-6 md:mb-8">
+                        Edwin Gyasi <br/> Owusu.
+                    </h2>
+                    
+                    <div class="space-y-6 text-gray-400 text-sm md:text-base leading-relaxed font-light">
+                        <p>
+                            I established <span class="text-white font-medium">Eon Designs</span> to bridge the gap between functional clarity and lasting impact. The name <span class="text-white font-medium">Eon</span> isn't accidental it represents deep time. My goal is to create visual systems that survive the trend cycle.
+                        </p>
+                        <p>
+                            I don't believe in overcomplicating things. I focus on clean layouts and logic-driven visuals that communicate instantly. No fluff. Just effective, enduring design.
+                        </p>
+                    </div>
+
+                    <!-- CAPABILITIES & CLIENTS -->
+                    <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-10">
+                        <div>
+                            <h4 class="text-white font-display font-medium tracking-wide mb-6 text-lg">What I Do</h4>
+                            <ul class="space-y-3">
+                                <li class="flex items-center gap-3 text-gray-400 text-sm">
+                                    <span class="text-brand-500"><i data-lucide="check" class="w-3 h-3"></i></span> Brand Identity
+                                </li>
+                                <li class="flex items-center gap-3 text-gray-400 text-sm">
+                                    <span class="text-brand-500"><i data-lucide="check" class="w-3 h-3"></i></span> Social Media Design
+                                </li>
+                                <li class="flex items-center gap-3 text-gray-400 text-sm">
+                                    <span class="text-brand-500"><i data-lucide="check" class="w-3 h-3"></i></span> Event Branding
+                                </li>
+                                <li class="flex items-center gap-3 text-gray-400 text-sm">
+                                    <span class="text-brand-500"><i data-lucide="check" class="w-3 h-3"></i></span> Creative Direction
+                                </li>
+                                <li class="flex items-center gap-3 text-gray-400 text-sm">
+                                    <span class="text-brand-500"><i data-lucide="check" class="w-3 h-3"></i></span> UI/UX
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                             <h4 class="text-white font-display font-medium tracking-wide mb-6 text-lg">Select Clients</h4>
+                             <div class="flex flex-wrap gap-2">
+                                <span class="px-4 py-1 border border-white/10 text-xs text-gray-400 hover:border-brand-500 hover:text-brand-500 transition-colors cursor-default">AusIMM Tarkwa Chapter</span>
+                                <span class="px-4 py-1 border border-white/10 text-xs text-gray-400 hover:border-brand-500 hover:text-brand-500 transition-colors cursor-default">GESS-KNUST</span>
+                                <span class="px-4 py-1 border border-white/10 text-xs text-gray-400 hover:border-brand-500 hover:text-brand-500 transition-colors cursor-default">ICGC</span>
+                                <span class="px-4 py-1 border border-white/10 text-xs text-gray-400 hover:border-brand-500 hover:text-brand-500 transition-colors cursor-default">Eon Designs</span>
+                                <span class="px-4 py-1 border border-white/10 text-xs text-gray-400 hover:border-brand-500 hover:text-brand-500 transition-colors cursor-default">Fragilda Construction Ltd.</span>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================= -->
+    <!-- SECTION: JOURNAL (BLOG)                   -->
+    <!-- ========================================= -->
+    <section id="journal" class="py-20 md:py-32 bg-dark-900 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-6">
+             <h2 class="text-3xl md:text-5xl font-display font-medium text-white mb-10 md:mb-16">Journal</h2>
+             <div id="blog-grid" class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                 <!-- Injected by JS -->
+             </div>
+        </div>
+    </section>
+
+    <!-- BLOG READING MODAL -->
+    <div id="blog-modal" class="hidden fixed inset-0 z-[100] bg-dark-950 overflow-y-auto animate-fade-in" style="background-color: #050505 !important;">
+         <div class="max-w-3xl mx-auto px-6 py-12 md:py-20">
+             <button onclick="document.getElementById('blog-modal').classList.add('hidden'); document.body.style.overflow='auto';" class="mb-10 text-gray-500 hover:text-white flex items-center gap-2 text-xs uppercase tracking-widest sticky top-6 bg-dark-950 border border-white/10 py-3 px-6 rounded-full w-fit z-50 shadow-xl">
+                 <i data-lucide="arrow-left" class="w-4 h-4"></i> Back to Journal
+             </button>
+             
+             <span id="blog-modal-date" class="text-brand-500 font-mono text-xs mb-4 block"></span>
+             <h1 id="blog-modal-title" class="text-2xl md:text-6xl font-display text-white mb-8 md:mb-10 leading-tight"></h1>
+             <img id="blog-modal-img" src="" onerror="this.style.display='none'" class="w-full h-auto mb-10 opacity-100 rounded-sm" />
+             
+             <!-- Article Body -->
+             <div id="blog-modal-body" class="prose prose-invert prose-base md:prose-lg text-gray-300 font-light leading-loose pb-20">
+                 <!-- Content Injected -->
+             </div>
+         </div>
+    </div>
+
+    <!-- ========================================= -->
+    <!-- SECTION: CONTACT                          -->
+    <!-- ========================================= -->
+    <section id="contact" class="py-20 md:py-32 bg-dark-950 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-6">
+             <div class="grid grid-cols-1 lg:grid-cols-5 gap-16">
+                 <div class="lg:col-span-2">
+                     <h2 class="text-3xl md:text-5xl font-display text-white mb-8">Start a <br/><span class="text-brand-500 italic">Project.</span></h2>
+                     
+                     <!-- EMAIL -->
+                     <a href="mailto:gyasiedwin14@gmail.com" class="flex items-center gap-4 text-white hover:text-brand-500 transition-colors mb-4 group">
+                         <div class="w-10 h-10 border border-white/10 flex items-center justify-center group-hover:bg-brand-500 group-hover:text-black group-hover:border-brand-500 transition-all">
+                             <i data-lucide="mail" class="w-4 h-4"></i>
+                         </div>
+                         <span class="text-base md:text-lg font-display">gyasiedwin14@gmail.com</span>
+                     </a>
+
+                     <!-- ▼▼▼ SOCIAL ICONS (EDIT HERE) ▼▼▼ -->
+                     <div class="flex gap-3 md:gap-4 mt-8">
+                         <a href="https://pinterest.com/eon_Designs1" target="_blank" class="p-3 border border-white/10 text-gray-400 hover:text-black hover:bg-brand-500 hover:border-brand-500 transition-all flex items-center justify-center">
+                             <!-- PINTEREST SVG LOGO (FIXED) -->
+                             <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.399.165-1.487-.69-2.425-2.857-2.425-4.587 0-3.743 2.718-7.178 7.848-7.178 4.125 0 7.325 2.946 7.325 6.883 0 4.116-2.596 7.432-6.197 7.432-1.213 0-2.352-.629-2.738-1.375 0 0-.599 2.286-.744 2.83-.268 1.025-1.001 2.302-1.492 3.076 1.12.333 2.308.513 3.541.513 6.627 0 12.001-5.367 12.001-12.001 0-6.627-5.373-12.001-12.001-12.001z"/></svg>
+                         </a>
+                         <a href="https://instagram.com/thedesigner_edwin" target="_blank" class="p-3 border border-white/10 text-gray-400 hover:text-black hover:bg-brand-500 hover:border-brand-500 transition-all"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+                         <a href="https://x.com/thedesigner_edwin" target="_blank" class="p-3 border border-white/10 text-gray-400 hover:text-black hover:bg-brand-500 hover:border-brand-500 transition-all"><i data-lucide="twitter" class="w-4 h-4"></i></a>
+                         <a href="https://facebook.com/eddywin.wi" target="_blank" class="p-3 border border-white/10 text-gray-400 hover:text-black hover:bg-brand-500 hover:border-brand-500 transition-all"><i data-lucide="facebook" class="w-4 h-4"></i></a>
+                     </div>
+                 </div>
+
+                 <div class="lg:col-span-3 bg-dark-900 p-6 md:p-12 border border-white/5">
+                     <form onsubmit="handleFormSubmit(event)" class="space-y-10">
+                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                             <input type="text" name="name" required class="bg-transparent border-b border-white/10 py-4 text-white focus:border-brand-500 outline-none font-display text-lg md:text-xl transition-all w-full" placeholder="Your Name" />
+                             <input type="email" name="email" required class="bg-transparent border-b border-white/10 py-4 text-white focus:border-brand-500 outline-none font-display text-lg md:text-xl transition-all w-full" placeholder="Email Address" />
+                         </div>
+                         <textarea rows="3" name="message" class="w-full bg-transparent border-b border-white/10 py-4 text-white focus:border-brand-500 outline-none font-display text-lg md:text-xl resize-none transition-all" placeholder="Project Goals..."></textarea>
+                         <button type="submit" id="submit-btn" class="px-10 py-5 bg-brand-500 text-dark-950 font-bold uppercase tracking-widest text-xs hover:bg-white transition-all w-full md:w-auto">Book Session</button>
+                     </form>
+                 </div>
+             </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-dark-950 py-12 border-t border-white/5 text-center text-gray-600 text-xs md:text-sm">
+        &copy; 2026 Eon Designs by Edwin Gyasi Owusu.
+    </footer>
+    
+    <!-- ========================================= -->
+    <!-- MOBILE MENU OVERLAY (MOVED TO BODY ROOT)  -->
+    <!-- ========================================= -->
+    <div id="mobile-menu" class="hidden fixed inset-0 w-screen h-screen z-[9999] pt-20 px-6 animate-fade-in flex flex-col" style="background-color: #000000 !important; opacity: 1 !important;">
+        <button onclick="toggleMobileMenu()" class="absolute top-6 right-6 text-white p-2 hover:bg-white/10 rounded-full transition-colors z-[10000]">
+            <i data-lucide="x" class="w-8 h-8"></i>
+        </button>
+        <div class="flex flex-col gap-6 mt-10">
+             <button onclick="scrollToSection('work'); toggleMobileMenu()" class="text-xl font-display font-medium text-gray-400 hover:text-white text-left transition-colors border-b border-white/10 pb-4">Work</button>
+             <button onclick="scrollToSection('vault'); toggleMobileMenu()" class="text-xl font-display font-medium text-gray-400 hover:text-white text-left transition-colors border-b border-white/10 pb-4">The Vault</button>
+             <button onclick="scrollToSection('about'); toggleMobileMenu()" class="text-xl font-display font-medium text-gray-400 hover:text-white text-left transition-colors border-b border-white/10 pb-4">About</button>
+             <button onclick="scrollToSection('journal'); toggleMobileMenu()" class="text-xl font-display font-medium text-gray-400 hover:text-white text-left transition-colors border-b border-white/10 pb-4">Journal</button>
+             <button onclick="scrollToSection('contact'); toggleMobileMenu()" class="mt-4 px-6 py-4 bg-white text-black font-bold text-center w-full uppercase tracking-widest text-xs">Book Session</button>
+        </div>
+    </div>
+
+    <!-- AI CHAT WIDGET -->
+    <div id="ai-widget" class="fixed bottom-6 right-6 z-50">
+        <button onclick="toggleChat()" id="chat-toggle" class="p-3 md:p-4 bg-black text-white border border-white/20 hover:border-white shadow-2xl transition-all duration-300 hover:scale-105">
+            <i data-lucide="message-square" class="w-5 h-5 md:w-6 md:h-6"></i>
+        </button>
+        <div id="chat-window" class="hidden fixed bottom-20 right-4 md:bottom-24 md:right-8 w-[90vw] md:w-[400px] h-[400px] md:h-[500px] bg-black border border-white/10 shadow-2xl flex flex-col animate-slide-up rounded-xl md:rounded-none overflow-hidden z-[60]">
+            <div class="bg-dark-900 p-4 border-b border-white/10 flex items-center gap-3">
+                <i data-lucide="sparkles" class="w-4 h-4 text-brand-500"></i>
+                <h3 class="text-white font-medium text-sm">Eon AI</h3>
+            </div>
+            <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-4 bg-black scrollbar-thin">
+                <div class="flex justify-start"><div class="bg-dark-900 text-gray-300 border border-white/10 max-w-[85%] p-4 text-sm font-light">Welcome. I am Edwin's digital twin. Ask me about rates, availability, or design philosophy.</div></div>
+            </div>
+            <div class="p-4 bg-dark-900 border-t border-white/10 flex gap-2">
+                <input type="text" id="chat-input" placeholder="Ask AI..." onkeypress="if(event.key === 'Enter') sendChatMessage()" class="flex-1 bg-black border border-white/10 px-4 py-3 text-white text-sm focus:outline-none focus:border-brand-500 transition-colors" />
+                <button onclick="sendChatMessage()" class="p-3 bg-white text-black hover:bg-gray-200"><i data-lucide="send" class="w-4 h-4"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================= -->
+    <!-- JAVASCRIPT LOGIC                          -->
+    <!-- ========================================= -->
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>
