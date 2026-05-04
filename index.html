@@ -4,6 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Edwin Gyasi Owusu — Geological Engineer specializing in Mining, Geotechnical, Oil & Gas, GIS & Data Analytics. Final-year BSc at KNUST, Ghana.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Edwin Gyasi Owusu — Geological Engineer">
+  <meta property="og:description" content="Data-driven geological engineer focused on mining operations, GIS, and analytics">
+  <meta property="og:image" content="https://edwingyasi.online/og-engineering.png">
+  <meta property="og:url" content="https://edwingyasi.online">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Edwin Gyasi Owusu — Geological Engineer">
+  <meta name="twitter:description" content="Data-driven geological engineer focused on mining operations, GIS, and analytics">
+  <meta name="twitter:image" content="https://edwingyasi.online/og-engineering.png">
   <title>Edwin Gyasi Owusu — Geological Engineer</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -152,13 +161,15 @@
       inset: 0;
       width: 100%; height: 100%;
       pointer-events: none;
-      opacity: 0.038;
-      animation: topoShift 28s ease-in-out infinite alternate;
+      animation: topoShift 36s ease-in-out infinite;
       transform-origin: center;
     }
     @keyframes topoShift {
-      0%   { transform: translate(0,0) scale(1.02); }
-      100% { transform: translate(-24px,-14px) scale(1.06); }
+      0%   { transform: translate(0, 0); }
+      25%  { transform: translate(-5px, -3px); }
+      50%  { transform: translate(-8px, 2px); }
+      75%  { transform: translate(3px, -4px); }
+      100% { transform: translate(0, 0); }
     }
 
     /* Top-right year / status label */
@@ -755,25 +766,120 @@
     <!-- Topographic contour lines -->
     <svg class="topo-bg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice"
          xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <g fill="none" stroke="white">
-        <!-- Major contour lines -->
-        <path stroke-width="1"   d="M-80,480 C120,310 320,640 540,440 C760,240 960,540 1180,380 C1360,240 1460,420 1540,340"/>
-        <path stroke-width="1"   d="M-80,510 C160,340 360,660 580,470 C800,270 1000,560 1220,400 C1400,260 1470,440 1540,370"/>
-        <path stroke-width="1"   d="M-80,540 C200,370 400,680 620,500 C840,300 1040,580 1260,420 C1420,280 1480,460 1540,400"/>
-        <path stroke-width="1"   d="M-80,570 C240,400 440,700 660,530 C880,330 1080,600 1300,440 C1430,300 1490,480 1540,430"/>
-        <path stroke-width="1"   d="M-80,450 C80,280 280,610 500,410 C720,210 920,520 1140,360 C1340,220 1440,400 1540,310"/>
-        <!-- Minor contour lines -->
-        <path stroke-width="0.5" d="M-80,420 C40,260 240,580 460,380 C680,180 880,500 1100,340 C1320,200 1420,380 1540,280"/>
-        <path stroke-width="0.5" d="M-80,390 C0,230 200,550 420,350 C640,150 840,480 1060,320 C1300,180 1400,360 1540,250"/>
-        <path stroke-width="0.5" d="M-80,600 C280,430 480,720 700,560 C920,370 1120,620 1340,460"/>
-        <path stroke-width="0.5" d="M-80,630 C320,460 520,740 740,590 C960,400 1160,640 1380,480"/>
-        <path stroke-width="0.5" d="M300,80  C480,30  580,240 780,140 C980,40  1080,210 1300,110"/>
-        <path stroke-width="0.5" d="M220,110 C420,60  520,260 720,160 C920,60  1020,240 1240,130"/>
-        <path stroke-width="0.5" d="M-80,700 C200,570 380,760 590,700 C800,620 980,720 1190,670 C1370,610 1460,680 1540,640"/>
-        <path stroke-width="0.5" d="M-80,730 C240,600 420,790 630,730 C840,650 1020,750 1230,700 C1400,640 1480,710 1540,670"/>
-        <!-- Extra fine lines for texture -->
-        <path stroke-width="0.3" d="M-80,360 C-40,200 160,520 380,320 C600,120 800,460 1020,300"/>
-        <path stroke-width="0.3" d="M500,50  C680,20  760,200 960,100 C1160,20  1260,180 1440,90"/>
+      <g fill="none" stroke="rgba(212,173,101,0.06)">
+
+        <!-- 01 — Upper center-left -->
+        <g transform="rotate(12, 600, 120)">
+          <ellipse cx="600" cy="120" rx="120" ry="78" stroke-width="0.8"/>
+          <ellipse cx="600" cy="120" rx="90" ry="58" stroke-width="0.6"/>
+          <ellipse cx="600" cy="120" rx="62" ry="40" stroke-width="0.5"/>
+          <ellipse cx="600" cy="120" rx="36" ry="23" stroke-width="0.5"/>
+          <ellipse cx="600" cy="120" rx="16" ry="10" stroke-width="0.5"/>
+        </g>
+        <text x="703" y="148" font-size="8" fill="rgba(212,173,101,0.06)" font-family="monospace" letter-spacing="0.05em">260</text>
+
+        <!-- 02 — Upper center-right -->
+        <g transform="rotate(-18, 840, 210)">
+          <ellipse cx="840" cy="210" rx="100" ry="65" stroke-width="0.8"/>
+          <ellipse cx="840" cy="210" rx="74" ry="48" stroke-width="0.6"/>
+          <ellipse cx="840" cy="210" rx="50" ry="32" stroke-width="0.5"/>
+          <ellipse cx="840" cy="210" rx="28" ry="18" stroke-width="0.5"/>
+        </g>
+
+        <!-- 03 — Center peak -->
+        <g transform="rotate(22, 715, 455)">
+          <ellipse cx="715" cy="455" rx="155" ry="100" stroke-width="1"/>
+          <ellipse cx="715" cy="455" rx="120" ry="78" stroke-width="0.7"/>
+          <ellipse cx="715" cy="455" rx="88" ry="57" stroke-width="0.6"/>
+          <ellipse cx="715" cy="455" rx="60" ry="39" stroke-width="0.5"/>
+          <ellipse cx="715" cy="455" rx="36" ry="23" stroke-width="0.5"/>
+          <ellipse cx="715" cy="455" rx="16" ry="10" stroke-width="0.5"/>
+        </g>
+        <text x="828" y="476" font-size="8" fill="rgba(212,173,101,0.06)" font-family="monospace" letter-spacing="0.05em">320</text>
+        <text x="796" y="415" font-size="8" fill="rgba(212,173,101,0.06)" font-family="monospace" letter-spacing="0.05em">340</text>
+
+        <!-- 04 — Lower center-left -->
+        <g transform="rotate(-8, 578, 730)">
+          <ellipse cx="578" cy="730" rx="112" ry="73" stroke-width="0.8"/>
+          <ellipse cx="578" cy="730" rx="84" ry="55" stroke-width="0.6"/>
+          <ellipse cx="578" cy="730" rx="58" ry="38" stroke-width="0.5"/>
+          <ellipse cx="578" cy="730" rx="34" ry="22" stroke-width="0.5"/>
+          <ellipse cx="578" cy="730" rx="15" ry="10" stroke-width="0.5"/>
+        </g>
+        <text x="663" y="756" font-size="8" fill="rgba(212,173,101,0.06)" font-family="monospace" letter-spacing="0.05em">280</text>
+
+        <!-- 05 — Lower center-right -->
+        <g transform="rotate(15, 860, 775)">
+          <ellipse cx="860" cy="775" rx="95" ry="62" stroke-width="0.8"/>
+          <ellipse cx="860" cy="775" rx="70" ry="46" stroke-width="0.6"/>
+          <ellipse cx="860" cy="775" rx="47" ry="31" stroke-width="0.5"/>
+          <ellipse cx="860" cy="775" rx="26" ry="17" stroke-width="0.5"/>
+        </g>
+
+        <!-- 06 — Upper-mid center -->
+        <g transform="rotate(-22, 728, 310)">
+          <ellipse cx="728" cy="310" rx="90" ry="58" stroke-width="0.8"/>
+          <ellipse cx="728" cy="310" rx="66" ry="43" stroke-width="0.6"/>
+          <ellipse cx="728" cy="310" rx="44" ry="28" stroke-width="0.5"/>
+          <ellipse cx="728" cy="310" rx="24" ry="15" stroke-width="0.5"/>
+        </g>
+
+        <!-- 07 — Left middle -->
+        <g transform="rotate(8, 420, 300)">
+          <ellipse cx="420" cy="300" rx="105" ry="68" stroke-width="0.8"/>
+          <ellipse cx="420" cy="300" rx="78" ry="51" stroke-width="0.6"/>
+          <ellipse cx="420" cy="300" rx="53" ry="34" stroke-width="0.5"/>
+          <ellipse cx="420" cy="300" rx="30" ry="20" stroke-width="0.5"/>
+        </g>
+        <text x="499" y="323" font-size="8" fill="rgba(212,173,101,0.06)" font-family="monospace" letter-spacing="0.05em">300</text>
+
+        <!-- 08 — Right upper-middle -->
+        <g transform="rotate(-15, 1022, 258)">
+          <ellipse cx="1022" cy="258" rx="118" ry="76" stroke-width="0.8"/>
+          <ellipse cx="1022" cy="258" rx="88" ry="57" stroke-width="0.6"/>
+          <ellipse cx="1022" cy="258" rx="60" ry="39" stroke-width="0.5"/>
+          <ellipse cx="1022" cy="258" rx="35" ry="23" stroke-width="0.5"/>
+          <ellipse cx="1022" cy="258" rx="16" ry="10" stroke-width="0.5"/>
+        </g>
+        <text x="1102" y="272" font-size="8" fill="rgba(212,173,101,0.06)" font-family="monospace" letter-spacing="0.05em">350</text>
+
+        <!-- 09 — Left lower -->
+        <g transform="rotate(20, 382, 680)">
+          <ellipse cx="382" cy="680" rx="100" ry="65" stroke-width="0.8"/>
+          <ellipse cx="382" cy="680" rx="74" ry="48" stroke-width="0.6"/>
+          <ellipse cx="382" cy="680" rx="50" ry="32" stroke-width="0.5"/>
+          <ellipse cx="382" cy="680" rx="28" ry="18" stroke-width="0.5"/>
+        </g>
+
+        <!-- 10 — Right lower -->
+        <g transform="rotate(-10, 1052, 722)">
+          <ellipse cx="1052" cy="722" rx="90" ry="58" stroke-width="0.8"/>
+          <ellipse cx="1052" cy="722" rx="66" ry="43" stroke-width="0.6"/>
+          <ellipse cx="1052" cy="722" rx="44" ry="28" stroke-width="0.5"/>
+          <ellipse cx="1052" cy="722" rx="24" ry="15" stroke-width="0.5"/>
+        </g>
+        <text x="1115" y="730" font-size="8" fill="rgba(212,173,101,0.06)" font-family="monospace" letter-spacing="0.05em">240</text>
+
+        <!-- 11 — Far upper left -->
+        <g transform="rotate(14, 178, 188)">
+          <ellipse cx="178" cy="188" rx="130" ry="85" stroke-width="0.8"/>
+          <ellipse cx="178" cy="188" rx="98" ry="64" stroke-width="0.6"/>
+          <ellipse cx="178" cy="188" rx="68" ry="44" stroke-width="0.5"/>
+          <ellipse cx="178" cy="188" rx="42" ry="27" stroke-width="0.5"/>
+          <ellipse cx="178" cy="188" rx="20" ry="13" stroke-width="0.5"/>
+        </g>
+        <text x="270" y="222" font-size="8" fill="rgba(212,173,101,0.06)" font-family="monospace" letter-spacing="0.05em">400</text>
+
+        <!-- 12 — Far upper right -->
+        <g transform="rotate(-20, 1272, 168)">
+          <ellipse cx="1272" cy="168" rx="125" ry="82" stroke-width="0.8"/>
+          <ellipse cx="1272" cy="168" rx="94" ry="61" stroke-width="0.6"/>
+          <ellipse cx="1272" cy="168" rx="65" ry="42" stroke-width="0.5"/>
+          <ellipse cx="1272" cy="168" rx="39" ry="25" stroke-width="0.5"/>
+          <ellipse cx="1272" cy="168" rx="18" ry="12" stroke-width="0.5"/>
+        </g>
+        <text x="1352" y="204" font-size="8" fill="rgba(212,173,101,0.06)" font-family="monospace" letter-spacing="0.05em">380</text>
+
       </g>
     </svg>
 
@@ -833,18 +939,15 @@
 
       <div class="about-right">
         <p class="about-para reveal d1">
-          I'm a geological engineer with a <strong>sharp eye for data</strong> and a heart for leadership.
-          I work at the intersection of field geology and modern analytics —
-          GIS, Python, spatial modeling.
+          I'm a geological engineer with a strong pull toward mining operations and the systems that make them work. I don't just study geology — I think about how field data connects to decisions, how processes can run better, and where the gaps are between site operations and engineering insight.
         </p>
         <p class="about-para reveal d2">
-          I've organized <strong>national conferences</strong>, automated certificate pipelines for
-          <strong>500+ attendees</strong>, launched student chapters across universities,
-          and built tools that solve real problems.
-          I also run <a href="/designs/" target="_blank" rel="noopener noreferrer">Eon Designs</a>,
-          a creative studio serving organizations across Ghana.
+          I'm sharpening my edge at the intersection of technical geology and data analytics — learning Python, SQL, and Power BI to turn raw site data into something actionable. I think in systems and workflows, not just tasks.
         </p>
-        <div class="skill-chips reveal d3">
+        <p class="about-para reveal d3">
+          Beyond engineering, I lead with initiative — from organizing conferences to launching student chapters across universities. I also run <a href="https://edwingyasi.online/designs/" target="_blank" rel="noopener noreferrer">Eon Designs</a>, a creative studio serving organizations across Ghana.
+        </p>
+        <div class="skill-chips reveal d4">
           <span class="chip">QGIS</span>
           <span class="chip">Python</span>
           <span class="chip">Kriging</span>
