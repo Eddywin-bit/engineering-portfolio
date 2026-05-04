@@ -1,19 +1,19 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Edwin Gyasi Owusu — Geological Engineer specializing in Mining, Geotechnical, Oil & Gas, GIS & Data Analytics. Final-year BSc at KNUST, Ghana.">
+  <meta name="description" content="Edwin Gyasi Owusu â€” Geological Engineer specializing in Mining, Geotechnical, Oil & Gas, GIS & Data Analytics. Final-year BSc at KNUST, Ghana.">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Edwin Gyasi Owusu — Geological Engineer">
+  <meta property="og:title" content="Edwin Gyasi Owusu â€” Geological Engineer">
   <meta property="og:description" content="Data-driven geological engineer focused on mining operations, GIS, and analytics">
   <meta property="og:image" content="https://edwingyasi.online/og-engineering.png">
   <meta property="og:url" content="https://edwingyasi.online">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Edwin Gyasi Owusu — Geological Engineer">
+  <meta name="twitter:title" content="Edwin Gyasi Owusu â€” Geological Engineer">
   <meta name="twitter:description" content="Data-driven geological engineer focused on mining operations, GIS, and analytics">
   <meta name="twitter:image" content="https://edwingyasi.online/og-engineering.png">
-  <title>Edwin Gyasi Owusu — Geological Engineer</title>
+  <title>Edwin Gyasi Owusu â€” Geological Engineer</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -155,22 +155,17 @@
       overflow: hidden;
     }
 
-    /* Topographic contour SVG */
-    .topo-bg {
+    /* Dot grid background */
+    .hero::before {
+      content: '';
       position: absolute;
       inset: 0;
-      width: 100%; height: 100%;
+      background-image: radial-gradient(circle, rgba(212,173,101,0.07) 1px, transparent 1px);
+      background-size: 36px 36px;
       pointer-events: none;
-      animation: topoShift 36s ease-in-out infinite;
-      transform-origin: center;
+      z-index: 1;
     }
-    @keyframes topoShift {
-      0%   { transform: translate(0, 0); }
-      25%  { transform: translate(-5px, -3px); }
-      50%  { transform: translate(-8px, 2px); }
-      75%  { transform: translate(3px, -4px); }
-      100% { transform: translate(0, 0); }
-    }
+    .hero-content, .hero-meta, .scroll-cue { position: relative; z-index: 2; }
 
     /* Top-right year / status label */
     .hero-meta {
@@ -510,7 +505,7 @@
     }
     .cs-card.open .cs-toggle-arrow { transform: rotate(45deg); }
 
-    /* Accordion via CSS grid trick — most performant smooth expand */
+    /* Accordion via CSS grid trick â€” most performant smooth expand */
     .cs-body {
       display: grid;
       grid-template-rows: 0fr;
@@ -763,125 +758,6 @@
   ================================================================ -->
   <section class="hero" id="home" aria-label="Introduction">
 
-    <!-- Topographic contour lines -->
-    <svg class="topo-bg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice"
-         xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <g fill="none" stroke="rgba(212,173,101,0.06)">
-
-        <!-- 01 — Upper center-left -->
-        <g transform="rotate(12, 600, 120)">
-          <ellipse cx="600" cy="120" rx="120" ry="78" stroke-width="0.8"/>
-          <ellipse cx="600" cy="120" rx="90" ry="58" stroke-width="0.6"/>
-          <ellipse cx="600" cy="120" rx="62" ry="40" stroke-width="0.5"/>
-          <ellipse cx="600" cy="120" rx="36" ry="23" stroke-width="0.5"/>
-          <ellipse cx="600" cy="120" rx="16" ry="10" stroke-width="0.5"/>
-        </g>
-        <text x="703" y="148" font-size="8" fill="rgba(212,173,101,0.06)" font-family="monospace" letter-spacing="0.05em">260</text>
-
-        <!-- 02 — Upper center-right -->
-        <g transform="rotate(-18, 840, 210)">
-          <ellipse cx="840" cy="210" rx="100" ry="65" stroke-width="0.8"/>
-          <ellipse cx="840" cy="210" rx="74" ry="48" stroke-width="0.6"/>
-          <ellipse cx="840" cy="210" rx="50" ry="32" stroke-width="0.5"/>
-          <ellipse cx="840" cy="210" rx="28" ry="18" stroke-width="0.5"/>
-        </g>
-
-        <!-- 03 — Center peak -->
-        <g transform="rotate(22, 715, 455)">
-          <ellipse cx="715" cy="455" rx="155" ry="100" stroke-width="1"/>
-          <ellipse cx="715" cy="455" rx="120" ry="78" stroke-width="0.7"/>
-          <ellipse cx="715" cy="455" rx="88" ry="57" stroke-width="0.6"/>
-          <ellipse cx="715" cy="455" rx="60" ry="39" stroke-width="0.5"/>
-          <ellipse cx="715" cy="455" rx="36" ry="23" stroke-width="0.5"/>
-          <ellipse cx="715" cy="455" rx="16" ry="10" stroke-width="0.5"/>
-        </g>
-        <text x="828" y="476" font-size="8" fill="rgba(212,173,101,0.06)" font-family="monospace" letter-spacing="0.05em">320</text>
-        <text x="796" y="415" font-size="8" fill="rgba(212,173,101,0.06)" font-family="monospace" letter-spacing="0.05em">340</text>
-
-        <!-- 04 — Lower center-left -->
-        <g transform="rotate(-8, 578, 730)">
-          <ellipse cx="578" cy="730" rx="112" ry="73" stroke-width="0.8"/>
-          <ellipse cx="578" cy="730" rx="84" ry="55" stroke-width="0.6"/>
-          <ellipse cx="578" cy="730" rx="58" ry="38" stroke-width="0.5"/>
-          <ellipse cx="578" cy="730" rx="34" ry="22" stroke-width="0.5"/>
-          <ellipse cx="578" cy="730" rx="15" ry="10" stroke-width="0.5"/>
-        </g>
-        <text x="663" y="756" font-size="8" fill="rgba(212,173,101,0.06)" font-family="monospace" letter-spacing="0.05em">280</text>
-
-        <!-- 05 — Lower center-right -->
-        <g transform="rotate(15, 860, 775)">
-          <ellipse cx="860" cy="775" rx="95" ry="62" stroke-width="0.8"/>
-          <ellipse cx="860" cy="775" rx="70" ry="46" stroke-width="0.6"/>
-          <ellipse cx="860" cy="775" rx="47" ry="31" stroke-width="0.5"/>
-          <ellipse cx="860" cy="775" rx="26" ry="17" stroke-width="0.5"/>
-        </g>
-
-        <!-- 06 — Upper-mid center -->
-        <g transform="rotate(-22, 728, 310)">
-          <ellipse cx="728" cy="310" rx="90" ry="58" stroke-width="0.8"/>
-          <ellipse cx="728" cy="310" rx="66" ry="43" stroke-width="0.6"/>
-          <ellipse cx="728" cy="310" rx="44" ry="28" stroke-width="0.5"/>
-          <ellipse cx="728" cy="310" rx="24" ry="15" stroke-width="0.5"/>
-        </g>
-
-        <!-- 07 — Left middle -->
-        <g transform="rotate(8, 420, 300)">
-          <ellipse cx="420" cy="300" rx="105" ry="68" stroke-width="0.8"/>
-          <ellipse cx="420" cy="300" rx="78" ry="51" stroke-width="0.6"/>
-          <ellipse cx="420" cy="300" rx="53" ry="34" stroke-width="0.5"/>
-          <ellipse cx="420" cy="300" rx="30" ry="20" stroke-width="0.5"/>
-        </g>
-        <text x="499" y="323" font-size="8" fill="rgba(212,173,101,0.06)" font-family="monospace" letter-spacing="0.05em">300</text>
-
-        <!-- 08 — Right upper-middle -->
-        <g transform="rotate(-15, 1022, 258)">
-          <ellipse cx="1022" cy="258" rx="118" ry="76" stroke-width="0.8"/>
-          <ellipse cx="1022" cy="258" rx="88" ry="57" stroke-width="0.6"/>
-          <ellipse cx="1022" cy="258" rx="60" ry="39" stroke-width="0.5"/>
-          <ellipse cx="1022" cy="258" rx="35" ry="23" stroke-width="0.5"/>
-          <ellipse cx="1022" cy="258" rx="16" ry="10" stroke-width="0.5"/>
-        </g>
-        <text x="1102" y="272" font-size="8" fill="rgba(212,173,101,0.06)" font-family="monospace" letter-spacing="0.05em">350</text>
-
-        <!-- 09 — Left lower -->
-        <g transform="rotate(20, 382, 680)">
-          <ellipse cx="382" cy="680" rx="100" ry="65" stroke-width="0.8"/>
-          <ellipse cx="382" cy="680" rx="74" ry="48" stroke-width="0.6"/>
-          <ellipse cx="382" cy="680" rx="50" ry="32" stroke-width="0.5"/>
-          <ellipse cx="382" cy="680" rx="28" ry="18" stroke-width="0.5"/>
-        </g>
-
-        <!-- 10 — Right lower -->
-        <g transform="rotate(-10, 1052, 722)">
-          <ellipse cx="1052" cy="722" rx="90" ry="58" stroke-width="0.8"/>
-          <ellipse cx="1052" cy="722" rx="66" ry="43" stroke-width="0.6"/>
-          <ellipse cx="1052" cy="722" rx="44" ry="28" stroke-width="0.5"/>
-          <ellipse cx="1052" cy="722" rx="24" ry="15" stroke-width="0.5"/>
-        </g>
-        <text x="1115" y="730" font-size="8" fill="rgba(212,173,101,0.06)" font-family="monospace" letter-spacing="0.05em">240</text>
-
-        <!-- 11 — Far upper left -->
-        <g transform="rotate(14, 178, 188)">
-          <ellipse cx="178" cy="188" rx="130" ry="85" stroke-width="0.8"/>
-          <ellipse cx="178" cy="188" rx="98" ry="64" stroke-width="0.6"/>
-          <ellipse cx="178" cy="188" rx="68" ry="44" stroke-width="0.5"/>
-          <ellipse cx="178" cy="188" rx="42" ry="27" stroke-width="0.5"/>
-          <ellipse cx="178" cy="188" rx="20" ry="13" stroke-width="0.5"/>
-        </g>
-        <text x="270" y="222" font-size="8" fill="rgba(212,173,101,0.06)" font-family="monospace" letter-spacing="0.05em">400</text>
-
-        <!-- 12 — Far upper right -->
-        <g transform="rotate(-20, 1272, 168)">
-          <ellipse cx="1272" cy="168" rx="125" ry="82" stroke-width="0.8"/>
-          <ellipse cx="1272" cy="168" rx="94" ry="61" stroke-width="0.6"/>
-          <ellipse cx="1272" cy="168" rx="65" ry="42" stroke-width="0.5"/>
-          <ellipse cx="1272" cy="168" rx="39" ry="25" stroke-width="0.5"/>
-          <ellipse cx="1272" cy="168" rx="18" ry="12" stroke-width="0.5"/>
-        </g>
-        <text x="1352" y="204" font-size="8" fill="rgba(212,173,101,0.06)" font-family="monospace" letter-spacing="0.05em">380</text>
-
-      </g>
-    </svg>
 
     <!-- Meta label top-right -->
     <div class="hero-meta" aria-hidden="true">
@@ -939,13 +815,13 @@
 
       <div class="about-right">
         <p class="about-para reveal d1">
-          I'm a geological engineer with a strong pull toward mining operations and the systems that make them work. I don't just study geology — I think about how field data connects to decisions, how processes can run better, and where the gaps are between site operations and engineering insight.
+          I'm a geological engineer with a strong pull toward mining operations and the systems that make them work. I don't just study geology â€” I think about how field data connects to decisions, how processes can run better, and where the gaps are between site operations and engineering insight.
         </p>
         <p class="about-para reveal d2">
-          I'm sharpening my edge at the intersection of technical geology and data analytics — learning Python, SQL, and Power BI to turn raw site data into something actionable. I think in systems and workflows, not just tasks.
+          I'm sharpening my edge at the intersection of technical geology and data analytics â€” learning Python, SQL, and Power BI to turn raw site data into something actionable. I think in systems and workflows, not just tasks.
         </p>
         <p class="about-para reveal d3">
-          Beyond engineering, I lead with initiative — from organizing conferences to launching student chapters across universities. I also run <a href="https://edwingyasi.online/designs/" target="_blank" rel="noopener noreferrer">Eon Designs</a>, a creative studio serving organizations across Ghana.
+          Beyond engineering, I create. I run <a href="https://edwingyasi.online/designs/" target="_blank" rel="noopener noreferrer">Eon Designs</a>, a creative studio serving organizations across Ghana.
         </p>
         <div class="skill-chips reveal d4">
           <span class="chip">QGIS</span>
@@ -1011,7 +887,7 @@
                 </div>
                 <div class="cs-section">
                   <span class="cs-section-label">Key Issues</span>
-                  <p class="cs-section-text">Worn hydraulic seals reducing system pressure by an estimated <strong>15–20%</strong>, inconsistent calibration of aggregate feeders, and lack of a preventive maintenance schedule for critical components.</p>
+                  <p class="cs-section-text">Worn hydraulic seals reducing system pressure by an estimated <strong>15â€“20%</strong>, inconsistent calibration of aggregate feeders, and lack of a preventive maintenance schedule for critical components.</p>
                 </div>
                 <div class="cs-section">
                   <span class="cs-section-label">Recommendations</span>
@@ -1111,7 +987,7 @@
                 </div>
                 <div class="cs-section">
                   <span class="cs-section-label">Outcome</span>
-                  <p class="cs-section-text">Contributed to foundation type recommendations — identifying sites suitable for <strong>shallow foundations</strong> versus those requiring <strong>deep foundation solutions</strong> based on bearing capacity and settlement analysis.</p>
+                  <p class="cs-section-text">Contributed to foundation type recommendations â€” identifying sites suitable for <strong>shallow foundations</strong> versus those requiring <strong>deep foundation solutions</strong> based on bearing capacity and settlement analysis.</p>
                 </div>
               </div>
               <div class="cs-tags">
@@ -1251,7 +1127,7 @@
        SCRIPTS
   ================================================================ -->
   <script>
-    /* ── Case Study Accordion ── */
+    /* â”€â”€ Case Study Accordion â”€â”€ */
     document.querySelectorAll('.cs-toggle').forEach(btn => {
       btn.addEventListener('click', () => {
         const card = btn.closest('.cs-card');
@@ -1271,12 +1147,12 @@
       });
     });
 
-    /* ── Sticky Nav ── */
+    /* â”€â”€ Sticky Nav â”€â”€ */
     const nav = document.getElementById('nav');
     const onScroll = () => nav.classList.toggle('stuck', window.scrollY > 50);
     window.addEventListener('scroll', onScroll, { passive: true });
 
-    /* ── Scroll Reveal (Intersection Observer) ── */
+    /* â”€â”€ Scroll Reveal (Intersection Observer) â”€â”€ */
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
