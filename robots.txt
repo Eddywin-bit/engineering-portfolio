@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /vault/
+Disallow: /ledger/
 
 Sitemap: https://www.edwingyasi.online/sitemap.xml
