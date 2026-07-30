@@ -6,6 +6,21 @@
   <meta name="robots" content="noindex, nofollow" />
   <title>Studio — Edwin Gyasi Owusu</title>
 
+  <!--
+    Absolute, host-relative path to the config.
+
+    Without this, Decap resolves the bare string "config.yml" against the
+    document base URL. Vercel serves this page at BOTH /admin and /admin/,
+    and on the no-trailing-slash variant the base is /admin, so "config.yml"
+    resolves to /config.yml at the site root and 404s. Visiting
+    edwingyasi.online/admin redirects to www.edwingyasi.online/admin with no
+    trailing slash, so that was the path everyone actually hit.
+
+    A leading slash pins it to /admin/config.yml regardless of trailing slash,
+    and still works on any host: apex, www, or a *.vercel.app preview.
+  -->
+  <link rel="cms-config-url" type="text/yaml" href="/admin/config.yml" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link

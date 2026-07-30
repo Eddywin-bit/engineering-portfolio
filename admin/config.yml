@@ -16,7 +16,10 @@ backend:
   branch: main
   # Vercel has no Git Gateway, so /api/auth + /api/callback in this repo
   # act as the OAuth provider. Same domain, no third-party service.
-  base_url: https://edwingyasi.online
+  #
+  # Must be the canonical host. The apex 307-redirects to www, and sending an
+  # OAuth popup through a redirect is a good way to lose the state cookie.
+  base_url: https://www.edwingyasi.online
   auth_endpoint: api/auth
   commit_messages:
     create: 'CMS: create {{collection}} "{{slug}}"'
@@ -31,9 +34,9 @@ local_backend: true
 # Commit straight to main so a save triggers a Vercel deploy immediately.
 publish_mode: simple
 
-site_url: https://edwingyasi.online
-display_url: https://edwingyasi.online
-logo_url: https://edwingyasi.online/og-engineering.png
+site_url: https://www.edwingyasi.online
+display_url: https://www.edwingyasi.online
+logo_url: https://www.edwingyasi.online/og-engineering.png
 
 # Default upload target (engineering site). The Eon Designs collection
 # overrides this per field so its uploads land in /designs/images.

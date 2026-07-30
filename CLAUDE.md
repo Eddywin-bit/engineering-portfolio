@@ -84,8 +84,17 @@ For all frontend work, use the Claude Chrome extension to visually verify change
 
 Both live sites are edited from one panel. No code editing required.
 
-**Admin panel:** https://edwingyasi.online/admin
+**Admin panel:** https://www.edwingyasi.online/admin
 **Config:** `/admin/config.yml` — **Loader/theme:** `/admin/index.html`
+
+The canonical host is `www.edwingyasi.online`. The apex 307-redirects to it.
+Use the www host anywhere an absolute URL is required, including the GitHub
+OAuth callback and `base_url` in config.yml.
+
+`admin/index.html` must keep its `<link rel="cms-config-url" href="/admin/config.yml">`.
+Vercel serves the page at both `/admin` and `/admin/`, and without that absolute
+link Decap resolves a relative `config.yml` against the `/admin` base, which
+lands on `/config.yml` at the site root and 404s.
 
 ### How content reaches the page
 
@@ -125,6 +134,9 @@ so items can be added, edited, deleted, and drag-reordered.
 Vercel has no Git Gateway, so `/api/auth.js` and `/api/callback.js` in this repo
 act as the GitHub OAuth provider. Same domain, no Netlify or Cloudflare Worker.
 
+GitHub OAuth App callback URL must be exactly:
+`https://www.edwingyasi.online/api/callback`
+
 Required Vercel environment variables:
 - `GITHUB_OAUTH_CLIENT_ID`
 - `GITHUB_OAUTH_CLIENT_SECRET`
@@ -144,4 +156,5 @@ and check the HTML.
 ## Updates Log
 
 - 2026-05-19: Built designs/ v2 but looked too similar to old site because brief said "preserve existing brand identity." New build (eon/) starts completely fresh with no reference to old site structure.
+- 2026-07-30: Fixed `Failed to load config.yml (404)`. Cause was relative path resolution, not a missing or blocked file. Vercel serves the panel at `/admin` without a trailing slash, so Decap's default relative `config.yml` resolved to `/config.yml` at the site root. Fixed with an absolute `cms-config-url` link. Also pinned all absolute CMS URLs to the canonical `www` host, since the apex 307-redirects and an OAuth popup should not travel through a redirect.
 - 2026-07-30: Added Decap CMS covering both live sites. Chose build-time injection over client-side hydration so edited content stays in the static HTML for SEO and link previews. This required marking regions in `index.html` and `designs/index.html` and switching the root Vercel project from pure-static to `node build.js`. Verified the rendered output is byte-identical to the pre-CMS pages. Superseded the old "never modify root / never touch /designs/" rules, which are incompatible with a CMS that edits both sites.
