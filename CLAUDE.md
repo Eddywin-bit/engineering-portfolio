@@ -8,9 +8,14 @@ Edwin Gyasi Owusu (CEO Gyasi). Final-year Geological Engineering student at KNUS
 
 ## Folder Structure
 
-- `/` — Engineering portfolio (live at edwingyasi.online) — DO NOT MODIFY
-- `/eon/` — Eon Designs portfolio v2 (the active build)
-- `/designs/` — old portfolio — DO NOT TOUCH
+- `/` — Engineering portfolio (live at edwingyasi.online) — content is CMS-managed, see Decap CMS below
+- `/admin/` — Decap CMS admin panel (`index.html` + `config.yml`)
+- `/content/` — CMS content source of truth (JSON), `engineering/` and `designs/`
+- `/api/` — Vercel serverless functions: GitHub OAuth provider for the CMS
+- `/images/` — CMS uploads for the engineering site
+- `build.js` — injects `/content` JSON into the HTML at deploy time
+- `/eon/` — Eon Designs portfolio v2 (not yet scaffolded as of 2026-07-30)
+- `/designs/` — Eon Designs site, live at edwingyasi.online/designs — CMS-managed
 - `/vault/` — Prompt Vault PWA — DO NOT TOUCH
 - `/ledger/` — My Ledger — DO NOT TOUCH
 
@@ -38,12 +43,20 @@ Do NOT reference, copy, or replicate anything from `/designs/`. That folder is t
 
 ## Hard Rules
 
-- NEVER modify files at repo root (the engineering portfolio)
-- NEVER touch `/designs/`, `/vault/`, or `/ledger/` folders
-- NEVER commit `ANTHROPIC_API_KEY` or any secret
-- ALWAYS work inside `/eon/` for this project
-- ALWAYS verify changes locally before pushing
-- Do NOT copy visual structure or layout from `/designs/index.html`
+- NEVER touch `/vault/` or `/ledger/` folders
+- NEVER commit `ANTHROPIC_API_KEY`, `GITHUB_OAUTH_CLIENT_SECRET`, or any secret
+- NEVER hand-edit content inside a `<!-- CMS:START -->` / `<!-- CMS:END -->` block. `build.js` overwrites it. Edit the JSON in `/content/` instead.
+- NEVER hand-edit `designs/js/data.js`. It is generated from `/content/designs/*.json`.
+- ALWAYS run `node build.js` and confirm it exits 0 before pushing
+- For the EON v2 build specifically, work inside `/eon/`
+- Do NOT copy visual structure or layout from `/designs/index.html` into `/eon/`
+
+## Standing Habit
+
+Whenever a structural or setup decision is made in this project, append a short
+note to this file in the same commit, without being asked. Structural means:
+new tooling, new folder conventions, build or deploy changes, auth setup,
+content pipeline changes, or a rule in this file being superseded.
 
 ## Visual Conventions (EON v2)
 
@@ -67,6 +80,68 @@ For all frontend work, use the Claude Chrome extension to visually verify change
 - Direct, honest feedback over flattery
 - Concise responses, no fluff
 
+## Decap CMS
+
+Both live sites are edited from one panel. No code editing required.
+
+**Admin panel:** https://edwingyasi.online/admin
+**Config:** `/admin/config.yml` — **Loader/theme:** `/admin/index.html`
+
+### How content reaches the page
+
+Decap commits JSON to `/content/`. Vercel then runs `node build.js` (set as the
+build command in `vercel.json`), which renders that JSON into marked regions of
+the HTML. Content ends up in the static HTML, so SEO and link previews stay correct.
+
+```
+/content/engineering/*.json ──► build.js ──► index.html          (9 regions)
+/content/designs/*.json     ──► build.js ──► designs/index.html  (12 regions)
+                                          └► designs/js/data.js  (regenerated)
+```
+
+Regions are bracketed by `<!-- CMS:START name -->` / `<!-- CMS:END name -->`.
+Everything outside those markers (all CSS, all scripts, layout) is never touched.
+The build is idempotent, and it fails loudly if a marker goes missing.
+
+### Collection map
+
+| Collection | Content folder | Renders into |
+|---|---|---|
+| **Engineering Site** | `content/engineering/` | `index.html` |
+| **Eon Designs Site** | `content/designs/` | `designs/index.html` + `designs/js/data.js` |
+
+Engineering entries: Page Title & SEO, Navigation, Hero, About, Projects &
+Case Studies, Skills & Certifications, Experience, Contact, Footer.
+
+Eon Designs entries: Page Title/SEO/Logo, Navigation, Hero, Selected Works,
+The Vault, About, Journal, Contact & Footer.
+
+Repeatable content (project cards, case studies, vault artifacts, journal posts,
+experience entries, skill badges, client list, social links) uses list widgets,
+so items can be added, edited, deleted, and drag-reordered.
+
+### Auth
+
+Vercel has no Git Gateway, so `/api/auth.js` and `/api/callback.js` in this repo
+act as the GitHub OAuth provider. Same domain, no Netlify or Cloudflare Worker.
+
+Required Vercel environment variables:
+- `GITHUB_OAUTH_CLIENT_ID`
+- `GITHUB_OAUTH_CLIENT_SECRET`
+- `ALLOWED_GITHUB_LOGIN` — restricts the panel to a single GitHub account
+
+### Media
+
+Engineering uploads → `/images/`. Eon Designs uploads → `/designs/images/`.
+Pre-existing artwork in `designs/Assets/` is untouched and still referenced.
+
+### Local testing
+
+`npx decap-server` (config has `local_backend: true`), serve the repo, open
+`/admin`. Or skip the UI: edit a file in `/content/`, run `node build.js`,
+and check the HTML.
+
 ## Updates Log
 
 - 2026-05-19: Built designs/ v2 but looked too similar to old site because brief said "preserve existing brand identity." New build (eon/) starts completely fresh with no reference to old site structure.
+- 2026-07-30: Added Decap CMS covering both live sites. Chose build-time injection over client-side hydration so edited content stays in the static HTML for SEO and link previews. This required marking regions in `index.html` and `designs/index.html` and switching the root Vercel project from pure-static to `node build.js`. Verified the rendered output is byte-identical to the pre-CMS pages. Superseded the old "never modify root / never touch /designs/" rules, which are incompatible with a CMS that edits both sites.

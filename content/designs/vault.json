@@ -1,0 +1,21 @@
+{
+  "eyebrow": "Concept Archive",
+  "heading": "The Vault",
+  "description": "Internal design repository. 50+ raw outputs, daily renders, and visual experiments.",
+  "load_all_label": "Load All Artifacts",
+  "archive_heading": "The Archive",
+  "items": [
+    { "category": "Food", "title": "Burger Concept", "src": "Assets/Trial 1.webp", "full": "Assets/Trial 1.webp" },
+    { "category": "Food", "title": "Burger Concept", "src": "Assets/Food Flyer.webp", "full": "Assets/Food Flyer.webp" },
+    { "category": "Commercial", "title": "Nike Campaign", "src": "Assets/beauty-poster.webp", "full": "Assets/beauty-poster.webp" },
+    { "category": "Commercial", "title": "Spotify Ad", "src": "https://picsum.photos/600/800?random=104", "full": "https://picsum.photos/1200/1600?random=104" },
+    { "category": "Commercial", "title": "Coffee Art", "src": "Assets/Composure.webp", "full": "Assets/Composure.webp" },
+    { "category": "Experimental", "title": "Abstract 01", "src": "Assets/Gess-December.webp", "full": "Assets/Gess-December.webp" },
+    { "category": "Experimental", "title": "Glass Texture", "src": "Assets/Gess_December_Days.webp", "full": "Assets/Gess_December_Days.webp" },
+    { "category": "Academic", "title": "Typography Study", "src": "Assets/Gess_Podcast.webp", "full": "Assets/Gess_Podcast.webp" },
+    { "category": "Academic", "title": "Typography Study", "src": "Assets/Geolink_Interviews.webp", "full": "Assets/Geolink_Interviews.webp" },
+    { "category": "Academic", "title": "Typography Study", "src": "Assets/Geolink_Hosts.webp", "full": "Assets/Geolink_Hosts.webp" },
+    { "category": "Academic", "title": "Typography Study", "src": "Assets/GeoBridge Random Quotes.webp", "full": "Assets/GeoBridge Random Quotes.webp" },
+    { "category": "Academic", "title": "Typography Study", "src": "Assets/Alumini-Spotlight.webp", "full": "Assets/Alumini-Spotlight.webp" }
+  ]
+}

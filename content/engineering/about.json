@@ -1,0 +1,15 @@
+{
+  "eyebrow": "About",
+  "title": "A geological engineer who thinks in systems.",
+  "stats": [
+    { "number": "6", "plus": true, "label_line_1": "Core engineering", "label_line_2": "disciplines" },
+    { "number": "3", "plus": true, "label_line_1": "Engineering", "label_line_2": "case studies" },
+    { "number": "2", "plus": true, "label_line_1": "Field & site", "label_line_2": "internships" },
+    { "number": "4", "plus": true, "label_line_1": "Software & data", "label_line_2": "tools in practice" }
+  ],
+  "paragraphs": [
+    "I'm a geological engineer with a strong pull toward <strong>mining operations</strong> and the systems that make them work. I don't just look at geology. I think about how field data connects to decisions, how processes can run better, and where the gaps are between site operations and engineering insight.",
+    "My work spans <strong>geotechnical engineering</strong>, <strong>exploration geophysics and geochemistry</strong>, <strong>hydrogeology</strong>, and <strong>engineering geological investigations</strong>: the practical side of getting useful answers out of difficult sites.",
+    "I sharpen my edge at the intersection of technical geology and <strong>data analytics</strong>, using Python, SQL, and Power BI to turn raw site data into something actionable. I think in systems and workflows, not just tasks."
+  ]
+}

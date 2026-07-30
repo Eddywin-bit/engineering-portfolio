@@ -1,0 +1,10 @@
+{
+  "title": "Let's talk.",
+  "intro": "Whether it's a project, a collaboration, or a conversation about the work, my inbox is open.",
+  "links": [
+    { "label": "Email", "href": "mailto:gyasiedwin14@gmail.com", "style": "primary", "icon": "arrow-right", "new_tab": false, "download": false },
+    { "label": "LinkedIn", "href": "https://www.linkedin.com/in/edwin-gyasi", "style": "ghost", "icon": "arrow-up-right", "new_tab": true, "download": false },
+    { "label": "CV", "href": "resume.pdf", "style": "ghost", "icon": "arrow-up-right", "new_tab": false, "download": true },
+    { "label": "Eon Designs", "href": "https://www.edwingyasi.online/designs", "style": "ghost", "icon": "arrow-up-right", "new_tab": true, "download": false }
+  ]
+}

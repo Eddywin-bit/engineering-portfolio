@@ -1,0 +1,10 @@
+{
+  "links": [
+    { "label": "Work", "target": "work" },
+    { "label": "The Vault", "target": "vault" },
+    { "label": "About", "target": "about" },
+    { "label": "Journal", "target": "journal" }
+  ],
+  "cta_label": "Book Session",
+  "cta_target": "contact"
+}

@@ -1,0 +1,9 @@
+{
+  "brand": "Edwin Gyasi Owusu",
+  "note": "© 2026 · Kumasi, Ghana",
+  "socials": [
+    { "icon": "mail", "href": "mailto:gyasiedwin14@gmail.com", "label": "Email", "new_tab": false },
+    { "icon": "linkedin", "href": "https://www.linkedin.com/in/edwin-gyasi", "label": "LinkedIn", "new_tab": true },
+    { "icon": "globe", "href": "https://www.edwingyasi.online/designs", "label": "Eon Designs", "new_tab": true }
+  ]
+}

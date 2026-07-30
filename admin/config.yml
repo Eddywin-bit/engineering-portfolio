@@ -1,0 +1,581 @@
+####################################################################
+# Decap CMS — edwingyasi.online
+#
+# Two sites, one panel:
+#   "Engineering Site"  -> /content/engineering/*.json  -> index.html
+#   "Eon Designs Site"  -> /content/designs/*.json      -> designs/index.html
+#
+# Publishing writes JSON to GitHub. Vercel then runs `node build.js`,
+# which injects the JSON into the marked regions of the two HTML files.
+# Nothing here edits HTML directly.
+####################################################################
+
+backend:
+  name: github
+  repo: Eddywin-bit/engineering-portfolio
+  branch: main
+  # Vercel has no Git Gateway, so /api/auth + /api/callback in this repo
+  # act as the OAuth provider. Same domain, no third-party service.
+  base_url: https://edwingyasi.online
+  auth_endpoint: api/auth
+  commit_messages:
+    create: 'CMS: create {{collection}} "{{slug}}"'
+    update: 'CMS: update {{collection}} "{{slug}}"'
+    delete: 'CMS: delete {{collection}} "{{slug}}"'
+    uploadMedia: 'CMS: upload {{path}}'
+    deleteMedia: 'CMS: delete {{path}}'
+
+# Lets `npx decap-server` drive the panel from local files during testing.
+local_backend: true
+
+# Commit straight to main so a save triggers a Vercel deploy immediately.
+publish_mode: simple
+
+site_url: https://edwingyasi.online
+display_url: https://edwingyasi.online
+logo_url: https://edwingyasi.online/og-engineering.png
+
+# Default upload target (engineering site). The Eon Designs collection
+# overrides this per field so its uploads land in /designs/images.
+media_folder: images
+public_folder: /images
+
+collections:
+  ####################################################################
+  # ENGINEERING SITE  (edwingyasi.online)
+  ####################################################################
+  - name: engineering
+    label: Engineering Site
+    label_singular: Engineering Section
+    description: >-
+      Every editable section of the main portfolio at edwingyasi.online.
+      Each entry below is one section of the page, top to bottom.
+    files:
+      - name: meta
+        label: 1. Page Title & SEO
+        file: content/engineering/meta.json
+        description: Browser tab title and the description Google shows.
+        fields:
+          - { label: Browser Tab Title, name: title, widget: string }
+          - {
+              label: Search Description,
+              name: description,
+              widget: text,
+              hint: Roughly 150–160 characters. This is the grey text under your link on Google.,
+            }
+
+      - name: nav
+        label: 2. Navigation Bar
+        file: content/engineering/nav.json
+        fields:
+          - { label: Brand Name, name: brand, widget: string }
+          - label: Menu Links
+            name: links
+            widget: list
+            label_singular: Link
+            summary: '{{fields.label}}  →  {{fields.href}}'
+            fields:
+              - { label: Label, name: label, widget: string }
+              - {
+                  label: Link Target,
+                  name: href,
+                  widget: string,
+                  hint: 'Use #about, #work, #skills, #experience or #contact to jump down the page.',
+                }
+          - { label: Button Label, name: cta_label, widget: string }
+          - { label: Button Target, name: cta_href, widget: string, default: '#contact' }
+
+      - name: hero
+        label: 3. Hero
+        file: content/engineering/hero.json
+        description: The first screen visitors see.
+        fields:
+          - { label: Headline, name: headline, widget: string }
+          - label: Role Line
+            name: roles
+            widget: list
+            label_singular: Role
+            hint: Shown on one line, separated by dots. Drag to reorder.
+            field: { label: Role, name: role, widget: string }
+          - { label: Sub-headline, name: subline, widget: text }
+          - label: Buttons
+            name: buttons
+            widget: list
+            label_singular: Button
+            summary: '{{fields.label}} ({{fields.style}})'
+            fields:
+              - { label: Label, name: label, widget: string }
+              - { label: Link, name: href, widget: string }
+              - {
+                  label: Style,
+                  name: style,
+                  widget: select,
+                  options: [primary, ghost],
+                  default: ghost,
+                }
+              - {
+                  label: Arrow Icon,
+                  name: icon,
+                  widget: select,
+                  options: [arrow-right, arrow-up-right],
+                  default: arrow-right,
+                }
+              - { label: Open in New Tab, name: new_tab, widget: boolean, default: false }
+              - { label: Download File, name: download, widget: boolean, default: false }
+
+      - name: about
+        label: 4. About
+        file: content/engineering/about.json
+        fields:
+          - { label: Eyebrow, name: eyebrow, widget: string }
+          - { label: Section Title, name: title, widget: string }
+          - label: Stat Counters
+            name: stats
+            widget: list
+            label_singular: Stat
+            summary: '{{fields.number}}+ — {{fields.label_line_1}} {{fields.label_line_2}}'
+            fields:
+              - { label: Number, name: number, widget: string }
+              - { label: Show “+” After Number, name: plus, widget: boolean, default: true }
+              - { label: Caption Line 1, name: label_line_1, widget: string }
+              - { label: Caption Line 2, name: label_line_2, widget: string }
+          - label: Paragraphs
+            name: paragraphs
+            widget: list
+            label_singular: Paragraph
+            hint: '<strong>text</strong> makes a phrase bold.'
+            field: { label: Paragraph, name: paragraph, widget: text }
+
+      - name: projects
+        label: 5. Projects & Case Studies
+        file: content/engineering/projects.json
+        fields:
+          - { label: Eyebrow, name: eyebrow, widget: string }
+          - { label: Section Title, name: title, widget: string }
+          - { label: Section Subtitle, name: subtitle, widget: text }
+          - label: Project Cards
+            name: items
+            widget: list
+            label_singular: Project
+            summary: '{{fields.title}}'
+            fields:
+              - { label: Title, name: title, widget: string }
+              - { label: Category, name: category, widget: string }
+              - { label: Description, name: description, widget: text }
+              - {
+                  label: Card Image,
+                  name: image,
+                  widget: image,
+                  hint: "Drag a file in, or paste an image URL.",
+                }
+              - {
+                  label: Image Alt Text,
+                  name: image_alt,
+                  widget: string,
+                  hint: Describes the image for screen readers and Google.,
+                }
+              - {
+                  label: Links To,
+                  name: href,
+                  widget: string,
+                  hint: 'e.g. case-studies/energy-audit.html',
+                }
+              - { label: Link Label, name: link_label, widget: string, default: Case Study }
+              - {
+                  label: Full Width Card,
+                  name: wide,
+                  widget: boolean,
+                  default: false,
+                  hint: Makes this card span the whole row.,
+                }
+              - label: Tools & Methods
+                name: tools
+                widget: list
+                label_singular: Tool
+                field: { label: Tool, name: tool, widget: string }
+          - label: Eon Designs Spotlight
+            name: eon_strip
+            widget: object
+            collapsed: true
+            fields:
+              - { label: Show This Block, name: enabled, widget: boolean, default: true }
+              - { label: Eyebrow, name: eyebrow, widget: string }
+              - { label: Title, name: title, widget: string }
+              - { label: Description, name: description, widget: text }
+              - { label: Link Label, name: link_label, widget: string }
+              - { label: Link URL, name: link_href, widget: string }
+
+      - name: skills
+        label: 6. Skills & Certifications
+        file: content/engineering/skills.json
+        fields:
+          - { label: Eyebrow, name: eyebrow, widget: string }
+          - { label: Section Title, name: title, widget: string }
+          - { label: Section Subtitle, name: subtitle, widget: text }
+          - label: Skill Blocks
+            name: blocks
+            widget: list
+            label_singular: Skill Block
+            summary: '{{fields.heading}}'
+            fields:
+              - { label: Heading, name: heading, widget: string }
+              - { label: Note, name: note, widget: string }
+              - {
+                  label: Colour Theme,
+                  name: theme,
+                  widget: select,
+                  options: [emerald, dark, gold, certifications],
+                }
+              - {
+                  label: Icon,
+                  name: icon,
+                  widget: select,
+                  options: [layers, code, palette, check-circle],
+                }
+              - label: Badges
+                name: badges
+                widget: list
+                label_singular: Badge
+                field: { label: Badge, name: badge, widget: string }
+
+      - name: experience
+        label: 7. Experience
+        file: content/engineering/experience.json
+        fields:
+          - { label: Eyebrow, name: eyebrow, widget: string }
+          - { label: Section Title, name: title, widget: string }
+          - { label: Section Subtitle, name: subtitle, widget: text }
+          - label: Timeline Entries
+            name: entries
+            widget: list
+            label_singular: Role
+            summary: '{{fields.role}} — {{fields.org}}'
+            fields:
+              - { label: Date Range, name: date, widget: string }
+              - { label: Role, name: role, widget: string }
+              - { label: Organisation, name: org, widget: string }
+              - { label: Description, name: description, widget: text }
+
+      - name: contact
+        label: 8. Contact
+        file: content/engineering/contact.json
+        fields:
+          - { label: Heading, name: title, widget: string }
+          - { label: Intro Text, name: intro, widget: text }
+          - label: Buttons
+            name: links
+            widget: list
+            label_singular: Button
+            summary: '{{fields.label}}'
+            fields:
+              - { label: Label, name: label, widget: string }
+              - {
+                  label: Link,
+                  name: href,
+                  widget: string,
+                  hint: 'Use mailto:you@example.com for email.',
+                }
+              - {
+                  label: Style,
+                  name: style,
+                  widget: select,
+                  options: [primary, ghost],
+                  default: ghost,
+                }
+              - {
+                  label: Arrow Icon,
+                  name: icon,
+                  widget: select,
+                  options: [arrow-right, arrow-up-right],
+                  default: arrow-up-right,
+                }
+              - { label: Open in New Tab, name: new_tab, widget: boolean, default: false }
+              - { label: Download File, name: download, widget: boolean, default: false }
+
+      - name: footer
+        label: 9. Footer
+        file: content/engineering/footer.json
+        fields:
+          - { label: Brand Name, name: brand, widget: string }
+          - { label: Copyright Note, name: note, widget: string }
+          - label: Social Icons
+            name: socials
+            widget: list
+            label_singular: Social Link
+            summary: '{{fields.label}}'
+            fields:
+              - {
+                  label: Icon,
+                  name: icon,
+                  widget: select,
+                  options: [mail, linkedin, globe],
+                }
+              - { label: Link, name: href, widget: string }
+              - { label: Accessible Label, name: label, widget: string }
+              - { label: Open in New Tab, name: new_tab, widget: boolean, default: true }
+
+  ####################################################################
+  # EON DESIGNS SITE  (edwingyasi.online/designs)
+  ####################################################################
+  - name: designs
+    label: Eon Designs Site
+    label_singular: Eon Designs Section
+    description: >-
+      Every editable section of the Eon Designs studio site at
+      edwingyasi.online/designs. Images uploaded here save to /designs/images.
+    files:
+      - name: meta
+        label: 1. Page Title, SEO & Logo
+        file: content/designs/meta.json
+        fields:
+          - { label: Browser Tab Title, name: title, widget: string }
+          - { label: Share Card Title, name: og_title, widget: string }
+          - { label: Share Card Description, name: og_description, widget: text }
+          - { label: Canonical URL, name: og_url, widget: string }
+          - {
+              label: Share Card Image,
+              name: og_image,
+              widget: image,
+              media_folder: /images,
+              public_folder: /images,
+              hint: "Shown when the site is shared on WhatsApp, LinkedIn or X.",
+            }
+          - {
+              label: Studio Logo,
+              name: logo,
+              widget: image,
+              media_folder: /designs/images,
+              public_folder: /designs/images,
+            }
+
+      - name: nav
+        label: 2. Navigation Bar
+        file: content/designs/nav.json
+        fields:
+          - label: Menu Links
+            name: links
+            widget: list
+            label_singular: Link
+            summary: '{{fields.label}}  →  #{{fields.target}}'
+            fields:
+              - { label: Label, name: label, widget: string }
+              - {
+                  label: Scrolls To,
+                  name: target,
+                  widget: select,
+                  options: [hero, work, vault, about, journal, contact],
+                }
+          - { label: Button Label, name: cta_label, widget: string }
+          - {
+              label: Button Scrolls To,
+              name: cta_target,
+              widget: select,
+              options: [hero, work, vault, about, journal, contact],
+              default: contact,
+            }
+
+      - name: hero
+        label: 3. Hero
+        file: content/designs/hero.json
+        fields:
+          - { label: Badge Text, name: badge, widget: string }
+          - { label: Headline, name: headline, widget: string }
+          - { label: "Sub-headline, Line 1", name: subline_line_1, widget: string }
+          - { label: Line 2 — Before Highlight, name: subline_line_2_before, widget: string }
+          - {
+              label: Highlighted Word,
+              name: subline_emphasis,
+              widget: string,
+              hint: Rendered in champagne italic serif.,
+            }
+          - { label: Line 2 — After Highlight, name: subline_line_2_after, widget: string }
+          - { label: Primary Button, name: primary_button, widget: string }
+          - { label: Secondary Button, name: secondary_button, widget: string }
+
+      - name: works
+        label: 4. Selected Works
+        file: content/designs/works.json
+        description: The case studies that open in the full-screen project modal.
+        fields:
+          - { label: Section Heading, name: heading, widget: string }
+          - { label: Section Subheading, name: subheading, widget: string }
+          - {
+              label: Counter Text,
+              name: counter,
+              widget: string,
+              hint: 'The small “01 — 03” marker on the right.',
+            }
+          - label: Case Studies
+            name: items
+            widget: list
+            label_singular: Case Study
+            summary: '{{fields.title}} — {{fields.client}}'
+            fields:
+              - { label: Title, name: title, widget: string }
+              - { label: Category, name: category, widget: string }
+              - {
+                  label: Cover Image,
+                  name: image,
+                  widget: image,
+                  media_folder: /designs/images,
+                  public_folder: /designs/images,
+                }
+              - { label: Client, name: client, widget: string }
+              - { label: Year, name: year, widget: string }
+              - { label: Your Role, name: role, widget: string }
+              - { label: Description, name: description, widget: text }
+              - { label: The Challenge, name: challenge, widget: text }
+              - { label: The Solution, name: solution, widget: text }
+              - label: Gallery Images
+                name: gallery
+                widget: list
+                label_singular: Image
+                field:
+                  {
+                    label: Image,
+                    name: image,
+                    widget: image,
+                    media_folder: /designs/images,
+                    public_folder: /designs/images,
+                  }
+
+      - name: vault
+        label: 5. The Vault
+        file: content/designs/vault.json
+        description: The masonry archive. Filter buttons are generated from the categories you use.
+        fields:
+          - { label: Eyebrow, name: eyebrow, widget: string }
+          - { label: Section Heading, name: heading, widget: string }
+          - { label: Section Description, name: description, widget: text }
+          - { label: “Load All” Button Label, name: load_all_label, widget: string }
+          - { label: Archive Overlay Heading, name: archive_heading, widget: string }
+          - label: Vault Items
+            name: items
+            widget: list
+            label_singular: Artifact
+            summary: '{{fields.category}} — {{fields.title}}'
+            fields:
+              - {
+                  label: Category,
+                  name: category,
+                  widget: string,
+                  hint: Becomes a filter button. Reuse exact spelling to group items.,
+                }
+              - { label: Title, name: title, widget: string }
+              - {
+                  label: Thumbnail,
+                  name: src,
+                  widget: image,
+                  media_folder: /designs/images,
+                  public_folder: /designs/images,
+                }
+              - {
+                  label: Full-size Image,
+                  name: full,
+                  widget: image,
+                  required: false,
+                  media_folder: /designs/images,
+                  public_folder: /designs/images,
+                  hint: Leave empty to reuse the thumbnail.,
+                }
+
+      - name: about
+        label: 6. About
+        file: content/designs/about.json
+        fields:
+          - { label: Eyebrow, name: eyebrow, widget: string }
+          - { label: Heading Line 1, name: heading_line_1, widget: string }
+          - { label: Heading Line 2, name: heading_line_2, widget: string }
+          - {
+              label: Portrait,
+              name: image,
+              widget: image,
+              media_folder: /designs/images,
+              public_folder: /designs/images,
+            }
+          - {
+              label: Portrait Fallback,
+              name: image_fallback,
+              widget: image,
+              media_folder: /designs/images,
+              public_folder: /designs/images,
+              hint: Used if the portrait above fails to load.,
+            }
+          - label: Paragraphs
+            name: paragraphs
+            widget: list
+            label_singular: Paragraph
+            field: { label: Paragraph, name: paragraph, widget: text }
+          - { label: Capabilities Heading, name: capabilities_heading, widget: string }
+          - label: Capabilities
+            name: capabilities
+            widget: list
+            label_singular: Capability
+            field: { label: Capability, name: capability, widget: string }
+          - { label: Clients Heading, name: clients_heading, widget: string }
+          - label: Client List
+            name: clients
+            widget: list
+            label_singular: Client
+            field: { label: Client, name: client, widget: string }
+
+      - name: journal
+        label: 7. Journal
+        file: content/designs/journal.json
+        fields:
+          - { label: Section Heading, name: heading, widget: string }
+          - label: Posts
+            name: posts
+            widget: list
+            label_singular: Post
+            summary: '{{fields.date}} — {{fields.title}}'
+            fields:
+              - { label: Title, name: title, widget: string }
+              - {
+                  label: Date,
+                  name: date,
+                  widget: string,
+                  hint: 'Free text, e.g. Dec 09, 2025',
+                }
+              - {
+                  label: Cover Image,
+                  name: image,
+                  widget: image,
+                  media_folder: /designs/images,
+                  public_folder: /designs/images,
+                }
+              - { label: Excerpt, name: excerpt, widget: text }
+              - label: Body
+                name: body
+                widget: markdown
+                media_folder: /designs/images
+                public_folder: /designs/images
+                hint: >-
+                  Two or more images in a row become a side-by-side grid.
+                  An italic line straight after them becomes the caption.
+
+      - name: contact
+        label: 8. Contact & Footer
+        file: content/designs/contact.json
+        fields:
+          - { label: Heading Line 1, name: heading_line_1, widget: string }
+          - { label: Heading Highlight, name: heading_emphasis, widget: string }
+          - { label: Email Address, name: email, widget: string }
+          - { label: Submit Button Label, name: submit_label, widget: string }
+          - { label: Name Field Placeholder, name: name_placeholder, widget: string }
+          - { label: Email Field Placeholder, name: email_placeholder, widget: string }
+          - { label: Message Field Placeholder, name: message_placeholder, widget: string }
+          - label: Social Links
+            name: socials
+            widget: list
+            label_singular: Social Link
+            summary: '{{fields.network}}'
+            fields:
+              - {
+                  label: Network,
+                  name: network,
+                  widget: select,
+                  options: [pinterest, instagram, twitter, facebook, linkedin, youtube, dribbble, behance],
+                }
+              - { label: Profile URL, name: href, widget: string }
+          - { label: Footer Line, name: footer, widget: string }

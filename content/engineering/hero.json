@@ -1,0 +1,36 @@
+{
+  "headline": "Edwin Gyasi Owusu.",
+  "roles": [
+    "Geological Engineer",
+    "Mining",
+    "Geotechnical",
+    "Oil & Gas"
+  ],
+  "subline": "Engineering the future through geology, data analytics, and AI.",
+  "buttons": [
+    {
+      "label": "View Projects",
+      "href": "#work",
+      "style": "primary",
+      "icon": "arrow-right",
+      "new_tab": false,
+      "download": false
+    },
+    {
+      "label": "LinkedIn",
+      "href": "https://www.linkedin.com/in/edwin-gyasi",
+      "style": "ghost",
+      "icon": "arrow-up-right",
+      "new_tab": true,
+      "download": false
+    },
+    {
+      "label": "Resume",
+      "href": "resume.pdf",
+      "style": "ghost",
+      "icon": "arrow-up-right",
+      "new_tab": true,
+      "download": true
+    }
+  ]
+}

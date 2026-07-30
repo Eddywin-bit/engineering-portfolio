@@ -1,0 +1,12 @@
+{
+  "brand": "Edwin Gyasi Owusu",
+  "links": [
+    { "label": "About", "href": "#about" },
+    { "label": "Projects", "href": "#work" },
+    { "label": "Skills", "href": "#skills" },
+    { "label": "Experience", "href": "#experience" },
+    { "label": "Contact", "href": "#contact" }
+  ],
+  "cta_label": "Contact",
+  "cta_href": "#contact"
+}

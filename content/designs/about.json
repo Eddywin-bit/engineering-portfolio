@@ -1,0 +1,27 @@
+{
+  "eyebrow": "The Designer",
+  "heading_line_1": "Edwin Gyasi",
+  "heading_line_2": "Owusu.",
+  "image": "profile.jpg",
+  "image_fallback": "Assets/1000007946.webp",
+  "paragraphs": [
+    "I established <span class=\"text-white font-medium\">Eon Designs</span> to bridge the gap between functional clarity and lasting impact. The name <span class=\"text-white font-medium\">Eon</span> isn't accidental it represents deep time. My goal is to create visual systems that survive the trend cycle.",
+    "I don't believe in overcomplicating things. I focus on clean layouts and logic-driven visuals that communicate instantly. No fluff. Just effective, enduring design."
+  ],
+  "capabilities_heading": "What I Do",
+  "capabilities": [
+    "Brand Identity",
+    "Social Media Design",
+    "Event Branding",
+    "Creative Direction",
+    "UI/UX"
+  ],
+  "clients_heading": "Select Clients",
+  "clients": [
+    "AusIMM Tarkwa Chapter",
+    "GESS-KNUST",
+    "ICGC",
+    "Eon Designs",
+    "Fragilda Construction Ltd."
+  ]
+}

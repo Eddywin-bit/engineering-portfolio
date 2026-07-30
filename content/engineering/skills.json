@@ -1,0 +1,61 @@
+{
+  "eyebrow": "Toolkit",
+  "title": "Skills & Certifications.",
+  "subtitle": "The tools, methods, and credentials I lean on across engineering, data, and creative work.",
+  "blocks": [
+    {
+      "heading": "Engineering",
+      "note": "Field, mapping, and geotechnical practice.",
+      "theme": "emerald",
+      "icon": "layers",
+      "badges": [
+        "Geological Mapping",
+        "GIS",
+        "QGIS",
+        "AutoCAD",
+        "Geotechnical Investigation",
+        "Geological Analysis"
+      ]
+    },
+    {
+      "heading": "Data & AI",
+      "note": "Turning raw site data into decisions.",
+      "theme": "dark",
+      "icon": "code",
+      "badges": [
+        "Python",
+        "SQL",
+        "Excel",
+        "Power BI",
+        "Data Analytics",
+        "AI Automation",
+        "Spatial Modeling"
+      ]
+    },
+    {
+      "heading": "Creative",
+      "note": "Visual communication and brand systems.",
+      "theme": "gold",
+      "icon": "palette",
+      "badges": [
+        "Adobe Photoshop",
+        "Canva",
+        "Brand Identity",
+        "Presentation Design"
+      ]
+    },
+    {
+      "heading": "Certifications",
+      "note": "Ongoing training and formal credentials.",
+      "theme": "certifications",
+      "icon": "check-circle",
+      "badges": [
+        "Google Data Analytics · 3 / 8",
+        "AusIMM Member",
+        "Genser Energy Technical Assessment",
+        "AI for Creatives · Google Accra",
+        "French · A2 in progress"
+      ]
+    }
+  ]
+}

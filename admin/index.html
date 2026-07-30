@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Studio — Edwin Gyasi Owusu</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&family=Fira+Code:wght@400&display=swap"
+    rel="stylesheet" />
+
+  <style>
+    /* ================================================================
+       Eon Studio theme for Decap CMS.
+
+       Palette is pulled from the two live sites:
+         base / surfaces  — designs site   (#050505, #0a0a0a)
+         accent           — engineering site gold (#C89B3C)
+         highlight        — designs champagne (#E0D4C5)
+         display face     — Playfair Display (designs site)
+         body face        — Inter (both sites)
+         mono             — Fira Code (designs site)
+
+       Decap renders through emotion, whose class names carry a readable
+       component label (…-AppHeader, …-Card). Matching on that label is
+       the stable way to reach its internals.
+       ================================================================ */
+
+    :root {
+      --eon-bg: #050505;
+      --eon-surface: #0a0a0a;
+      --eon-surface-2: #101010;
+      --eon-line: rgba(255, 255, 255, 0.10);
+      --eon-line-soft: rgba(255, 255, 255, 0.06);
+      --eon-text: #E8E6E1;
+      --eon-text-mute: #8A8A8A;
+      --eon-gold: #C89B3C;
+      --eon-gold-hi: #D8AB4C;
+      --eon-champagne: #E0D4C5;
+      --eon-display: 'Playfair Display', Georgia, serif;
+      --eon-body: 'Inter', system-ui, -apple-system, sans-serif;
+      --eon-mono: 'Fira Code', ui-monospace, monospace;
+    }
+
+    html, body, #nc-root {
+      background: var(--eon-bg) !important;
+      color: var(--eon-text);
+      font-family: var(--eon-body);
+    }
+
+    ::selection { background: var(--eon-gold); color: #050505; }
+
+    /* Scrollbars ---------------------------------------------------- */
+    * { scrollbar-color: rgba(200,155,60,.45) transparent; scrollbar-width: thin; }
+    *::-webkit-scrollbar { width: 10px; height: 10px; }
+    *::-webkit-scrollbar-track { background: transparent; }
+    *::-webkit-scrollbar-thumb {
+      background: rgba(200,155,60,.35);
+      border: 3px solid var(--eon-bg);
+      border-radius: 999px;
+    }
+    *::-webkit-scrollbar-thumb:hover { background: rgba(200,155,60,.6); }
+
+    /* ---------------------------------------------------------------
+       LOGIN SCREEN
+       --------------------------------------------------------------- */
+    [class*="-StyledAuthenticationPage"] {
+      background:
+        radial-gradient(900px 600px at 50% -10%, rgba(200,155,60,.10), transparent 65%),
+        var(--eon-bg) !important;
+      position: relative;
+    }
+    /* Hairline grid, echoes the abstract linework on the designs hero. */
+    [class*="-StyledAuthenticationPage"]::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none;
+    }
+    [class*="-StyledAuthenticationPage"] > * { position: relative; z-index: 1; }
+
+    /* Decap's default logo slot. */
+    [class*="-PageLogoIcon"],
+    [class*="-CustomLogoIcon"] { display: none !important; }
+
+    [class*="-StyledAuthenticationPage"]::after {
+      content: "EON STUDIO";
+      position: absolute;
+      top: calc(50% - 190px);
+      left: 0; right: 0;
+      text-align: center;
+      font-family: var(--eon-display);
+      font-weight: 600;
+      font-size: 34px;
+      letter-spacing: .16em;
+      color: var(--eon-champagne);
+      z-index: 2;
+    }
+
+    [class*="-LoginButton"],
+    [class*="-StyledAuthenticationPage"] button {
+      background: var(--eon-gold) !important;
+      color: #050505 !important;
+      font-family: var(--eon-body) !important;
+      font-weight: 600 !important;
+      font-size: 11px !important;
+      letter-spacing: .22em !important;
+      text-transform: uppercase !important;
+      border-radius: 0 !important;
+      padding: 18px 42px !important;
+      box-shadow: 0 0 34px rgba(200,155,60,.22) !important;
+      transition: background .25s ease, transform .25s ease !important;
+    }
+    [class*="-LoginButton"]:hover,
+    [class*="-StyledAuthenticationPage"] button:hover {
+      background: var(--eon-champagne) !important;
+      transform: translateY(-1px);
+    }
+
+    /* ---------------------------------------------------------------
+       CHROME — header, sidebar, page shell
+       --------------------------------------------------------------- */
+    [class*="-AppHeader"] {
+      background: var(--eon-surface) !important;
+      border-bottom: 1px solid var(--eon-line-soft) !important;
+      box-shadow: none !important;
+    }
+    [class*="-AppHeader"] a,
+    [class*="-AppHeader"] button,
+    [class*="-AppHeaderButton"] {
+      color: var(--eon-text-mute) !important;
+      font-size: 11px !important;
+      letter-spacing: .18em !important;
+      text-transform: uppercase !important;
+      border-radius: 0 !important;
+      background: transparent !important;
+    }
+    [class*="-AppHeader"] a:hover,
+    [class*="-AppHeaderButton"]:hover { color: var(--eon-gold) !important; }
+    [class*="-AppHeaderActions"] [class*="-AppHeaderButton"][class*="active"] {
+      color: var(--eon-champagne) !important;
+    }
+
+    [class*="-AppMainContainer"],
+    [class*="-AppContainer"] { background: var(--eon-bg) !important; }
+
+    [class*="-SidebarContainer"] {
+      background: var(--eon-surface) !important;
+      border: 1px solid var(--eon-line-soft) !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+    }
+    [class*="-SidebarHeading"] {
+      font-family: var(--eon-mono) !important;
+      font-size: 10px !important;
+      letter-spacing: .24em !important;
+      text-transform: uppercase !important;
+      color: var(--eon-gold) !important;
+    }
+    [class*="-SidebarNavLink"] {
+      color: var(--eon-text-mute) !important;
+      font-size: 13px !important;
+      border-radius: 0 !important;
+      border-left: 2px solid transparent !important;
+      transition: color .2s ease, border-color .2s ease, background .2s ease !important;
+    }
+    [class*="-SidebarNavLink"]:hover {
+      color: var(--eon-text) !important;
+      background: rgba(255,255,255,.03) !important;
+    }
+    [class*="-SidebarNavLink"][class*="active"],
+    [class*="-SidebarNavLink"].active {
+      color: var(--eon-champagne) !important;
+      border-left-color: var(--eon-gold) !important;
+      background: rgba(200,155,60,.07) !important;
+    }
+
+    /* ---------------------------------------------------------------
+       COLLECTION VIEW
+       --------------------------------------------------------------- */
+    [class*="-CollectionTop"],
+    [class*="-CollectionHeader"] { background: transparent !important; }
+    [class*="-CollectionTopHeading"],
+    [class*="-CollectionTop"] h1 {
+      font-family: var(--eon-display) !important;
+      font-weight: 600 !important;
+      letter-spacing: -.01em !important;
+      color: var(--eon-text) !important;
+    }
+    [class*="-CollectionTopDescription"],
+    [class*="-CollectionTop"] p { color: var(--eon-text-mute) !important; }
+
+    [class*="-Card"],
+    [class*="-ListCard"],
+    [class*="-EntryCard"] {
+      background: var(--eon-surface) !important;
+      border: 1px solid var(--eon-line-soft) !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      transition: border-color .25s ease, transform .25s ease !important;
+    }
+    [class*="-Card"]:hover,
+    [class*="-ListCard"]:hover {
+      border-color: rgba(200,155,60,.45) !important;
+      transform: translateY(-2px);
+    }
+    [class*="-CardHeading"] a,
+    [class*="-ListCardLink"] {
+      font-family: var(--eon-display) !important;
+      color: var(--eon-text) !important;
+      font-size: 17px !important;
+    }
+
+    /* ---------------------------------------------------------------
+       EDITOR
+       --------------------------------------------------------------- */
+    [class*="-EditorContainer"],
+    [class*="-EditorContent"] { background: var(--eon-bg) !important; }
+
+    [class*="-EditorControlBar"],
+    [class*="-ToolbarContainer"] {
+      background: var(--eon-surface) !important;
+      border-bottom: 1px solid var(--eon-line-soft) !important;
+      box-shadow: none !important;
+    }
+
+    [class*="-ControlPaneContainer"],
+    [class*="-PreviewPaneContainer"] {
+      background: var(--eon-bg) !important;
+      border-color: var(--eon-line-soft) !important;
+    }
+
+    /* Field labels */
+    [class*="-FieldLabel"],
+    label[class*="css-"] {
+      font-family: var(--eon-mono) !important;
+      font-size: 10px !important;
+      letter-spacing: .18em !important;
+      text-transform: uppercase !important;
+      color: var(--eon-gold) !important;
+      background: transparent !important;
+    }
+    [class*="-FieldLabel"][class*="active"] { color: var(--eon-gold-hi) !important; }
+
+    /* Inputs */
+    [class*="-ControlContainer"] input,
+    [class*="-ControlContainer"] textarea,
+    [class*="-widget"] input,
+    [class*="-widget"] textarea,
+    input[type="text"],
+    input[type="url"],
+    input[type="email"],
+    textarea {
+      background: var(--eon-surface-2) !important;
+      color: var(--eon-text) !important;
+      border: 1px solid var(--eon-line) !important;
+      border-radius: 0 !important;
+      font-family: var(--eon-body) !important;
+      font-size: 14px !important;
+      transition: border-color .2s ease, box-shadow .2s ease !important;
+    }
+    input:focus, textarea:focus {
+      border-color: var(--eon-gold) !important;
+      box-shadow: 0 0 0 1px rgba(200,155,60,.35) !important;
+      outline: none !important;
+    }
+    ::placeholder { color: #5A5A5A !important; }
+
+    /* Widget shells (object / list / markdown) */
+    [class*="-ObjectControl"],
+    [class*="-ListControl"],
+    [class*="-ObjectWidgetTopBar"],
+    [class*="-StyledListItem"],
+    [class*="-NestedObjectLabel"] {
+      background: var(--eon-surface) !important;
+      border-color: var(--eon-line-soft) !important;
+      border-radius: 0 !important;
+      color: var(--eon-text) !important;
+    }
+    [class*="-TopBarButton"],
+    [class*="-ExpandButton"] { color: var(--eon-gold) !important; }
+
+    [class*="-AddButton"],
+    [class*="-ListControl"] button[class*="-Add"] {
+      background: transparent !important;
+      color: var(--eon-gold) !important;
+      border: 1px solid rgba(200,155,60,.4) !important;
+      border-radius: 0 !important;
+      font-size: 11px !important;
+      letter-spacing: .16em !important;
+      text-transform: uppercase !important;
+    }
+    [class*="-AddButton"]:hover {
+      background: rgba(200,155,60,.12) !important;
+      color: var(--eon-champagne) !important;
+    }
+
+    /* Markdown editor surface */
+    [class*="-Toolbar"] { background: var(--eon-surface-2) !important; }
+    [class*="-Toolbar"] button { color: var(--eon-text-mute) !important; }
+    [class*="-Toolbar"] button:hover { color: var(--eon-gold) !important; }
+    [data-slate-editor] {
+      background: var(--eon-surface-2) !important;
+      color: var(--eon-text) !important;
+      font-family: var(--eon-body) !important;
+    }
+
+    /* Primary actions: Publish / Save */
+    button[class*="-ToolbarButton"],
+    [class*="-PublishButton"],
+    [class*="-SaveButton"] {
+      background: var(--eon-gold) !important;
+      color: #050505 !important;
+      border-radius: 0 !important;
+      font-size: 11px !important;
+      font-weight: 600 !important;
+      letter-spacing: .18em !important;
+      text-transform: uppercase !important;
+      box-shadow: none !important;
+    }
+    button[class*="-ToolbarButton"]:hover,
+    [class*="-PublishButton"]:hover { background: var(--eon-champagne) !important; }
+
+    [class*="-DeleteButton"] {
+      background: transparent !important;
+      color: #B4553F !important;
+      border: 1px solid rgba(180,85,63,.45) !important;
+      border-radius: 0 !important;
+    }
+
+    /* Media library */
+    [class*="-StyledModal"],
+    [class*="-MediaLibraryModal"],
+    [class*="-DialogContent"] {
+      background: var(--eon-surface) !important;
+      border: 1px solid var(--eon-line) !important;
+      border-radius: 0 !important;
+      color: var(--eon-text) !important;
+    }
+    [class*="-MediaLibraryTitle"],
+    [class*="-StyledModal"] h1 {
+      font-family: var(--eon-display) !important;
+      color: var(--eon-text) !important;
+    }
+    [class*="-MediaCard"] {
+      background: var(--eon-surface-2) !important;
+      border: 1px solid var(--eon-line-soft) !important;
+      border-radius: 0 !important;
+      color: var(--eon-text) !important;
+    }
+    [class*="-MediaCard"][class*="selected"] { border-color: var(--eon-gold) !important; }
+
+    /* Notifications */
+    [class*="-Toast"],
+    [class*="-SnackbarMessage"] {
+      background: var(--eon-surface) !important;
+      color: var(--eon-text) !important;
+      border-left: 2px solid var(--eon-gold) !important;
+      border-radius: 0 !important;
+    }
+
+    /* Anything Decap still paints white, pull back to the surface tone. */
+    #nc-root [style*="background-color: rgb(255, 255, 255)"],
+    #nc-root [style*="background: rgb(255, 255, 255)"] {
+      background: var(--eon-surface) !important;
+    }
+  </style>
+</head>
+<body>
+  <script src="https://unpkg.com/decap-cms@^3.8.4/dist/decap-cms.js"></script>
+  <script>
+    (function () {
+      if (!window.CMS) return;
+
+      /* ------------------------------------------------------------
+         Preview pane styling. The preview renders inside an iframe,
+         so it needs its own stylesheet rather than the theme above.
+         ------------------------------------------------------------ */
+      CMS.registerPreviewStyle(
+        'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Inter:wght@300;400;500&family=Fira+Code&display=swap'
+      );
+      CMS.registerPreviewStyle(
+        [
+          'body{background:#050505;color:#E8E6E1;font-family:Inter,sans-serif;',
+          'padding:34px 30px;line-height:1.65;-webkit-font-smoothing:antialiased}',
+          '.eon-kicker{font-family:"Fira Code",monospace;font-size:10px;letter-spacing:.24em;',
+          'text-transform:uppercase;color:#C89B3C;margin:0 0 6px}',
+          '.eon-title{font-family:"Playfair Display",serif;font-weight:600;font-size:30px;',
+          'letter-spacing:-.01em;color:#E0D4C5;margin:0 0 22px}',
+          '.eon-rule{height:1px;background:linear-gradient(90deg,rgba(200,155,60,.6),transparent);',
+          'border:0;margin:0 0 26px}',
+          '.eon-field{margin:0 0 20px;padding:0 0 20px;border-bottom:1px solid rgba(255,255,255,.06)}',
+          '.eon-field:last-child{border-bottom:0}',
+          '.eon-label{font-family:"Fira Code",monospace;font-size:9px;letter-spacing:.2em;',
+          'text-transform:uppercase;color:#8A8A8A;margin:0 0 7px}',
+          '.eon-value{font-size:14.5px;color:#E8E6E1;white-space:pre-wrap;word-break:break-word}',
+          '.eon-value em{color:#6E6E6E;font-style:italic}',
+          '.eon-list{margin:0;padding:0;list-style:none}',
+          '.eon-list li{position:relative;padding:0 0 0 16px;margin:0 0 6px;font-size:13.5px}',
+          '.eon-list li:before{content:"";position:absolute;left:0;top:8px;width:5px;height:5px;',
+          'background:#C89B3C}',
+          '.eon-img{max-width:190px;border:1px solid rgba(255,255,255,.12);display:block;margin-top:4px}',
+        ].join('')
+      );
+
+      /* ------------------------------------------------------------
+         A single branded preview used by every section, so the pane
+         reads as part of the site instead of a raw field dump.
+         ------------------------------------------------------------ */
+      var h = window.h || (window.React && window.React.createElement);
+      if (!h) return;
+
+      var IMG = /\.(png|jpe?g|gif|webp|svg|avif)$/i;
+
+      function renderValue(value) {
+        if (value == null || value === '') {
+          return h('div', { className: 'eon-value' }, h('em', {}, 'empty'));
+        }
+        if (typeof value === 'boolean') {
+          return h('div', { className: 'eon-value' }, value ? 'Yes' : 'No');
+        }
+        if (typeof value === 'string') {
+          if (IMG.test(value.split('?')[0])) {
+            return h('img', { className: 'eon-img', src: value });
+          }
+          return h('div', { className: 'eon-value' }, value);
+        }
+        if (Array.isArray(value)) {
+          return h(
+            'ul',
+            { className: 'eon-list' },
+            value.map(function (item, i) {
+              var text =
+                item && typeof item === 'object'
+                  ? item.title || item.label || item.heading || item.role || item.name || '(item ' + (i + 1) + ')'
+                  : String(item);
+              return h('li', { key: i }, text);
+            })
+          );
+        }
+        return h('div', { className: 'eon-value' }, JSON.stringify(value));
+      }
+
+      function SectionPreview(props) {
+        var data = props.entry.get('data');
+        var plain = data && data.toJS ? data.toJS() : {};
+        var label = (props.collection && props.collection.get('label')) || 'Section';
+
+        var fields = Object.keys(plain).map(function (key) {
+          return h(
+            'div',
+            { className: 'eon-field', key: key },
+            h('div', { className: 'eon-label' }, key.replace(/_/g, ' ')),
+            renderValue(plain[key])
+          );
+        });
+
+        return h(
+          'div',
+          {},
+          h('p', { className: 'eon-kicker' }, label),
+          h('h1', { className: 'eon-title' }, plain.title || plain.heading || plain.headline || plain.brand || 'Preview'),
+          h('hr', { className: 'eon-rule' }),
+          fields
+        );
+      }
+
+      [
+        'meta', 'nav', 'hero', 'about', 'projects', 'skills',
+        'experience', 'contact', 'footer', 'works', 'vault', 'journal',
+        'engineering', 'designs',
+      ].forEach(function (name) {
+        try { CMS.registerPreviewTemplate(name, SectionPreview); } catch (e) {}
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "heading_line_1": "Start a",
+  "heading_emphasis": "Project.",
+  "email": "gyasiedwin14@gmail.com",
+  "submit_label": "Book Session",
+  "name_placeholder": "Your Name",
+  "email_placeholder": "Email Address",
+  "message_placeholder": "Project Goals...",
+  "socials": [
+    { "network": "pinterest", "href": "https://pinterest.com/eon_Designs1" },
+    { "network": "instagram", "href": "https://instagram.com/thedesigner_edwin" },
+    { "network": "twitter", "href": "https://x.com/thedesigner_edwin" },
+    { "network": "facebook", "href": "https://facebook.com/eddywin.wi" }
+  ],
+  "footer": "© 2026 Eon Designs by Edwin Gyasi Owusu."
+}

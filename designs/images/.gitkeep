@@ -1,0 +1,3 @@
+# Upload target for the Eon Designs Site collection in /admin.
+# Decap CMS writes images here and references them as /designs/images/<file>.
+# The pre-existing artwork in ../Assets/ is untouched and still works.

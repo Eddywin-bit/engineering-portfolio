@@ -1,0 +1,56 @@
+{
+  "heading": "Selected Works",
+  "subheading": "Curated projects from the last 12 months.",
+  "counter": "01 — 03",
+  "items": [
+    {
+      "title": "Geolink Podcast",
+      "category": "Media & Branding",
+      "image": "Assets/Banner_Geolink.webp",
+      "client": "Geological Department - KNUST",
+      "year": "2025",
+      "role": "Visual Identity",
+      "description": "Turning audio into a visual experience. A bold, editorial brand identity designed to amplify student voices and connect academia with industry.",
+      "challenge": "Podcasts are audio-first. The challenge was creating a visual language that could capture attention on social media and communicate the depth of the conversations.",
+      "solution": "We stepped away from rigid academic aesthetics and created a bold design. Using high-contrast portraits of hosts and guests, the design feels editorial, conversational, and modern",
+      "gallery": [
+        "Assets/Gess_Podcast.webp",
+        "Assets/Geolink_Hosts.webp",
+        "Assets/Geolink_Interviews.webp"
+      ]
+    },
+    {
+      "title": "Viral Creative Suite",
+      "category": "YouTube & Digital Strategy",
+      "image": "Assets/yt-thumb-main.webp",
+      "client": "Various Creators",
+      "year": "2024",
+      "role": "Content Design",
+      "description": "High-impact thumbnail design engineered for maximum Click-Through Rate (CTR). Visual storytelling condensed into a single frame.",
+      "challenge": "In the digital economy, you have 0.5 seconds to capture attention. The challenge is balancing clickability with brand integrity.",
+      "solution": "We focus on visual hierarchy, facial emotion, and high-contrast color theory. Each thumbnail is treated as a billboard, designed to stop the scroll and drive engagement.",
+      "gallery": [
+        "Assets/yt-thumb-main.webp",
+        "Assets/yt-thumb-1.webp",
+        "Assets/yt-thumb-2.webp",
+        "Assets/yt-thumb-3.webp"
+      ]
+    },
+    {
+      "title": "AusIMM Tarkwa Student Chapter",
+      "category": "Corporate Identity",
+      "image": "Assets/ausimm-main.webp",
+      "client": "AusIMM - Tarkwa Chapter",
+      "year": "2025",
+      "role": "Public Relations Officer",
+      "description": "Directing the visual communication for the Tarkwa Student Chapter of the AusIMM. Bridging the gap between technical engineering data and accessible public information.",
+      "challenge": "Engineering organizations often struggle to look modern. The challenge was to maintain professional rigor while making the chapter appealing to the next generation of geologists.",
+      "solution": "I developed a clean, corporate visual system. As PRO, I ensured every piece of communication reinforced our authority, moving away from cluttered designs to a \"International Standard\" aesthetic.",
+      "gallery": [
+        "Assets/ausimm-1.webp",
+        "Assets/ausimm-2.webp",
+        "Assets/ausimm-3.webp"
+      ]
+    }
+  ]
+}

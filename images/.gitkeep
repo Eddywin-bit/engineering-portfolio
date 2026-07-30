@@ -1,0 +1,2 @@
+# Upload target for the Engineering Site collection in /admin.
+# Decap CMS writes images here and references them as /images/<file>.

@@ -14,3 +14,10 @@ desktop.ini
 
 # Logs
 *.log
+
+# Dependencies / platform
+node_modules/
+.vercel/
+
+# Build scratch
+.tmp_*
