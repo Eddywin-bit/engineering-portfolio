@@ -6,6 +6,12 @@
   <meta name="robots" content="noindex, nofollow" />
   <title>Studio — Edwin Gyasi Owusu</title>
 
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
   <!--
     Absolute, host-relative path to the config.
 
@@ -24,245 +30,424 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&family=Fira+Code:wght@400&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
     rel="stylesheet" />
 
   <style>
     /* ================================================================
-       Eon Studio theme for Decap CMS.
+       Studio theme for Decap CMS.
 
-       Palette is pulled from the two live sites:
-         base / surfaces  — designs site   (#050505, #0a0a0a)
-         accent           — engineering site gold (#C89B3C)
-         highlight        — designs champagne (#E0D4C5)
-         display face     — Playfair Display (designs site)
-         body face        — Inter (both sites)
-         mono             — Fira Code (designs site)
+       Every value below is lifted from the :root block of index.html so
+       the panel reads as one more room in the same building. Light only.
 
-       Decap renders through emotion, whose class names carry a readable
-       component label (…-AppHeader, …-Card). Matching on that label is
-       the stable way to reach its internals.
+       Decap renders through emotion, and its generated class names keep a
+       readable component label on the end (…-AppHeader, …-Card). Matching
+       on that suffix is the stable way to reach the internals.
        ================================================================ */
 
     :root {
-      --eon-bg: #050505;
-      --eon-surface: #0a0a0a;
-      --eon-surface-2: #101010;
-      --eon-line: rgba(255, 255, 255, 0.10);
-      --eon-line-soft: rgba(255, 255, 255, 0.06);
-      --eon-text: #E8E6E1;
-      --eon-text-mute: #8A8A8A;
-      --eon-gold: #C89B3C;
-      --eon-gold-hi: #D8AB4C;
-      --eon-champagne: #E0D4C5;
-      --eon-display: 'Playfair Display', Georgia, serif;
-      --eon-body: 'Inter', system-ui, -apple-system, sans-serif;
-      --eon-mono: 'Fira Code', ui-monospace, monospace;
+      --bg:           #FAFAF8;
+      --bg-elev:      #FFFFFF;
+      --bg-tint:      #F3F1EB;
+      --ink:          #1C1C1C;
+      --ink-soft:     #3D3D3D;
+      --ink-mute:     #666666;
+      --ink-faint:    #A8A8A8;
+      --emerald:      #0F766E;
+      --emerald-hi:   #14867D;
+      --emerald-deep: #0A5952;
+      --emerald-soft: rgba(15, 118, 110, 0.08);
+      --emerald-tint: #E8F2F0;
+      --gold:         #C89B3C;
+      --gold-hi:      #D8AB4C;
+      --gold-deep:    #A17F30;
+      --gold-soft:    rgba(200, 155, 60, 0.12);
+      --gold-tint:    #F7EFD9;
+      --line:         rgba(28, 28, 28, 0.10);
+      --line-soft:    rgba(28, 28, 28, 0.06);
+      --font-heading: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --font-body:    'Inter', system-ui, -apple-system, sans-serif;
+      --radius:       16px;
+      --radius-sm:    10px;
+      --ease:         cubic-bezier(0.22, 0.61, 0.36, 1);
+      --bar:          58px;
     }
 
-    html, body, #nc-root {
-      background: var(--eon-bg) !important;
-      color: var(--eon-text);
-      font-family: var(--eon-body);
+    html, body {
+      background: var(--bg) !important;
+      color: var(--ink);
+      font-family: var(--font-body);
+      -webkit-font-smoothing: antialiased;
     }
 
-    ::selection { background: var(--eon-gold); color: #050505; }
+    /* Clear the fixed brand bar. Decap's own header is sticky, so it is
+       pushed down by the same amount rather than sliding underneath. */
+    body { padding-top: var(--bar) !important; }
 
-    /* Scrollbars ---------------------------------------------------- */
-    * { scrollbar-color: rgba(200,155,60,.45) transparent; scrollbar-width: thin; }
-    *::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::selection { background: var(--emerald); color: #fff; }
+
+    * { scrollbar-color: rgba(28,28,28,.22) transparent; scrollbar-width: thin; }
+    *::-webkit-scrollbar { width: 11px; height: 11px; }
     *::-webkit-scrollbar-track { background: transparent; }
     *::-webkit-scrollbar-thumb {
-      background: rgba(200,155,60,.35);
-      border: 3px solid var(--eon-bg);
+      background: rgba(28,28,28,.18);
+      border: 3px solid var(--bg);
       border-radius: 999px;
     }
-    *::-webkit-scrollbar-thumb:hover { background: rgba(200,155,60,.6); }
+    *::-webkit-scrollbar-thumb:hover { background: var(--emerald); }
 
     /* ---------------------------------------------------------------
-       LOGIN SCREEN
+       BRAND BAR
+
+       Decap has no slot for a wordmark, so this sits above the whole app
+       as its own element. The mark is the same "E" as the favicon and the
+       wordmark matches .brand on index.html: Plus Jakarta Sans 700.
+       --------------------------------------------------------------- */
+    .ega-brand {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--bar);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      padding: 0 1.6rem;
+      background: rgba(250, 250, 248, 0.85);
+      backdrop-filter: saturate(180%) blur(14px);
+      -webkit-backdrop-filter: saturate(180%) blur(14px);
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .ega-brand__mark { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .ega-brand__word {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 1.05rem;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      white-space: nowrap;
+    }
+    .ega-brand__rule { width: 1px; height: 20px; background: var(--line); }
+    .ega-brand__meta {
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--emerald);
+      white-space: nowrap;
+    }
+    .ega-brand__spacer { flex: 1; }
+    .ega-brand__link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.45rem 0.95rem;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--ink-soft);
+      text-decoration: none;
+      transition: all 0.25s var(--ease);
+    }
+    .ega-brand__link:hover {
+      border-color: var(--emerald);
+      color: var(--emerald);
+      background: var(--emerald-soft);
+    }
+    @media (max-width: 720px) {
+      .ega-brand__rule, .ega-brand__meta { display: none; }
+      .ega-brand__word { font-size: 0.95rem; }
+    }
+
+    /* ---------------------------------------------------------------
+       LOGIN
        --------------------------------------------------------------- */
     [class*="-StyledAuthenticationPage"] {
       background:
-        radial-gradient(900px 600px at 50% -10%, rgba(200,155,60,.10), transparent 65%),
-        var(--eon-bg) !important;
+        radial-gradient(760px 480px at 50% 0%, var(--emerald-soft), transparent 70%),
+        var(--bg) !important;
       position: relative;
     }
-    /* Hairline grid, echoes the abstract linework on the designs hero. */
+    /* Hairline grid, the same device the hero uses behind the headline. */
     [class*="-StyledAuthenticationPage"]::before {
       content: "";
       position: absolute;
       inset: 0;
       background-image:
-        linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
-      background-size: 80px 80px;
+        linear-gradient(rgba(28,28,28,.028) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(28,28,28,.028) 1px, transparent 1px);
+      background-size: 72px 72px;
       pointer-events: none;
     }
     [class*="-StyledAuthenticationPage"] > * { position: relative; z-index: 1; }
 
-    /* Decap's default logo slot. */
+    /* Decap's stock logo slot: the brand bar above already carries the mark. */
     [class*="-PageLogoIcon"],
     [class*="-CustomLogoIcon"] { display: none !important; }
 
     [class*="-StyledAuthenticationPage"]::after {
-      content: "EON STUDIO";
+      content: "Sign in to edit the site";
       position: absolute;
-      top: calc(50% - 190px);
+      top: calc(50% - 116px);
       left: 0; right: 0;
       text-align: center;
-      font-family: var(--eon-display);
-      font-weight: 600;
-      font-size: 34px;
-      letter-spacing: .16em;
-      color: var(--eon-champagne);
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 1.7rem;
+      letter-spacing: -0.025em;
+      color: var(--ink);
       z-index: 2;
     }
 
     [class*="-LoginButton"],
     [class*="-StyledAuthenticationPage"] button {
-      background: var(--eon-gold) !important;
-      color: #050505 !important;
-      font-family: var(--eon-body) !important;
-      font-weight: 600 !important;
-      font-size: 11px !important;
-      letter-spacing: .22em !important;
-      text-transform: uppercase !important;
-      border-radius: 0 !important;
-      padding: 18px 42px !important;
-      box-shadow: 0 0 34px rgba(200,155,60,.22) !important;
-      transition: background .25s ease, transform .25s ease !important;
+      background: var(--emerald) !important;
+      color: #fff !important;
+      font-family: var(--font-body) !important;
+      font-weight: 500 !important;
+      font-size: 0.95rem !important;
+      letter-spacing: 0 !important;
+      text-transform: none !important;
+      border: 1px solid var(--emerald) !important;
+      border-radius: 999px !important;
+      padding: 0.95rem 1.9rem !important;
+      box-shadow: none !important;
+      transition: all 0.3s var(--ease) !important;
     }
     [class*="-LoginButton"]:hover,
     [class*="-StyledAuthenticationPage"] button:hover {
-      background: var(--eon-champagne) !important;
-      transform: translateY(-1px);
+      background: var(--emerald-hi) !important;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(15,118,110,0.25) !important;
     }
 
     /* ---------------------------------------------------------------
-       CHROME — header, sidebar, page shell
+       CHROME — header, sidebar, shell
        --------------------------------------------------------------- */
     [class*="-AppHeader"] {
-      background: var(--eon-surface) !important;
-      border-bottom: 1px solid var(--eon-line-soft) !important;
+      top: var(--bar) !important;
+      background: var(--bg-elev) !important;
+      border-bottom: 1px solid var(--line-soft) !important;
       box-shadow: none !important;
     }
     [class*="-AppHeader"] a,
     [class*="-AppHeader"] button,
     [class*="-AppHeaderButton"] {
-      color: var(--eon-text-mute) !important;
-      font-size: 11px !important;
-      letter-spacing: .18em !important;
-      text-transform: uppercase !important;
-      border-radius: 0 !important;
+      color: var(--ink-mute) !important;
+      font-family: var(--font-body) !important;
+      font-size: 0.88rem !important;
+      font-weight: 500 !important;
+      letter-spacing: 0 !important;
+      text-transform: none !important;
+      border-radius: 999px !important;
       background: transparent !important;
+      transition: all 0.25s var(--ease) !important;
     }
     [class*="-AppHeader"] a:hover,
-    [class*="-AppHeaderButton"]:hover { color: var(--eon-gold) !important; }
+    [class*="-AppHeaderButton"]:hover {
+      color: var(--emerald) !important;
+      background: var(--emerald-soft) !important;
+    }
     [class*="-AppHeaderActions"] [class*="-AppHeaderButton"][class*="active"] {
-      color: var(--eon-champagne) !important;
+      color: var(--emerald) !important;
+      background: var(--emerald-soft) !important;
+    }
+    /* The "New" / quick-create control reads as the one primary action. */
+    [class*="-AppHeaderActions"] [class*="-AppHeaderNewEntryButton"],
+    [class*="-AppHeader"] [class*="-DropdownButton"] {
+      background: var(--ink) !important;
+      color: var(--bg) !important;
+      border-radius: 999px !important;
+      padding: 0.55rem 1.05rem !important;
+    }
+    [class*="-AppHeaderActions"] [class*="-AppHeaderNewEntryButton"]:hover,
+    [class*="-AppHeader"] [class*="-DropdownButton"]:hover {
+      background: var(--emerald) !important;
+      color: #fff !important;
     }
 
     [class*="-AppMainContainer"],
-    [class*="-AppContainer"] { background: var(--eon-bg) !important; }
+    [class*="-AppContainer"] { background: var(--bg) !important; }
 
     [class*="-SidebarContainer"] {
-      background: var(--eon-surface) !important;
-      border: 1px solid var(--eon-line-soft) !important;
-      border-radius: 0 !important;
-      box-shadow: none !important;
+      background: var(--bg-elev) !important;
+      border: 1px solid var(--line) !important;
+      border-radius: var(--radius) !important;
+      box-shadow: 0 1px 2px rgba(28,28,28,0.03) !important;
+      padding: 0.5rem !important;
     }
     [class*="-SidebarHeading"] {
-      font-family: var(--eon-mono) !important;
-      font-size: 10px !important;
-      letter-spacing: .24em !important;
+      font-family: var(--font-body) !important;
+      font-size: 0.75rem !important;
+      font-weight: 500 !important;
+      letter-spacing: 0.06em !important;
       text-transform: uppercase !important;
-      color: var(--eon-gold) !important;
+      color: var(--emerald) !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 0.5rem !important;
+    }
+    /* The 24px rule that precedes every section eyebrow on the live site. */
+    [class*="-SidebarHeading"]::before {
+      content: "";
+      width: 24px;
+      height: 1px;
+      background: var(--emerald);
+      flex: none;
     }
     [class*="-SidebarNavLink"] {
-      color: var(--eon-text-mute) !important;
-      font-size: 13px !important;
-      border-radius: 0 !important;
-      border-left: 2px solid transparent !important;
-      transition: color .2s ease, border-color .2s ease, background .2s ease !important;
+      color: var(--ink-soft) !important;
+      font-family: var(--font-body) !important;
+      font-size: 0.92rem !important;
+      font-weight: 500 !important;
+      border-radius: var(--radius-sm) !important;
+      border-left: 0 !important;
+      margin: 2px 0 !important;
+      transition: all 0.25s var(--ease) !important;
     }
     [class*="-SidebarNavLink"]:hover {
-      color: var(--eon-text) !important;
-      background: rgba(255,255,255,.03) !important;
+      color: var(--ink) !important;
+      background: var(--bg-tint) !important;
     }
     [class*="-SidebarNavLink"][class*="active"],
     [class*="-SidebarNavLink"].active {
-      color: var(--eon-champagne) !important;
-      border-left-color: var(--eon-gold) !important;
-      background: rgba(200,155,60,.07) !important;
+      color: var(--emerald-deep) !important;
+      background: var(--emerald-tint) !important;
     }
+    [class*="-SidebarNavLink"] svg { color: currentColor !important; }
 
     /* ---------------------------------------------------------------
        COLLECTION VIEW
        --------------------------------------------------------------- */
     [class*="-CollectionTop"],
-    [class*="-CollectionHeader"] { background: transparent !important; }
+    [class*="-CollectionHeader"] {
+      background: transparent !important;
+      box-shadow: none !important;
+    }
     [class*="-CollectionTopHeading"],
     [class*="-CollectionTop"] h1 {
-      font-family: var(--eon-display) !important;
-      font-weight: 600 !important;
-      letter-spacing: -.01em !important;
-      color: var(--eon-text) !important;
+      font-family: var(--font-heading) !important;
+      font-weight: 700 !important;
+      font-size: 2rem !important;
+      letter-spacing: -0.025em !important;
+      color: var(--ink) !important;
     }
     [class*="-CollectionTopDescription"],
-    [class*="-CollectionTop"] p { color: var(--eon-text-mute) !important; }
+    [class*="-CollectionTop"] p {
+      color: var(--ink-mute) !important;
+      font-size: 1rem !important;
+      line-height: 1.6 !important;
+    }
 
     [class*="-Card"],
     [class*="-ListCard"],
     [class*="-EntryCard"] {
-      background: var(--eon-surface) !important;
-      border: 1px solid var(--eon-line-soft) !important;
-      border-radius: 0 !important;
+      position: relative !important;
+      overflow: hidden !important;
+      background: var(--bg-elev) !important;
+      border: 1px solid var(--line) !important;
+      border-radius: var(--radius) !important;
       box-shadow: none !important;
-      transition: border-color .25s ease, transform .25s ease !important;
+      transition: border-color .3s var(--ease), transform .3s var(--ease), box-shadow .3s var(--ease) !important;
     }
+    /* The emerald-to-gold hairline that wipes across every project card. */
+    [class*="-Card"]::before,
+    [class*="-ListCard"]::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, var(--emerald), var(--gold));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.45s var(--ease);
+      z-index: 2;
+    }
+    [class*="-Card"]:hover::before,
+    [class*="-ListCard"]:hover::before { transform: scaleX(1); }
     [class*="-Card"]:hover,
     [class*="-ListCard"]:hover {
-      border-color: rgba(200,155,60,.45) !important;
-      transform: translateY(-2px);
+      border-color: rgba(15,118,110,0.35) !important;
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(28,28,28,0.07) !important;
     }
     [class*="-CardHeading"] a,
     [class*="-ListCardLink"] {
-      font-family: var(--eon-display) !important;
-      color: var(--eon-text) !important;
-      font-size: 17px !important;
+      font-family: var(--font-heading) !important;
+      font-weight: 700 !important;
+      color: var(--ink) !important;
+      font-size: 1.15rem !important;
+      letter-spacing: -0.015em !important;
     }
+    [class*="-CardHeading"] a:hover,
+    [class*="-ListCardLink"]:hover { color: var(--emerald) !important; }
 
     /* ---------------------------------------------------------------
        EDITOR
        --------------------------------------------------------------- */
     [class*="-EditorContainer"],
-    [class*="-EditorContent"] { background: var(--eon-bg) !important; }
+    [class*="-EditorContent"] { background: var(--bg) !important; }
 
     [class*="-EditorControlBar"],
     [class*="-ToolbarContainer"] {
-      background: var(--eon-surface) !important;
-      border-bottom: 1px solid var(--eon-line-soft) !important;
+      background: var(--bg-elev) !important;
+      border-bottom: 1px solid var(--line-soft) !important;
       box-shadow: none !important;
     }
+    [class*="-ToolbarSectionMain"] h1,
+    [class*="-ToolbarSubSectionFirst"] {
+      font-family: var(--font-heading) !important;
+      color: var(--ink) !important;
+    }
 
-    [class*="-ControlPaneContainer"],
+    [class*="-ControlPaneContainer"] {
+      background: var(--bg) !important;
+      border-color: var(--line) !important;
+    }
     [class*="-PreviewPaneContainer"] {
-      background: var(--eon-bg) !important;
-      border-color: var(--eon-line-soft) !important;
+      background: var(--bg-tint) !important;
+      border-color: var(--line) !important;
+    }
+    [class*="-PreviewPaneFrame"] { background: var(--bg) !important; }
+
+    /* Each field sits on its own card so the form has real structure
+       instead of running together as one column of inputs. */
+    [class*="-ControlContainer"] {
+      background: var(--bg-elev) !important;
+      border: 1px solid var(--line) !important;
+      border-radius: var(--radius) !important;
+      padding: 1.05rem 1.15rem 1.15rem !important;
+      margin-bottom: 1rem !important;
+      transition: border-color 0.25s var(--ease), box-shadow 0.25s var(--ease) !important;
+    }
+    [class*="-ControlContainer"]:focus-within {
+      border-color: rgba(15,118,110,0.4) !important;
+      box-shadow: 0 0 0 3px var(--emerald-soft) !important;
     }
 
-    /* Field labels */
     [class*="-FieldLabel"],
-    label[class*="css-"] {
-      font-family: var(--eon-mono) !important;
-      font-size: 10px !important;
-      letter-spacing: .18em !important;
+    [class*="-ControlContainer"] > label {
+      font-family: var(--font-body) !important;
+      font-size: 0.78rem !important;
+      font-weight: 500 !important;
+      letter-spacing: 0.06em !important;
       text-transform: uppercase !important;
-      color: var(--eon-gold) !important;
+      color: var(--emerald) !important;
       background: transparent !important;
+      padding: 0 !important;
+      position: static !important;
+      display: block !important;
+      margin-bottom: 0.55rem !important;
     }
-    [class*="-FieldLabel"][class*="active"] { color: var(--eon-gold-hi) !important; }
+    [class*="-FieldLabel"][class*="active"] { color: var(--emerald) !important; }
+    [class*="-FieldHint"],
+    [class*="-ControlHint"] {
+      font-size: 0.82rem !important;
+      color: var(--ink-mute) !important;
+      font-style: normal !important;
+      line-height: 1.5 !important;
+    }
+    [class*="-ControlHint"][class*="error"] { color: #B4553F !important; }
 
     /* Inputs */
     [class*="-ControlContainer"] input,
@@ -272,219 +457,870 @@
     input[type="text"],
     input[type="url"],
     input[type="email"],
+    input[type="number"],
     textarea {
-      background: var(--eon-surface-2) !important;
-      color: var(--eon-text) !important;
-      border: 1px solid var(--eon-line) !important;
-      border-radius: 0 !important;
-      font-family: var(--eon-body) !important;
-      font-size: 14px !important;
-      transition: border-color .2s ease, box-shadow .2s ease !important;
+      background: var(--bg) !important;
+      color: var(--ink) !important;
+      border: 1px solid var(--line) !important;
+      border-radius: var(--radius-sm) !important;
+      padding: 0.7rem 0.85rem !important;
+      font-family: var(--font-body) !important;
+      font-size: 0.95rem !important;
+      line-height: 1.55 !important;
+      transition: border-color .2s var(--ease), box-shadow .2s var(--ease) !important;
     }
     input:focus, textarea:focus {
-      border-color: var(--eon-gold) !important;
-      box-shadow: 0 0 0 1px rgba(200,155,60,.35) !important;
+      background: var(--bg-elev) !important;
+      border-color: var(--emerald) !important;
+      box-shadow: 0 0 0 3px var(--emerald-soft) !important;
       outline: none !important;
     }
-    ::placeholder { color: #5A5A5A !important; }
+    ::placeholder { color: var(--ink-faint) !important; }
 
-    /* Widget shells (object / list / markdown) */
+    /* Select / relation menus */
+    [class*="-control"][class*="css-"],
+    [class*="-ReactSelect"] [class*="control"] {
+      background: var(--bg) !important;
+      border: 1px solid var(--line) !important;
+      border-radius: var(--radius-sm) !important;
+      min-height: 42px !important;
+    }
+    [class*="-menu"][class*="css-"] {
+      background: var(--bg-elev) !important;
+      border: 1px solid var(--line) !important;
+      border-radius: var(--radius-sm) !important;
+      box-shadow: 0 12px 32px rgba(28,28,28,0.10) !important;
+      overflow: hidden !important;
+    }
+    [class*="-option"][class*="css-"] { color: var(--ink) !important; }
+    [class*="-option"][class*="css-"]:hover { background: var(--emerald-tint) !important; }
+
+    /* Object and list shells */
     [class*="-ObjectControl"],
     [class*="-ListControl"],
     [class*="-ObjectWidgetTopBar"],
     [class*="-StyledListItem"],
     [class*="-NestedObjectLabel"] {
-      background: var(--eon-surface) !important;
-      border-color: var(--eon-line-soft) !important;
-      border-radius: 0 !important;
-      color: var(--eon-text) !important;
+      background: var(--bg-tint) !important;
+      border-color: var(--line) !important;
+      border-radius: var(--radius-sm) !important;
+      color: var(--ink) !important;
+    }
+    [class*="-StyledListItem"] {
+      background: var(--bg-elev) !important;
+      border: 1px solid var(--line) !important;
+      margin-bottom: 0.6rem !important;
+    }
+    [class*="-NestedObjectLabel"] {
+      font-family: var(--font-heading) !important;
+      font-weight: 600 !important;
+      color: var(--ink) !important;
+      background: transparent !important;
     }
     [class*="-TopBarButton"],
-    [class*="-ExpandButton"] { color: var(--eon-gold) !important; }
+    [class*="-ExpandButton"] { color: var(--ink-mute) !important; }
+    [class*="-TopBarButton"]:hover { color: var(--emerald) !important; }
+    [class*="-DragHandle"] { color: var(--ink-faint) !important; }
 
+    /* "Add Stat", "Add Project", every list-append control */
     [class*="-AddButton"],
     [class*="-ListControl"] button[class*="-Add"] {
-      background: transparent !important;
-      color: var(--eon-gold) !important;
-      border: 1px solid rgba(200,155,60,.4) !important;
-      border-radius: 0 !important;
-      font-size: 11px !important;
-      letter-spacing: .16em !important;
-      text-transform: uppercase !important;
+      background: var(--emerald-soft) !important;
+      color: var(--emerald-deep) !important;
+      border: 1px solid rgba(15,118,110,0.22) !important;
+      border-radius: 999px !important;
+      font-family: var(--font-body) !important;
+      font-size: 0.88rem !important;
+      font-weight: 500 !important;
+      letter-spacing: 0 !important;
+      text-transform: none !important;
+      padding: 0.6rem 1.15rem !important;
+      box-shadow: none !important;
+      transition: all 0.25s var(--ease) !important;
     }
     [class*="-AddButton"]:hover {
-      background: rgba(200,155,60,.12) !important;
-      color: var(--eon-champagne) !important;
+      background: var(--emerald) !important;
+      color: #fff !important;
+      border-color: var(--emerald) !important;
+      transform: translateY(-2px);
     }
 
-    /* Markdown editor surface */
-    [class*="-Toolbar"] { background: var(--eon-surface-2) !important; }
-    [class*="-Toolbar"] button { color: var(--eon-text-mute) !important; }
-    [class*="-Toolbar"] button:hover { color: var(--eon-gold) !important; }
+    /* Markdown editor */
+    [class*="-Toolbar"] {
+      background: var(--bg-tint) !important;
+      border-bottom: 1px solid var(--line) !important;
+      border-radius: var(--radius-sm) var(--radius-sm) 0 0 !important;
+    }
+    [class*="-ToolbarButton"][class*="-Toolbar"] { background: transparent !important; }
+    [class*="-Toolbar"] button { color: var(--ink-mute) !important; border-radius: 6px !important; }
+    [class*="-Toolbar"] button:hover { color: var(--emerald) !important; background: var(--emerald-soft) !important; }
     [data-slate-editor] {
-      background: var(--eon-surface-2) !important;
-      color: var(--eon-text) !important;
-      font-family: var(--eon-body) !important;
+      background: var(--bg) !important;
+      color: var(--ink) !important;
+      font-family: var(--font-body) !important;
+      font-size: 0.98rem !important;
+      line-height: 1.7 !important;
+      border-radius: 0 0 var(--radius-sm) var(--radius-sm) !important;
     }
 
-    /* Primary actions: Publish / Save */
+    /* Primary actions: Publish, Save */
     button[class*="-ToolbarButton"],
     [class*="-PublishButton"],
     [class*="-SaveButton"] {
-      background: var(--eon-gold) !important;
-      color: #050505 !important;
-      border-radius: 0 !important;
-      font-size: 11px !important;
-      font-weight: 600 !important;
-      letter-spacing: .18em !important;
-      text-transform: uppercase !important;
+      background: var(--emerald) !important;
+      color: #fff !important;
+      border: 1px solid var(--emerald) !important;
+      border-radius: 999px !important;
+      font-family: var(--font-body) !important;
+      font-size: 0.9rem !important;
+      font-weight: 500 !important;
+      letter-spacing: 0 !important;
+      text-transform: none !important;
+      padding: 0.6rem 1.3rem !important;
       box-shadow: none !important;
+      transition: all 0.3s var(--ease) !important;
     }
     button[class*="-ToolbarButton"]:hover,
-    [class*="-PublishButton"]:hover { background: var(--eon-champagne) !important; }
+    [class*="-PublishButton"]:hover,
+    [class*="-SaveButton"]:hover {
+      background: var(--emerald-hi) !important;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(15,118,110,0.25) !important;
+    }
+    /* Secondary toolbar controls stay quiet, mirroring .btn.ghost */
+    [class*="-ToolbarDropdown"] button[class*="-ToolbarButton"],
+    button[class*="-ToolbarButton"][class*="disabled"] {
+      background: transparent !important;
+      color: var(--ink) !important;
+      border-color: var(--line) !important;
+    }
+    [class*="-ToolbarDropdown"] button[class*="-ToolbarButton"]:hover {
+      border-color: var(--ink) !important;
+      background: var(--bg-elev) !important;
+    }
 
     [class*="-DeleteButton"] {
       background: transparent !important;
       color: #B4553F !important;
-      border: 1px solid rgba(180,85,63,.45) !important;
-      border-radius: 0 !important;
+      border: 1px solid rgba(180,85,63,.35) !important;
+      border-radius: 999px !important;
+      box-shadow: none !important;
     }
+    [class*="-DeleteButton"]:hover {
+      background: rgba(180,85,63,.08) !important;
+      transform: translateY(-2px);
+    }
+
+    /* Image widget: the drop zone should read as a target, not a button. */
+    [class*="-ImageWrapper"],
+    [class*="-FileWidgetButton"],
+    [class*="-FileWidgetButtonRemove"] {
+      border-radius: var(--radius-sm) !important;
+      font-family: var(--font-body) !important;
+    }
+    [class*="-FileWidgetButton"] {
+      background: var(--bg) !important;
+      color: var(--emerald-deep) !important;
+      border: 1px dashed rgba(15,118,110,0.35) !important;
+      padding: 0.85rem 1.2rem !important;
+      font-weight: 500 !important;
+      transition: all 0.25s var(--ease) !important;
+    }
+    [class*="-FileWidgetButton"]:hover {
+      background: var(--emerald-soft) !important;
+      border-color: var(--emerald) !important;
+    }
+    [class*="-FileWidgetButtonRemove"] {
+      background: transparent !important;
+      color: #B4553F !important;
+      border: 1px solid rgba(180,85,63,.30) !important;
+    }
+    [class*="-ImageWrapper"] { border: 1px solid var(--line) !important; overflow: hidden !important; }
 
     /* Media library */
     [class*="-StyledModal"],
     [class*="-MediaLibraryModal"],
     [class*="-DialogContent"] {
-      background: var(--eon-surface) !important;
-      border: 1px solid var(--eon-line) !important;
-      border-radius: 0 !important;
-      color: var(--eon-text) !important;
+      background: var(--bg) !important;
+      border: 1px solid var(--line) !important;
+      border-radius: var(--radius) !important;
+      box-shadow: 0 24px 64px rgba(28,28,28,0.16) !important;
+      color: var(--ink) !important;
+      overflow: hidden !important;
     }
     [class*="-MediaLibraryTitle"],
     [class*="-StyledModal"] h1 {
-      font-family: var(--eon-display) !important;
-      color: var(--eon-text) !important;
+      font-family: var(--font-heading) !important;
+      font-weight: 700 !important;
+      letter-spacing: -0.02em !important;
+      color: var(--ink) !important;
     }
+    [class*="-MediaLibraryCardGrid"] { background: transparent !important; }
     [class*="-MediaCard"] {
-      background: var(--eon-surface-2) !important;
-      border: 1px solid var(--eon-line-soft) !important;
-      border-radius: 0 !important;
-      color: var(--eon-text) !important;
+      background: var(--bg-elev) !important;
+      border: 1px solid var(--line) !important;
+      border-radius: var(--radius-sm) !important;
+      color: var(--ink) !important;
+      transition: all 0.25s var(--ease) !important;
     }
-    [class*="-MediaCard"][class*="selected"] { border-color: var(--eon-gold) !important; }
+    [class*="-MediaCard"]:hover {
+      border-color: rgba(15,118,110,0.35) !important;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 26px rgba(28,28,28,0.08) !important;
+    }
+    [class*="-MediaCard"][class*="selected"] {
+      border-color: var(--emerald) !important;
+      box-shadow: 0 0 0 3px var(--emerald-soft) !important;
+    }
+    [class*="-MediaCardText"] { color: var(--ink-soft) !important; }
+    [class*="-EmptyMessage"] { color: var(--ink-mute) !important; }
 
     /* Notifications */
     [class*="-Toast"],
     [class*="-SnackbarMessage"] {
-      background: var(--eon-surface) !important;
-      color: var(--eon-text) !important;
-      border-left: 2px solid var(--eon-gold) !important;
-      border-radius: 0 !important;
+      background: var(--bg-elev) !important;
+      color: var(--ink) !important;
+      border: 1px solid var(--line) !important;
+      border-left: 3px solid var(--emerald) !important;
+      border-radius: var(--radius-sm) !important;
+      box-shadow: 0 12px 32px rgba(28,28,28,0.12) !important;
+      font-family: var(--font-body) !important;
     }
 
-    /* Anything Decap still paints white, pull back to the surface tone. */
-    #nc-root [style*="background-color: rgb(255, 255, 255)"],
-    #nc-root [style*="background: rgb(255, 255, 255)"] {
-      background: var(--eon-surface) !important;
-    }
+    [class*="-Loader"] { color: var(--ink-mute) !important; }
   </style>
 </head>
 <body>
+  <header class="ega-brand">
+    <svg class="ega-brand__mark" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+      <defs>
+        <linearGradient id="ega-plate" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#0F766E" />
+          <stop offset="1" stop-color="#0A5952" />
+        </linearGradient>
+      </defs>
+      <rect width="100" height="100" rx="22" fill="url(#ega-plate)" />
+      <rect x="30" y="26" width="9.5" height="48" fill="#FAFAF8" />
+      <rect x="30" y="26" width="42" height="9.5" fill="#FAFAF8" />
+      <rect x="30" y="45.25" width="34.5" height="9.5" fill="#FAFAF8" />
+      <rect x="30" y="64.5" width="42" height="9.5" fill="#C89B3C" />
+    </svg>
+    <span class="ega-brand__word">Edwin Gyasi Owusu</span>
+    <span class="ega-brand__rule"></span>
+    <span class="ega-brand__meta">Content Studio</span>
+    <span class="ega-brand__spacer"></span>
+    <a class="ega-brand__link" href="https://www.edwingyasi.online" target="_blank" rel="noopener">
+      View site
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M7 17 17 7M9 7h8v8" />
+      </svg>
+    </a>
+  </header>
+
   <script src="https://unpkg.com/decap-cms@^3.8.4/dist/decap-cms.js"></script>
   <script>
     (function () {
       if (!window.CMS) return;
 
-      /* ------------------------------------------------------------
-         Preview pane styling. The preview renders inside an iframe,
-         so it needs its own stylesheet rather than the theme above.
-         ------------------------------------------------------------ */
+      /* ============================================================
+         PREVIEW PANE
+
+         The pane renders in its own iframe, so it needs a standalone
+         stylesheet. These are the real class names and real values
+         from index.html, trimmed to what the previews use, so the
+         pane is a small copy of the page rather than a field dump.
+         ============================================================ */
       CMS.registerPreviewStyle(
-        'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Inter:wght@300;400;500&family=Fira+Code&display=swap'
-      );
-      CMS.registerPreviewStyle(
-        [
-          'body{background:#050505;color:#E8E6E1;font-family:Inter,sans-serif;',
-          'padding:34px 30px;line-height:1.65;-webkit-font-smoothing:antialiased}',
-          '.eon-kicker{font-family:"Fira Code",monospace;font-size:10px;letter-spacing:.24em;',
-          'text-transform:uppercase;color:#C89B3C;margin:0 0 6px}',
-          '.eon-title{font-family:"Playfair Display",serif;font-weight:600;font-size:30px;',
-          'letter-spacing:-.01em;color:#E0D4C5;margin:0 0 22px}',
-          '.eon-rule{height:1px;background:linear-gradient(90deg,rgba(200,155,60,.6),transparent);',
-          'border:0;margin:0 0 26px}',
-          '.eon-field{margin:0 0 20px;padding:0 0 20px;border-bottom:1px solid rgba(255,255,255,.06)}',
-          '.eon-field:last-child{border-bottom:0}',
-          '.eon-label{font-family:"Fira Code",monospace;font-size:9px;letter-spacing:.2em;',
-          'text-transform:uppercase;color:#8A8A8A;margin:0 0 7px}',
-          '.eon-value{font-size:14.5px;color:#E8E6E1;white-space:pre-wrap;word-break:break-word}',
-          '.eon-value em{color:#6E6E6E;font-style:italic}',
-          '.eon-list{margin:0;padding:0;list-style:none}',
-          '.eon-list li{position:relative;padding:0 0 0 16px;margin:0 0 6px;font-size:13.5px}',
-          '.eon-list li:before{content:"";position:absolute;left:0;top:8px;width:5px;height:5px;',
-          'background:#C89B3C}',
-          '.eon-img{max-width:190px;border:1px solid rgba(255,255,255,.12);display:block;margin-top:4px}',
-        ].join('')
+        'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@500;700;900&display=swap'
       );
 
-      /* ------------------------------------------------------------
-         A single branded preview used by every section, so the pane
-         reads as part of the site instead of a raw field dump.
-         ------------------------------------------------------------ */
+      CMS.registerPreviewStyle([
+        ':root{--bg:#FAFAF8;--bg-elev:#FFF;--bg-tint:#F3F1EB;--ink:#1C1C1C;--ink-soft:#3D3D3D;',
+        '--ink-mute:#666;--ink-faint:#A8A8A8;--emerald:#0F766E;--emerald-deep:#0A5952;',
+        '--emerald-tint:#E8F2F0;--gold:#C89B3C;--gold-deep:#A17F30;--gold-tint:#F7EFD9;',
+        '--line:rgba(28,28,28,.10);--line-soft:rgba(28,28,28,.06);--radius:16px;--radius-sm:10px;',
+        "--fh:'Plus Jakarta Sans',system-ui,sans-serif;--fb:'Inter',system-ui,sans-serif}",
+
+        '*{box-sizing:border-box}',
+        'body{background:var(--bg);color:var(--ink);font-family:var(--fb);margin:0;',
+        'padding:34px 30px 60px;line-height:1.6;-webkit-font-smoothing:antialiased}',
+        'a{color:inherit;text-decoration:none}',
+        'img{max-width:100%;display:block}',
+
+        /* section furniture */
+        '.sec-eyebrow{display:inline-flex;align-items:center;gap:.5rem;font-size:.8rem;font-weight:500;',
+        'color:var(--emerald);letter-spacing:.06em;text-transform:uppercase;margin:0 0 1rem}',
+        '.sec-eyebrow:before{content:"";width:24px;height:1px;background:var(--emerald)}',
+        '.sec-title{font-family:var(--fh);font-weight:700;font-size:2.1rem;line-height:1.08;',
+        'letter-spacing:-.025em;color:var(--ink);margin:0 0 1rem;max-width:20ch}',
+        '.sec-sub{font-size:1rem;color:var(--ink-mute);max-width:50ch;line-height:1.6;margin:0 0 2rem}',
+        '.sec-rule{height:1px;background:var(--line);border:0;margin:2.4rem 0}',
+
+        /* hero */
+        '.hero-tag{display:inline-flex;align-items:center;gap:.6rem;padding:.5rem 1rem;',
+        'background:var(--bg-elev);border:1px solid var(--line);border-radius:999px;',
+        'font-size:.85rem;color:var(--ink-soft);margin:0 0 1.6rem}',
+        '.hero-tag .dot{width:7px;height:7px;border-radius:50%;background:var(--emerald)}',
+        '.hero-title{font-family:var(--fh);font-weight:800;font-size:2.9rem;line-height:1.04;',
+        'letter-spacing:-.035em;color:var(--ink);margin:0 0 1rem}',
+        '.hero-role{font-family:var(--fh);font-weight:500;font-size:1.2rem;color:var(--emerald);margin:0 0 1.4rem}',
+        '.hero-sub{font-size:1.05rem;color:var(--ink-mute);max-width:44ch;line-height:1.55;margin:0 0 1.8rem}',
+
+        /* buttons */
+        '.btns{display:flex;flex-wrap:wrap;gap:.7rem}',
+        '.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.8rem 1.4rem;border-radius:999px;',
+        'font-size:.92rem;font-weight:500;border:1px solid transparent}',
+        '.btn.primary{background:var(--emerald);color:#fff;border-color:var(--emerald)}',
+        '.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}',
+        '.btn .cue{opacity:.75;font-size:.8rem}',
+
+        /* stats */
+        '.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:.8rem;margin-top:1.6rem}',
+        '.stat{background:var(--bg-elev);border:1px solid var(--line);border-radius:var(--radius);padding:1.2rem 1.1rem}',
+        '.stat .n{font-family:var(--fh);font-weight:700;font-size:1.8rem;color:var(--emerald);',
+        'line-height:1;margin:0 0 .35rem;letter-spacing:-.02em}',
+        '.stat .n .plus{color:var(--gold);font-weight:600}',
+        '.stat .lbl{font-size:.8rem;color:var(--ink-mute);line-height:1.35}',
+
+        /* prose */
+        '.prose p{font-size:1rem;line-height:1.75;color:var(--ink-soft);max-width:60ch;margin:0 0 1.1rem}',
+        '.prose p strong{color:var(--ink);font-weight:600}',
+
+        /* project cards */
+        '.cards{display:grid;gap:1rem}',
+        '.project-card{position:relative;overflow:hidden;background:var(--bg-elev);border:1px solid var(--line);',
+        'border-radius:var(--radius);padding:1.5rem}',
+        '.project-card:before{content:"";position:absolute;top:0;left:0;width:100%;height:3px;',
+        'background:linear-gradient(90deg,var(--emerald),var(--gold))}',
+        '.project-visual{aspect-ratio:16/9;background:var(--bg-tint);border-radius:var(--radius-sm);',
+        'margin:0 0 1.2rem;border:1px solid var(--line-soft);overflow:hidden;display:flex;',
+        'align-items:center;justify-content:center;color:var(--ink-faint);font-size:.8rem}',
+        '.project-visual img{width:100%;height:100%;object-fit:cover}',
+        '.project-cat{display:inline-flex;align-items:center;gap:.5rem;font-size:.78rem;font-weight:500;',
+        'color:var(--emerald);margin:0 0 .7rem}',
+        '.project-cat .pin{width:6px;height:6px;border-radius:50%;background:var(--emerald)}',
+        '.project-title{font-family:var(--fh);font-weight:700;font-size:1.25rem;line-height:1.2;',
+        'letter-spacing:-.015em;color:var(--ink);margin:0 0 .6rem}',
+        '.project-desc{color:var(--ink-mute);font-size:.93rem;line-height:1.6;margin:0 0 1.1rem}',
+        '.project-tools{display:flex;flex-wrap:wrap;gap:.35rem;margin:0 0 1rem}',
+        '.project-tools span{font-size:.72rem;font-weight:500;padding:.25rem .6rem;',
+        'background:var(--bg-tint);border-radius:999px;color:var(--ink-soft)}',
+        '.project-arrow{color:var(--emerald);font-size:.85rem;font-weight:500}',
+
+        /* dark eon strip, exactly as it appears on the live page */
+        '.eon-strip{margin-top:1.4rem;background:var(--ink);color:var(--bg);border-radius:var(--radius);padding:1.7rem}',
+        '.eon-strip .sec-eyebrow{color:var(--gold)}',
+        '.eon-strip .sec-eyebrow:before{background:var(--gold)}',
+        '.eon-title{font-family:var(--fh);font-weight:700;font-size:1.4rem;color:#fff;',
+        'margin:0 0 .5rem;letter-spacing:-.015em}',
+        '.eon-desc{color:#C7C7C7;font-size:.95rem;line-height:1.6;margin:0 0 1rem}',
+        '.eon-link{color:var(--gold);font-size:.88rem;font-weight:500}',
+
+        /* skill blocks */
+        '.skill-block{border-radius:var(--radius);padding:1.5rem;margin:0 0 1rem;position:relative;overflow:hidden}',
+        '.skill-block.emerald{background:var(--emerald-tint);border:1px solid rgba(15,118,110,.15)}',
+        '.skill-block.gold{background:var(--gold-tint);border:1px solid rgba(200,155,60,.25)}',
+        '.skill-block.dark{background:var(--ink);color:var(--bg)}',
+        '.skill-block.certifications{background:linear-gradient(135deg,var(--emerald-deep),var(--emerald));color:#fff}',
+        '.skill-block h3{font-family:var(--fh);font-weight:700;font-size:1.15rem;margin:0 0 .4rem;letter-spacing:-.015em}',
+        '.skill-block.emerald h3{color:var(--emerald-deep)}',
+        '.skill-block.gold h3{color:var(--gold-deep)}',
+        '.skill-block.dark h3,.skill-block.certifications h3{color:#fff}',
+        '.skill-note{font-size:.85rem;margin:0 0 1.1rem;opacity:.85}',
+        '.skill-block.emerald .skill-note{color:var(--emerald-deep)}',
+        '.skill-block.gold .skill-note{color:var(--gold-deep)}',
+        '.skill-block.dark .skill-note{color:#C7C7C7;opacity:1}',
+        '.skill-block.certifications .skill-note{color:rgba(255,255,255,.85);opacity:1}',
+        '.badges{display:flex;flex-wrap:wrap;gap:.4rem}',
+        '.badge{padding:.45rem .85rem;border-radius:999px;font-size:.8rem;font-weight:500}',
+        '.skill-block.emerald .badge{background:rgba(255,255,255,.7);color:var(--emerald-deep);',
+        'border:1px solid rgba(15,118,110,.15)}',
+        '.skill-block.gold .badge{background:rgba(255,255,255,.7);color:var(--gold-deep);',
+        'border:1px solid rgba(200,155,60,.25)}',
+        '.skill-block.dark .badge{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.15)}',
+        '.skill-block.certifications .badge{background:rgba(255,255,255,.12);color:#fff;',
+        'border:1px solid rgba(255,255,255,.2)}',
+
+        /* timeline */
+        '.timeline{position:relative;padding-left:2rem}',
+        '.timeline:before{content:"";position:absolute;left:6px;top:6px;bottom:6px;width:1px;background:var(--line)}',
+        '.exp{position:relative;padding-bottom:1.8rem}',
+        '.exp:before{content:"";position:absolute;left:-2rem;top:6px;width:13px;height:13px;border-radius:50%;',
+        'background:var(--bg);border:2px solid var(--emerald)}',
+        '.exp-date{font-size:.8rem;color:var(--ink-mute);font-weight:500;margin:0 0 .35rem;letter-spacing:.02em}',
+        '.exp-role{font-family:var(--fh);font-weight:700;font-size:1.1rem;color:var(--ink);margin:0 0 .2rem;letter-spacing:-.01em}',
+        '.exp-org{font-size:.92rem;color:var(--emerald);font-weight:500;margin:0 0 .5rem}',
+        '.exp-desc{font-size:.92rem;color:var(--ink-mute);line-height:1.6;margin:0;max-width:56ch}',
+
+        /* nav + footer strips */
+        '.navbar{display:flex;align-items:center;gap:1rem;background:var(--bg-elev);border:1px solid var(--line);',
+        'border-radius:999px;padding:.65rem 1.1rem}',
+        '.navbar .brand{font-family:var(--fh);font-weight:700;font-size:1rem;letter-spacing:-.01em}',
+        '.navbar .links{display:flex;flex-wrap:wrap;gap:.9rem;font-size:.85rem;color:var(--ink-soft);margin-left:auto}',
+        '.navbar .cta{background:var(--ink);color:var(--bg);border-radius:999px;padding:.4rem .9rem;font-size:.8rem;font-weight:500}',
+        '.footer{background:var(--bg-elev);border:1px solid var(--line);border-radius:var(--radius);padding:1.5rem}',
+        '.footer .fb{font-family:var(--fh);font-weight:700;font-size:1.05rem;margin:0 0 .4rem}',
+        '.footer .fn{font-size:.88rem;color:var(--ink-mute);margin:0 0 1rem}',
+        '.socials{display:flex;flex-wrap:wrap;gap:.45rem}',
+        '.socials span{font-size:.78rem;padding:.35rem .8rem;border:1px solid var(--line);',
+        'border-radius:999px;color:var(--ink-soft)}',
+
+        /* meta / SERP card */
+        '.serp{background:var(--bg-elev);border:1px solid var(--line);border-radius:var(--radius);padding:1.3rem}',
+        '.serp .url{font-size:.8rem;color:var(--emerald);margin:0 0 .35rem}',
+        '.serp .t{font-family:var(--fh);font-weight:600;font-size:1.15rem;color:#1a0dab;margin:0 0 .35rem;line-height:1.3}',
+        '.serp .d{font-size:.9rem;color:var(--ink-mute);line-height:1.6;margin:0}',
+        '.tabchip{display:inline-flex;align-items:center;gap:.5rem;background:var(--bg-tint);',
+        'border:1px solid var(--line);border-top-left-radius:10px;border-top-right-radius:10px;',
+        'border-bottom:0;padding:.5rem .9rem;font-size:.82rem;color:var(--ink-soft);max-width:280px;',
+        'overflow:hidden;text-overflow:ellipsis;white-space:nowrap}',
+        '.tabchip .fav{width:14px;height:14px;border-radius:3px;flex:none;',
+        'background:linear-gradient(#0F766E,#0A5952)}',
+
+        /* eon designs stage: that site is dark, so its preview is too */
+        '.eon-stage{background:#050505;border-radius:var(--radius);padding:1.8rem;color:#E8E6E1;',
+        "font-family:'Inter',sans-serif}",
+        '.eon-stage .kick{font-size:.72rem;letter-spacing:.24em;text-transform:uppercase;color:#E0D4C5;margin:0 0 .9rem}',
+        ".eon-stage h2{font-family:'Playfair Display',serif;font-weight:700;font-size:2rem;line-height:1.1;",
+        'color:#fff;margin:0 0 .8rem}',
+        ".eon-stage h3{font-family:'Playfair Display',serif;font-weight:500;font-size:1.2rem;color:#fff;margin:0 0 .4rem}",
+        '.eon-stage p{color:#9A9A9A;font-size:.93rem;line-height:1.7;margin:0 0 .8rem}',
+        '.eon-stage .em{color:#E0D4C5;font-style:italic}',
+        '.eon-stage .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.7rem;margin-top:1.1rem}',
+        '.eon-stage .tile{background:#0f0f0f;border:1px solid rgba(255,255,255,.08);border-radius:8px;',
+        'overflow:hidden}',
+        '.eon-stage .tile .ph{aspect-ratio:4/3;background:#141414;display:flex;align-items:center;',
+        'justify-content:center;color:#4A4A4A;font-size:.72rem}',
+        '.eon-stage .tile .ph img{width:100%;height:100%;object-fit:cover}',
+        '.eon-stage .tile .cap{padding:.6rem .7rem}',
+        '.eon-stage .tile .cap b{display:block;font-weight:500;font-size:.85rem;color:#E8E6E1}',
+        '.eon-stage .tile .cap i{display:block;font-style:normal;font-size:.72rem;color:#7A7A7A;margin-top:.15rem}',
+        '.eon-stage .chips{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.9rem}',
+        '.eon-stage .chips span{font-size:.75rem;padding:.3rem .7rem;border:1px solid rgba(255,255,255,.12);',
+        'border-radius:999px;color:#B8B8B8}',
+        '.eon-stage .btn{display:inline-flex;padding:.7rem 1.3rem;border-radius:0;background:#E0D4C5;',
+        'color:#050505;font-size:.8rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase}',
+        '.eon-stage .btn.o{background:transparent;color:#E0D4C5;border:1px solid rgba(224,212,197,.4)}',
+
+        /* shared small parts */
+        '.empty{color:var(--ink-faint);font-style:italic}',
+        '.count{font-size:.75rem;color:var(--ink-faint);margin-left:.4rem;font-weight:400}',
+      ].join(''));
+
+      /* ============================================================
+         PREVIEW TEMPLATES
+
+         Both collections contain files named meta / nav / hero / about /
+         contact, and Decap keys templates by file name, so one dispatcher
+         is registered for every name and it branches on the collection.
+         ============================================================ */
       var h = window.h || (window.React && window.React.createElement);
       if (!h) return;
 
-      var IMG = /\.(png|jpe?g|gif|webp|svg|avif)$/i;
+      var k = 0;
+      var key = function () { return 'k' + (++k); };
 
-      function renderValue(value) {
-        if (value == null || value === '') {
-          return h('div', { className: 'eon-value' }, h('em', {}, 'empty'));
-        }
-        if (typeof value === 'boolean') {
-          return h('div', { className: 'eon-value' }, value ? 'Yes' : 'No');
-        }
-        if (typeof value === 'string') {
-          if (IMG.test(value.split('?')[0])) {
-            return h('img', { className: 'eon-img', src: value });
-          }
-          return h('div', { className: 'eon-value' }, value);
-        }
-        if (Array.isArray(value)) {
-          return h(
-            'ul',
-            { className: 'eon-list' },
-            value.map(function (item, i) {
-              var text =
-                item && typeof item === 'object'
-                  ? item.title || item.label || item.heading || item.role || item.name || '(item ' + (i + 1) + ')'
-                  : String(item);
-              return h('li', { key: i }, text);
-            })
-          );
-        }
-        return h('div', { className: 'eon-value' }, JSON.stringify(value));
+      /** Immutable-safe read that always hands back plain JS. */
+      function js(v) { return v && v.toJS ? v.toJS() : v; }
+
+      function txt(v) {
+        if (v == null) return '';
+        if (typeof v === 'string' || typeof v === 'number') return String(v);
+        if (typeof v === 'object') return v.label || v.title || v.name || v.text || '';
+        return String(v);
       }
 
-      function SectionPreview(props) {
-        var data = props.entry.get('data');
-        var plain = data && data.toJS ? data.toJS() : {};
-        var label = (props.collection && props.collection.get('label')) || 'Section';
+      function list(v) {
+        var a = js(v);
+        return Array.isArray(a) ? a : [];
+      }
 
-        var fields = Object.keys(plain).map(function (key) {
-          return h(
-            'div',
-            { className: 'eon-field', key: key },
-            h('div', { className: 'eon-label' }, key.replace(/_/g, ' ')),
-            renderValue(plain[key])
+      function em(node, fallback) {
+        return node ? node : h('span', { className: 'empty' }, fallback);
+      }
+
+      /** Resolve a media path through Decap so uploads preview before publish. */
+      function media(props, path) {
+        if (!path) return null;
+        try {
+          var a = props.getAsset && props.getAsset(path);
+          if (a) return a.toString();
+        } catch (e) {}
+        return path;
+      }
+
+      function eyebrowTitleSub(d, extra) {
+        var out = [];
+        if (d.eyebrow) out.push(h('p', { className: 'sec-eyebrow', key: key() }, d.eyebrow));
+        var t = d.title || d.heading;
+        if (t) out.push(h('h1', { className: 'sec-title', key: key() }, t));
+        var s = d.subtitle || d.subheading || d.description;
+        if (s) out.push(h('p', { className: 'sec-sub', key: key() }, s));
+        return out.concat(extra || []);
+      }
+
+      function buttons(items) {
+        if (!items.length) return null;
+        return h('div', { className: 'btns', key: key() }, items.map(function (b) {
+          var style = (b && b.style) || 'ghost';
+          return h('span', { className: 'btn ' + (style === 'primary' ? 'primary' : 'ghost'), key: key() },
+            txt(b) || 'Button',
+            b && b.new_tab ? h('span', { className: 'cue' }, '↗') : null
           );
-        });
+        }));
+      }
 
-        return h(
-          'div',
-          {},
-          h('p', { className: 'eon-kicker' }, label),
-          h('h1', { className: 'eon-title' }, plain.title || plain.heading || plain.headline || plain.brand || 'Preview'),
-          h('hr', { className: 'eon-rule' }),
-          fields
+      /* ---------------------------------------- engineering renderers --- */
+
+      var E = {};
+
+      E.meta = function (d) {
+        return h('div', {},
+          h('p', { className: 'sec-eyebrow' }, 'Browser tab'),
+          h('div', { className: 'tabchip' },
+            h('span', { className: 'fav' }),
+            d.title || 'Untitled page'
+          ),
+          h('hr', { className: 'sec-rule' }),
+          h('p', { className: 'sec-eyebrow' }, 'Search result'),
+          h('div', { className: 'serp' },
+            h('p', { className: 'url' }, 'www.edwingyasi.online'),
+            h('p', { className: 't' }, d.title || 'Untitled page'),
+            h('p', { className: 'd' }, em(d.description, 'No description set. Search engines will pick their own snippet.'))
+          )
         );
+      };
+
+      E.nav = function (d) {
+        return h('div', {},
+          h('p', { className: 'sec-eyebrow' }, 'Navigation'),
+          h('div', { className: 'navbar' },
+            h('span', { className: 'brand' }, d.brand || 'Brand'),
+            h('span', { className: 'links' }, list(d.links).map(function (l) {
+              return h('span', { key: key() }, txt(l));
+            })),
+            h('span', { className: 'cta' }, d.cta_label || 'CTA')
+          )
+        );
+      };
+
+      E.hero = function (d) {
+        var roles = list(d.roles).map(txt).filter(Boolean);
+        return h('div', {},
+          roles.length
+            ? h('p', { className: 'hero-tag' }, h('span', { className: 'dot' }), roles[0])
+            : null,
+          h('h1', { className: 'hero-title' }, em(d.headline, 'Headline')),
+          roles.length > 1
+            ? h('p', { className: 'hero-role' }, roles.slice(1).join('  ·  '))
+            : null,
+          h('p', { className: 'hero-sub' }, em(d.subline, 'Sub-headline')),
+          buttons(list(d.buttons))
+        );
+      };
+
+      E.about = function (d) {
+        var stats = list(d.stats);
+        return h('div', {},
+          eyebrowTitleSub(d),
+          h('div', { className: 'prose' }, list(d.paragraphs).map(function (p) {
+            return h('p', { key: key(), dangerouslySetInnerHTML: { __html: txt(p) } });
+          })),
+          stats.length
+            ? h('div', { className: 'stats' }, stats.map(function (s) {
+                return h('div', { className: 'stat', key: key() },
+                  h('p', { className: 'n' }, s.number, s.plus ? h('span', { className: 'plus' }, '+') : null),
+                  h('p', { className: 'lbl' }, s.label_line_1, s.label_line_2 ? h('br') : null, s.label_line_2)
+                );
+              }))
+            : null
+        );
+      };
+
+      E.projects = function (d, props) {
+        var strip = js(d.eon_strip) || {};
+        return h('div', {},
+          eyebrowTitleSub(d),
+          h('div', { className: 'cards' }, list(d.items).map(function (p) {
+            var src = media(props, p.image);
+            return h('div', { className: 'project-card', key: key() },
+              h('div', { className: 'project-visual' },
+                src ? h('img', { src: src, alt: p.image_alt || '' }) : 'No image'
+              ),
+              p.category ? h('p', { className: 'project-cat' }, h('span', { className: 'pin' }), p.category) : null,
+              h('h3', { className: 'project-title' }, em(p.title, 'Untitled project')),
+              h('p', { className: 'project-desc' }, p.description || ''),
+              list(p.tools).length
+                ? h('div', { className: 'project-tools' }, list(p.tools).map(function (t) {
+                    return h('span', { key: key() }, txt(t));
+                  }))
+                : null,
+              h('p', { className: 'project-arrow' }, (p.link_label || 'View project') + ' →')
+            );
+          })),
+          strip.enabled !== false && (strip.title || strip.description)
+            ? h('div', { className: 'eon-strip' },
+                strip.eyebrow ? h('p', { className: 'sec-eyebrow' }, strip.eyebrow) : null,
+                h('h3', { className: 'eon-title' }, strip.title || ''),
+                h('p', { className: 'eon-desc' }, strip.description || ''),
+                h('p', { className: 'eon-link' }, (strip.link_label || 'Visit') + ' →')
+              )
+            : null
+        );
+      };
+
+      E.skills = function (d) {
+        return h('div', {},
+          eyebrowTitleSub(d),
+          list(d.blocks).map(function (b) {
+            var theme = (b.theme || 'emerald').toLowerCase();
+            return h('div', { className: 'skill-block ' + theme, key: key() },
+              h('h3', {}, em(b.heading, 'Untitled block')),
+              b.note ? h('p', { className: 'skill-note' }, b.note) : null,
+              h('div', { className: 'badges' }, list(b.badges).map(function (x) {
+                return h('span', { className: 'badge', key: key() }, txt(x));
+              }))
+            );
+          })
+        );
+      };
+
+      E.experience = function (d) {
+        return h('div', {},
+          eyebrowTitleSub(d),
+          h('div', { className: 'timeline' }, list(d.entries).map(function (e) {
+            return h('div', { className: 'exp', key: key() },
+              h('p', { className: 'exp-date' }, e.date || ''),
+              h('h3', { className: 'exp-role' }, em(e.role, 'Role')),
+              h('p', { className: 'exp-org' }, e.org || ''),
+              h('p', { className: 'exp-desc' }, e.description || '')
+            );
+          }))
+        );
+      };
+
+      E.contact = function (d) {
+        return h('div', {},
+          h('h1', { className: 'sec-title' }, em(d.title, 'Contact')),
+          h('p', { className: 'sec-sub' }, d.intro || ''),
+          buttons(list(d.links))
+        );
+      };
+
+      E.footer = function (d) {
+        return h('div', {},
+          h('p', { className: 'sec-eyebrow' }, 'Footer'),
+          h('div', { className: 'footer' },
+            h('p', { className: 'fb' }, em(d.brand, 'Brand')),
+            h('p', { className: 'fn' }, d.note || ''),
+            h('div', { className: 'socials' }, list(d.socials).map(function (s) {
+              return h('span', { key: key() }, txt(s) || s.network || 'Link');
+            }))
+          )
+        );
+      };
+
+      /* ------------------------------------------ eon designs renderers --
+         That site is near-black, so its previews sit on a dark stage. The
+         panel around them stays light. */
+
+      var D = {};
+
+      function stage(children) {
+        return h('div', { className: 'eon-stage' }, children);
+      }
+
+      D.meta = function (d, props) {
+        var logo = media(props, d.logo);
+        return h('div', {},
+          h('p', { className: 'sec-eyebrow' }, 'Browser tab'),
+          h('div', { className: 'tabchip' }, h('span', { className: 'fav' }), d.title || 'Untitled page'),
+          h('hr', { className: 'sec-rule' }),
+          h('p', { className: 'sec-eyebrow' }, 'Link preview'),
+          stage([
+            logo ? h('img', { key: key(), src: logo, style: { height: '28px', width: 'auto', marginBottom: '14px' } }) : null,
+            h('h3', { key: key() }, d.og_title || d.title || 'Untitled'),
+            h('p', { key: key() }, em(d.og_description, 'No share description set.')),
+            d.og_url ? h('p', { key: key(), className: 'kick' }, d.og_url) : null,
+          ])
+        );
+      };
+
+      D.nav = function (d) {
+        return h('div', {},
+          h('p', { className: 'sec-eyebrow' }, 'Navigation'),
+          stage([
+            h('div', { key: key(), className: 'chips' },
+              list(d.links).map(function (l) { return h('span', { key: key() }, txt(l)); })
+            ),
+            h('p', { key: key(), style: { marginTop: '14px' } },
+              h('span', { className: 'btn' }, d.cta_label || 'CTA')
+            ),
+          ])
+        );
+      };
+
+      D.hero = function (d) {
+        return h('div', {},
+          stage([
+            d.badge ? h('p', { key: key(), className: 'kick' }, d.badge) : null,
+            h('h2', { key: key() }, em(d.headline, 'Headline')),
+            h('p', { key: key() },
+              d.subline_line_1 || '',
+              h('br'),
+              d.subline_line_2_before || '',
+              d.subline_emphasis ? h('span', { className: 'em' }, d.subline_emphasis) : null,
+              d.subline_line_2_after || ''
+            ),
+            h('p', { key: key() },
+              h('span', { className: 'btn' }, d.primary_button || 'Primary'),
+              ' ',
+              h('span', { className: 'btn o' }, d.secondary_button || 'Secondary')
+            ),
+          ])
+        );
+      };
+
+      D.works = function (d, props) {
+        var items = list(d.items);
+        return h('div', {},
+          stage([
+            h('h2', { key: key() }, em(d.heading, 'Selected works')),
+            d.subheading ? h('p', { key: key() }, d.subheading) : null,
+            d.counter ? h('p', { key: key(), className: 'kick' }, d.counter) : null,
+            h('div', { key: key(), className: 'grid' }, items.map(function (w) {
+              var src = media(props, w.image);
+              return h('div', { className: 'tile', key: key() },
+                h('div', { className: 'ph' }, src ? h('img', { src: src, alt: w.title || '' }) : 'No image'),
+                h('div', { className: 'cap' },
+                  h('b', {}, w.title || 'Untitled'),
+                  h('i', {}, [w.category, w.year].filter(Boolean).join(' · '))
+                )
+              );
+            })),
+          ])
+        );
+      };
+
+      D.vault = function (d, props) {
+        var items = list(d.items);
+        return h('div', {},
+          stage([
+            d.eyebrow ? h('p', { key: key(), className: 'kick' }, d.eyebrow) : null,
+            h('h2', { key: key() }, em(d.heading, 'The Vault')),
+            d.description ? h('p', { key: key() }, d.description) : null,
+            h('div', { key: key(), className: 'grid' }, items.slice(0, 6).map(function (v) {
+              var src = media(props, v.src);
+              return h('div', { className: 'tile', key: key() },
+                h('div', { className: 'ph' }, src ? h('img', { src: src, alt: v.title || '' }) : 'No image'),
+                h('div', { className: 'cap' },
+                  h('b', {}, v.title || 'Untitled'),
+                  h('i', {}, v.category || '')
+                )
+              );
+            })),
+            items.length > 6
+              ? h('p', { key: key(), className: 'kick', style: { marginTop: '14px' } },
+                  '+ ' + (items.length - 6) + ' more in the archive')
+              : null,
+          ])
+        );
+      };
+
+      D.about = function (d, props) {
+        var img = media(props, d.image) || media(props, d.image_fallback);
+        return h('div', {},
+          stage([
+            d.eyebrow ? h('p', { key: key(), className: 'kick' }, d.eyebrow) : null,
+            h('h2', { key: key() }, d.heading_line_1 || '', d.heading_line_2 ? h('br') : null, d.heading_line_2 || ''),
+            img ? h('div', { key: key(), className: 'tile', style: { marginBottom: '14px' } },
+              h('div', { className: 'ph' }, h('img', { src: img, alt: '' }))) : null,
+            h('div', { key: key() }, list(d.paragraphs).map(function (p) {
+              return h('p', { key: key() }, txt(p));
+            })),
+            d.capabilities_heading ? h('p', { key: key(), className: 'kick' }, d.capabilities_heading) : null,
+            h('div', { key: key(), className: 'chips' }, list(d.capabilities).map(function (c) {
+              return h('span', { key: key() }, txt(c));
+            })),
+            d.clients_heading ? h('p', { key: key(), className: 'kick', style: { marginTop: '16px' } }, d.clients_heading) : null,
+            h('div', { key: key(), className: 'chips' }, list(d.clients).map(function (c) {
+              return h('span', { key: key() }, txt(c));
+            })),
+          ])
+        );
+      };
+
+      D.journal = function (d, props) {
+        return h('div', {},
+          stage([
+            h('h2', { key: key() }, em(d.heading, 'Journal')),
+            h('div', { key: key() }, list(d.posts).map(function (p) {
+              var src = media(props, p.image);
+              return h('div', { key: key(), style: { marginBottom: '18px' } },
+                src ? h('div', { className: 'tile' }, h('div', { className: 'ph' }, h('img', { src: src, alt: '' }))) : null,
+                h('h3', { style: { marginTop: '10px' } }, p.title || 'Untitled post'),
+                p.date ? h('p', { className: 'kick' }, p.date) : null,
+                h('p', {}, p.excerpt || '')
+              );
+            })),
+          ])
+        );
+      };
+
+      D.contact = function (d) {
+        return h('div', {},
+          stage([
+            h('h2', { key: key() },
+              d.heading_line_1 || '',
+              d.heading_emphasis ? h('span', { className: 'em' }, ' ' + d.heading_emphasis) : null
+            ),
+            d.email ? h('p', { key: key() }, d.email) : null,
+            h('div', { key: key(), className: 'chips' },
+              [d.name_placeholder, d.email_placeholder, d.message_placeholder]
+                .filter(Boolean)
+                .map(function (p) { return h('span', { key: key() }, p); })
+            ),
+            h('p', { key: key(), style: { marginTop: '14px' } },
+              h('span', { className: 'btn' }, d.submit_label || 'Send')
+            ),
+            h('div', { key: key(), className: 'chips' }, list(d.socials).map(function (s) {
+              return h('span', { key: key() }, s.network || txt(s));
+            })),
+            d.footer ? h('p', { key: key(), className: 'kick', style: { marginTop: '16px' } }, d.footer) : null,
+          ])
+        );
+      };
+
+      /* -------------------------------------------------- fallback + wire */
+
+      function Fallback(d) {
+        return h('div', {},
+          h('p', { className: 'sec-eyebrow' }, 'Preview'),
+          h('div', { className: 'prose' }, Object.keys(d).map(function (name) {
+            var v = d[name];
+            return h('p', { key: key() },
+              h('strong', {}, name.replace(/_/g, ' ') + ': '),
+              Array.isArray(js(v)) ? list(v).length + ' item(s)' : txt(v) || '—'
+            );
+          }))
+        );
+      }
+
+      function Preview(props) {
+        var data = js(props.entry.get('data')) || {};
+        var collection = props.collection.get('name');
+        var slug = props.entry.get('slug') || '';
+        var table = collection === 'designs' ? D : E;
+        var render = table[slug] || table[collection] || Fallback;
+        try {
+          return render(data, props);
+        } catch (err) {
+          return h('div', { className: 'prose' },
+            h('p', {}, h('strong', {}, 'Preview unavailable. ')),
+            h('p', {}, String(err && err.message ? err.message : err))
+          );
+        }
       }
 
       [
@@ -492,7 +1328,7 @@
         'experience', 'contact', 'footer', 'works', 'vault', 'journal',
         'engineering', 'designs',
       ].forEach(function (name) {
-        try { CMS.registerPreviewTemplate(name, SectionPreview); } catch (e) {}
+        try { CMS.registerPreviewTemplate(name, Preview); } catch (e) {}
       });
     })();
   </script>
