@@ -27,6 +27,10 @@
     header.nav{position:sticky;top:0;z-index:60;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(16px) saturate(1.2);-webkit-backdrop-filter:blur(16px) saturate(1.2);border-bottom:1px solid var(--line-soft);}
     .nav-inner{max-width:1180px;margin:0 auto;padding:1rem clamp(1.25rem,4vw,2rem);display:flex;align-items:center;justify-content:space-between;}
     .brand{font-family:var(--font-heading);font-weight:700;font-size:1.05rem;letter-spacing:-0.01em;}
+    /* Matches the homepage nav. The type rules above still style the alt text
+       if the PNG fails. src is root-absolute because this page sits one level
+       down; a relative path would resolve inside /case-studies/. */
+    .brand img{height:36px;width:auto;display:block;}
     .back{display:inline-flex;align-items:center;gap:0.5rem;font-size:0.9rem;color:var(--ink-soft);transition:color 0.2s var(--ease);}
     .back:hover{color:var(--emerald);}.back svg{width:16px;height:16px;}
     .cs-header{padding:clamp(2.5rem,6vw,4rem) 0 clamp(1.5rem,3vw,2rem);}
@@ -71,7 +75,7 @@
 
   <header class="nav">
     <div class="nav-inner">
-      <a href="../index.html" class="brand">Edwin Gyasi Owusu</a>
+      <a href="../index.html" class="brand"><img src="/images/logo.png" alt="Edwin Gyasi Owusu" width="326" height="160" /></a>
       <a href="../index.html#work" class="back">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
         All Projects

@@ -247,8 +247,10 @@ function buildEngineering() {
     // The wordmark is an image now. nav.brand still drives the alt text, so
     // the accessible name stays CMS-editable even though the glyphs are baked
     // into the PNG. Intrinsic width/height are declared so the row does not
-    // reflow while the logo loads; CSS caps the rendered height.
-    `      <a href="#top" class="brand"><img src="/images/logo.png" alt="${attr(nav.brand)}" width="327" height="160" /></a>\n` +
+    // reflow while the logo loads; CSS caps the rendered height. These two
+    // numbers must match the real pixel size of images/logo.png, or the
+    // reserved box has the wrong aspect ratio and the logo jumps on load.
+    `      <a href="#top" class="brand"><img src="/images/logo.png" alt="${attr(nav.brand)}" width="326" height="160" /></a>\n` +
     `      <nav class="nav-links" aria-label="Primary">\n` +
     nav.links
       .map((l) => `        <a href="${attr(l.href)}">${esc(l.label)}</a>`)
