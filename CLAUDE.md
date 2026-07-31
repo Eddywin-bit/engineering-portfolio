@@ -252,14 +252,20 @@ falls through to white and reports a bogus ~1:1 on white-on-emerald text.
 
 ## Updates Log
 
-- 2026-07-31: Cleared the login screen. `logo_url` was pointing at
-  `og-engineering.png`, and Decap renders that as the only graphic on the
-  page, so a 1200x630 dark Open Graph tile sat across the middle of an
-  otherwise light screen with the heading on top of it. Removed the key rather
-  than hiding the element, since the element is only there because the key is.
-  The heading was absolutely positioned at a pixel offset measured to clear
-  that logo, which is why the two overlapped; it is a flex item with
-  `order: -1` now, so it sits above the button on its own.
+- 2026-07-31: Login screen, in two passes. First removed `logo_url`, which had
+  been pointing at `og-engineering.png` and putting a dark 1200x630 Open Graph
+  tile across the middle of a light screen. That turned out to be half the
+  story: Decap's auth page is `logo_url ? <img> : <DecapLogoIcon 300px>`, so
+  clearing the key just handed the slot to their pink wordmark. There is no
+  "no logo" state. Pointed it at `/images/logo.png` instead and hid
+  `-NetlifyCreditIcon`, the credit mark Decap only appends on the custom-logo
+  branch. The `-PageLogoIcon` / `-CustomLogoIcon` hooks that were supposed to
+  control this matched neither branch and never fired, which is why the OG card
+  showed with an apparent `display:none` sitting right above it: the auth page
+  is the `exus10f*` family, and `PageLogoIcon` lives in an unrelated module.
+  The heading had been absolutely positioned at a pixel offset measured to
+  clear the old logo, which is what made them overlap; it is a flex item now,
+  ordered between the mark and the button.
 
 - 2026-07-31: Swapped in the supplied brand artwork. The engineering nav brand
   is an `<img>` now, changed in `build.js` rather than `index.html` because the

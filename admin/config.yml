@@ -37,12 +37,16 @@ publish_mode: simple
 site_url: https://www.edwingyasi.online
 display_url: https://www.edwingyasi.online
 
-# No logo_url on purpose. Decap renders it on the login screen as its only
-# graphic, and this pointed at og-engineering.png, the 1200x630 Open Graph
-# card. An OG image is built to be a dark social tile with the name burned
-# into it, so the login screen got a black slab across the middle that fought
-# the light theme and sat under the heading. The brand bar above already
-# carries the mark. Setting this again brings the slab back.
+# The login screen's centre graphic. This is not optional in practice: when
+# logo_url is unset Decap falls back to its own 300px pink wordmark, so the
+# choice is our mark or theirs, not ours or nothing.
+#
+# It previously pointed at og-engineering.png, which is the 1200x630 Open
+# Graph card, a dark social tile with the name burned in, and it landed as a
+# black slab across the middle of a light screen. The wordmark is the right
+# asset. Root-relative rather than absolute so it also resolves under
+# `npx decap-server` on localhost; Decap passes this straight to an <img src>.
+logo_url: /images/logo.png
 
 # Default upload target (engineering site). The Eon Designs collection
 # overrides this per field so its uploads land in /designs/images.

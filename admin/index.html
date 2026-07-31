@@ -187,15 +187,50 @@
     }
     [class*="-StyledAuthenticationPage"] > * { position: relative; z-index: 1; }
 
-    /* Decap's stock logo slot. config.yml deliberately sets no logo_url, so
-       nothing should reach this any more, but the rule stays as a backstop:
-       if logo_url is ever set again it renders full-bleed here as the only
-       graphic on the page, and the obvious thing to point it at is the OG
-       card, which is a dark tile. The brand bar above already carries the
-       mark. -CustomLogoIcon is not a component this Decap version emits;
-       kept only because it is inert. */
-    [class*="-PageLogoIcon"],
-    [class*="-CustomLogoIcon"] { display: none !important; }
+    /* The login screen's centre graphic.
+
+       Decap's auth page does this:
+
+         hP(u) = u ? <CustomIconWrapper><img src={u} alt="Logo"></...>
+                   : <DecapLogoIcon size="300px" type="decap-cms">
+
+       where u is logo_url. So there is no "no logo" state: drop logo_url and
+       their 300px pink wordmark takes the slot. config.yml points it at our
+       own wordmark instead.
+
+       The hooks this file used to carry, -PageLogoIcon and -CustomLogoIcon,
+       matched neither branch and never did anything. PageLogoIcon is a real
+       component but belongs to a different module (e141mjkc*) that the auth
+       page does not use; the auth page is the exus10f* family. That dead rule
+       is why the old Open Graph card appeared on this screen despite an
+       apparent display:none sitting right here. Replaced with the two names
+       the page actually emits. Neither is a prefix of any other name in that
+       family, so they cannot leak. */
+
+    /* Backstop: if logo_url is ever cleared, keep their wordmark out. */
+    [class*="-DecapLogoIcon"] { display: none !important; }
+
+    /* Decap appends its own 100px credit mark below the button, but only on
+       the branch where a custom logo_url is set. Setting our logo is what
+       summons it, so it has to go in the same breath. */
+    [class*="-NetlifyCreditIcon"] { display: none !important; }
+
+    /* The wrapper is a fixed 300px wide with the raw <img> unstyled inside,
+       so the 327px source would otherwise overhang it. Constrain the image,
+       not the wrapper, and leave height auto so the 327x160 ratio holds. */
+    [class*="-CustomIconWrapper"] {
+      /* The heading below is order:-1, so the mark needs -2 to lead. Reading
+         order down the column: mark, "Sign in to edit the site", button. */
+      order: -2;
+      width: auto !important;
+      margin-bottom: 0 !important;
+    }
+    [class*="-CustomIconWrapper"] img {
+      width: 200px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
 
     /* The heading. Decap gives this page no slot for one, so it is generated
        content on the page itself.
