@@ -184,8 +184,18 @@ readable component suffix emotion leaves on its generated class names
 (`[class*="-AppHeader"]`, `[class*="-ControlContainer"]`). If a Decap upgrade
 renames a component, that rule silently stops applying, it does not break.
 
-Two structural pieces worth knowing:
+`[class*=...]` matches a **substring**, so a hook written for a parent silently
+claims its children too. `-Card` also matches `-CardHeading` and `-CardBody`,
+`-Toolbar` also matches `-ToolbarContainer`. Before adding a hook, check whether
+Decap emits a longer component name containing it, and exclude it with `:not()`
+if so. This is the single easiest way to break this file.
 
+Three structural pieces worth knowing:
+
+- The brand bar outranks Decap's sticky header, which means it also outranks the
+  modal layer. `body.ReactModal__Body--open .ega-brand { display: none }` steps
+  it aside while the media library is open. Keep that rule if you touch the
+  z-index.
 - The wordmark is a real `<header class="ega-brand">` fixed above the app,
   because Decap has no slot for one. `body` gets `padding-top` and Decap's own
   sticky header is offset by the same `--bar` value. Change one, change both.
@@ -198,8 +208,17 @@ Preview panes reuse the real class names and values from the live pages, so a
 change to `index.html` component CSS should be mirrored in the
 `registerPreviewStyle` block or the preview will drift out of date.
 
+Preview keys are positional. `resetKeys()` runs at the top of `Preview` so a
+node keeps its key across renders. Do not make `key()` monotonic again, that
+remounts the entire preview subtree on every keystroke.
+
 ## Updates Log
 
+- 2026-07-30: Fixed five admin preview and chrome defects. Four were the same
+  root cause, `[class*=...]` substring collisions claiming child components,
+  which is now written up as a rule above. The fifth was monotonic React keys
+  remounting the preview on every keystroke. Verified from source only, the
+  reported stale-preview-content symptom is still open and needs a browser.
 - 2026-07-30: Re-themed the admin panel to the engineering site's light palette
   and added a site-wide favicon set. The first admin theme borrowed the Eon
   dark/champagne identity, which read as a third brand rather than as part of

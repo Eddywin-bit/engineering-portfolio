@@ -117,6 +117,12 @@
       -webkit-backdrop-filter: saturate(180%) blur(14px);
       border-bottom: 1px solid var(--line-soft);
     }
+    /* The bar has to outrank Decap's own sticky header, which puts it above
+       the modal layer too. react-modal stamps this class on <body> while any
+       modal is open, so the bar steps aside for the media library instead of
+       painting its "View site" icon over the top of it. Hiding a fixed
+       element costs no layout shift, the body padding-top stays put. */
+    body.ReactModal__Body--open .ega-brand { display: none !important; }
     .ega-brand__mark { width: 26px; height: 26px; display: block; border-radius: 6px; }
     .ega-brand__word {
       font-family: var(--font-heading);
@@ -339,7 +345,11 @@
       line-height: 1.6 !important;
     }
 
-    [class*="-Card"],
+    /* `-Card` is a substring of every card sub-component Decap emits
+       (-CardHeading, -CardBody, -CardImage, …), so an unqualified
+       [class*="-Card"] nests the whole card treatment inside the card. The
+       exclusions keep the chrome on the outer card only. */
+    [class*="-Card"]:not([class*="-CardHeading"]):not([class*="-CardBody"]):not([class*="-CardImage"]):not([class*="-CardFooter"]):not([class*="-CardLink"]),
     [class*="-ListCard"],
     [class*="-EntryCard"] {
       position: relative !important;
@@ -351,7 +361,7 @@
       transition: border-color .3s var(--ease), transform .3s var(--ease), box-shadow .3s var(--ease) !important;
     }
     /* The emerald-to-gold hairline that wipes across every project card. */
-    [class*="-Card"]::before,
+    [class*="-Card"]:not([class*="-CardHeading"]):not([class*="-CardBody"]):not([class*="-CardImage"]):not([class*="-CardFooter"]):not([class*="-CardLink"])::before,
     [class*="-ListCard"]::before {
       content: "";
       position: absolute;
@@ -363,9 +373,9 @@
       transition: transform 0.45s var(--ease);
       z-index: 2;
     }
-    [class*="-Card"]:hover::before,
+    [class*="-Card"]:not([class*="-CardHeading"]):not([class*="-CardBody"]):not([class*="-CardImage"]):not([class*="-CardFooter"]):not([class*="-CardLink"]):hover::before,
     [class*="-ListCard"]:hover::before { transform: scaleX(1); }
-    [class*="-Card"]:hover,
+    [class*="-Card"]:not([class*="-CardHeading"]):not([class*="-CardBody"]):not([class*="-CardImage"]):not([class*="-CardFooter"]):not([class*="-CardLink"]):hover,
     [class*="-ListCard"]:hover {
       border-color: rgba(15,118,110,0.35) !important;
       transform: translateY(-3px);
@@ -545,8 +555,15 @@
       transform: translateY(-2px);
     }
 
-    /* Markdown editor */
-    [class*="-Toolbar"] {
+    /* Markdown editor.
+
+       `-ToolbarContainer` is the editor's top control bar and it contains
+       the substring `-Toolbar`. This block is declared after the control-bar
+       rule above and carries equal specificity, so without the exclusion it
+       wins and repaints the top bar with the wrong background plus stray
+       rounded corners. Keep the exclusions in sync with the grouped
+       selector on the -EditorControlBar rule. */
+    [class*="-Toolbar"]:not([class*="-ToolbarContainer"]):not([class*="-ToolbarSection"]):not([class*="-ToolbarSubSection"]):not([class*="-ToolbarButton"]) {
       background: var(--bg-tint) !important;
       border-bottom: 1px solid var(--line) !important;
       border-radius: var(--radius-sm) var(--radius-sm) 0 0 !important;
@@ -646,7 +663,10 @@
       border-radius: var(--radius) !important;
       box-shadow: 0 24px 64px rgba(28,28,28,0.16) !important;
       color: var(--ink) !important;
-      overflow: hidden !important;
+      /* No overflow:hidden here. Decap owns the scroll container inside the
+         media library, and clipping it at the modal cuts the image grid off
+         once the uploads pass one screenful. The card grid is
+         transparent-backed, so nothing bleeds past the rounded corners. */
     }
     [class*="-MediaLibraryTitle"],
     [class*="-StyledModal"] h1 {
@@ -854,11 +874,18 @@
         '.exp-desc{font-size:.92rem;color:var(--ink-mute);line-height:1.6;margin:0;max-width:56ch}',
 
         /* nav + footer strips */
-        '.navbar{display:flex;align-items:center;gap:1rem;background:var(--bg-elev);border:1px solid var(--line);',
-        'border-radius:999px;padding:.65rem 1.1rem}',
-        '.navbar .brand{font-family:var(--fh);font-weight:700;font-size:1rem;letter-spacing:-.01em}',
-        '.navbar .links{display:flex;flex-wrap:wrap;gap:.9rem;font-size:.85rem;color:var(--ink-soft);margin-left:auto}',
-        '.navbar .cta{background:var(--ink);color:var(--bg);border-radius:999px;padding:.4rem .9rem;font-size:.8rem;font-weight:500}',
+        /* Wraps because the preview pane is far narrower than the real page.
+           Without flex-wrap the links clip off the right edge. The radius
+           drops to a rounded rect once it can occupy more than one row, a
+           999px pill only reads correctly as a single line. */
+        '.navbar{display:flex;align-items:center;flex-wrap:wrap;gap:.6rem 1rem;background:var(--bg-elev);',
+        'border:1px solid var(--line);border-radius:var(--radius);padding:.65rem 1.1rem}',
+        '.navbar .brand{font-family:var(--fh);font-weight:700;font-size:1rem;letter-spacing:-.01em;',
+        'flex:0 1 auto;min-width:0;overflow-wrap:anywhere}',
+        '.navbar .links{display:flex;flex-wrap:wrap;gap:.9rem;font-size:.85rem;color:var(--ink-soft);',
+        'margin-left:auto;min-width:0}',
+        '.navbar .cta{background:var(--ink);color:var(--bg);border-radius:999px;padding:.4rem .9rem;',
+        'font-size:.8rem;font-weight:500;flex:0 0 auto;white-space:nowrap}',
         '.footer{background:var(--bg-elev);border:1px solid var(--line);border-radius:var(--radius);padding:1.5rem}',
         '.footer .fb{font-family:var(--fh);font-weight:700;font-size:1.05rem;margin:0 0 .4rem}',
         '.footer .fn{font-size:.88rem;color:var(--ink-mute);margin:0 0 1rem}',
@@ -918,8 +945,17 @@
       var h = window.h || (window.React && window.React.createElement);
       if (!h) return;
 
+      /* Keys are positional, not monotonic. `k` used to only ever increment,
+         so every render handed React an all-new key set and it tore down and
+         rebuilt the whole preview subtree on each keystroke: flicker, image
+         re-fetches, lost scroll position. Resetting per render makes a given
+         node keep its key across renders, because the render pass is
+         synchronous and top-down, so the call order is stable. Toggling a
+         conditional node still shifts its later siblings by one, same as
+         index keys in a list, which is the acceptable case. */
       var k = 0;
       var key = function () { return 'k' + (++k); };
+      var resetKeys = function () { k = 0; };
 
       /** Immutable-safe read that always hands back plain JS. */
       function js(v) { return v && v.toJS ? v.toJS() : v; }
@@ -1308,6 +1344,7 @@
       }
 
       function Preview(props) {
+        resetKeys();
         var data = js(props.entry.get('data')) || {};
         var collection = props.collection.get('name');
         var slug = props.entry.get('slug') || '';
