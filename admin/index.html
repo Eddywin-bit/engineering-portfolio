@@ -312,10 +312,25 @@
     /* ---------------------------------------------------------------
        CHROME — header, sidebar, shell
        --------------------------------------------------------------- */
-    [class*="-AppHeader"] {
+    /* Scoped to the element, not the family. `[class*="-AppHeader"]` is a
+       substring hook and -AppHeader is a prefix of every other component in
+       this header: -AppHeaderContent, -AppHeaderNavList, -AppHeaderNavLink,
+       -AppHeaderButton, -AppHeaderActions, -AppHeaderQuickNewButton,
+       -AppHeaderLogo. Unscoped, this rule was painting a panel background
+       and a bottom hairline on all of them, so the nav items and the actions
+       block each drew their own faint rule inside the bar and the header's
+       real bottom edge was one line among several. Decap renders the bar
+       itself as `<header>`, and nothing else here is one, so the type
+       selector isolates it. .ega-brand is a <header> too but carries no
+       emotion class, so it cannot match.
+
+       The border is a full --line rather than --line-soft: it is the divider
+       between the top navigation and the collection sidebar below, and it is
+       now the only line in the region doing that job. */
+    header[class*="-AppHeader"] {
       top: var(--bar) !important;
       background: var(--bg-elev) !important;
-      border-bottom: 1px solid var(--line-soft) !important;
+      border-bottom: 1px solid var(--line) !important;
       box-shadow: none !important;
     }
 
@@ -375,15 +390,38 @@
        modal rather than a route, so it has no active class to take. Its lit
        state is borrowed from body.ReactModal__Body--open, the same hook
        .ega-brand already uses to step aside for that modal. Any other Decap
-       modal will light it too, but those are all short-lived confirms. */
+       modal will light it too, but those are all short-lived confirms.
+
+       The tabs carry no background in any state, deliberately. The sidebar's
+       selected collection is a filled --emerald-tint pill sitting a short
+       way below them, and a filled tab reads as the top of that same shape
+       rather than as a separate region: two green blocks with a gap, not a
+       header and a sidebar. So selection here is spelled with a rule under
+       the label and a colour change, and fill is left to the sidebar alone.
+       Keep it that way. The header's own bottom border does the separating,
+       and it is a full --line rather than --line-soft for the same reason. */
     [class*="-AppHeaderNavList"] a,
     [class*="-AppHeaderNavList"] button {
       position: relative !important;
       color: var(--ink-mute) !important;
       background: transparent !important;
-      border-radius: var(--radius-sm) var(--radius-sm) 0 0 !important;
+      border-radius: 0 !important;
       font-weight: 500 !important;
-      transition: color 0.25s var(--ease), background 0.25s var(--ease) !important;
+      transition: color 0.25s var(--ease) !important;
+    }
+    /* One rail per tab, present at all times so nothing shifts when it
+       lights, and inset from the label rather than run edge to edge. */
+    [class*="-AppHeaderNavList"] a::after,
+    [class*="-AppHeaderNavList"] button::after {
+      content: "";
+      position: absolute;
+      left: 14px;
+      right: 14px;
+      bottom: 6px;
+      height: 2px;
+      border-radius: 2px;
+      background: transparent;
+      transition: background 0.25s var(--ease);
     }
     /* Decap gives the leading icon its own `color:#b3b9c4`, so it ignores
        every colour set on the tab itself and stays grey through hover and
@@ -393,38 +431,39 @@
     [class*="-AppHeaderNavList"] svg {
       color: currentColor !important;
     }
+    /* Hover restates the background as transparent because
+       `[class*="-AppHeader"] a:hover` further up fills it --emerald-soft,
+       and that rule carries the same specificity as this one. It is a
+       translucent green wash, which is exactly the fill this block is
+       avoiding. The rail previews in the same wash instead. */
     [class*="-AppHeaderNavList"] a:hover,
     [class*="-AppHeaderNavList"] button:hover {
       color: var(--emerald) !important;
-      background: var(--emerald-soft) !important;
+      background: transparent !important;
     }
-    /* The selected tab: emerald label on the tint, over a 2px emerald rule
-       that reads as the tab sitting on the page below it. */
+    [class*="-AppHeaderNavList"] a:hover::after,
+    [class*="-AppHeaderNavList"] button:hover::after {
+      background: rgba(15, 118, 110, 0.28);
+    }
+    /* The selected tab: emerald label over a solid emerald rail, no fill. */
     [class*="-AppHeaderNavList"] a.header-link-active,
     body.ReactModal__Body--open [class*="-AppHeaderNavList"] button {
       color: var(--emerald-deep) !important;
-      background: var(--emerald-tint) !important;
+      background: transparent !important;
       font-weight: 600 !important;
     }
     [class*="-AppHeaderNavList"] a.header-link-active::after,
     body.ReactModal__Body--open [class*="-AppHeaderNavList"] button::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: 2px;
       background: var(--emerald);
     }
     /* While the media modal is up, Contents is no longer the tab you are on,
-       so it drops back to the resting treatment and the rule goes with it. */
+       so it drops back to the resting treatment and the rail goes with it. */
     body.ReactModal__Body--open [class*="-AppHeaderNavList"] a.header-link-active {
       color: var(--ink-mute) !important;
-      background: transparent !important;
       font-weight: 500 !important;
     }
     body.ReactModal__Body--open [class*="-AppHeaderNavList"] a.header-link-active::after {
-      display: none;
+      background: transparent;
     }
     /* The "New" / quick-create control reads as the one primary action. */
     [class*="-AppHeaderActions"] [class*="-AppHeaderNewEntryButton"],

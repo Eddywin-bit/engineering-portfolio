@@ -302,6 +302,23 @@ the upstream fix, so it has not been written. Left deliberately broken.
 
 ## Updates Log
 
+- 2026-07-31: Took the fill back off the header tabs. The selected tab and the
+  selected collection in the sidebar were both --emerald-tint blocks a short
+  distance apart, so they merged into one green shape and the header stopped
+  reading as its own region. The tabs now carry no background in any state and
+  spell selection with a rail under the label; fill belongs to the sidebar
+  alone. Keep it that way, and note the hover rule has to restate
+  `background: transparent` because `[class*="-AppHeader"] a:hover` fills it
+  --emerald-soft at equal specificity.
+
+  Scoping the chrome rule to `header[class*="-AppHeader"]` fixed a collision
+  that had been there since the first theme: -AppHeader is a prefix of
+  -AppHeaderContent, -AppHeaderNavList, -AppHeaderNavLink, -AppHeaderButton,
+  -AppHeaderActions, -AppHeaderQuickNewButton and -AppHeaderLogo, so the panel
+  background and bottom hairline meant for the bar were being drawn on all
+  seven. The bar's real bottom edge was one hairline among several, which is
+  the opposite of the separation it exists to provide.
+
 - 2026-07-31: Header tabs and the Published control. The Contents/Media tabs
   had never had a selected state, for two reasons at once: the rule was hung
   off `-AppHeaderActions` while the tabs live in `-AppHeaderNavList`, and the
