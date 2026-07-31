@@ -36,7 +36,13 @@ publish_mode: simple
 
 site_url: https://www.edwingyasi.online
 display_url: https://www.edwingyasi.online
-logo_url: https://www.edwingyasi.online/og-engineering.png
+
+# No logo_url on purpose. Decap renders it on the login screen as its only
+# graphic, and this pointed at og-engineering.png, the 1200x630 Open Graph
+# card. An OG image is built to be a dark social tile with the name burned
+# into it, so the login screen got a black slab across the middle that fought
+# the light theme and sat under the heading. The brand bar above already
+# carries the mark. Setting this again brings the slab back.
 
 # Default upload target (engineering site). The Eon Designs collection
 # overrides this per field so its uploads land in /designs/images.

@@ -187,22 +187,43 @@
     }
     [class*="-StyledAuthenticationPage"] > * { position: relative; z-index: 1; }
 
-    /* Decap's stock logo slot: the brand bar above already carries the mark. */
+    /* Decap's stock logo slot. config.yml deliberately sets no logo_url, so
+       nothing should reach this any more, but the rule stays as a backstop:
+       if logo_url is ever set again it renders full-bleed here as the only
+       graphic on the page, and the obvious thing to point it at is the OG
+       card, which is a dark tile. The brand bar above already carries the
+       mark. -CustomLogoIcon is not a component this Decap version emits;
+       kept only because it is inert. */
     [class*="-PageLogoIcon"],
     [class*="-CustomLogoIcon"] { display: none !important; }
 
+    /* The heading. Decap gives this page no slot for one, so it is generated
+       content on the page itself.
+
+       It used to be absolutely positioned at `top: calc(50% - 116px)`, an
+       offset measured to clear the logo that sat in the middle. That is what
+       put it on top of the dark card: the two were placed by unrelated
+       systems and only lined up at one viewport height. With the card gone
+       the offset would leave it stranded well above the button.
+
+       The page is `display:flex; flex-flow:column nowrap; align-items:center;
+       justify-content:center; gap:50px`, and generated content on a flex
+       container is itself a flex item, so `order:-1` drops the heading into
+       the real layout directly above the login button, centred as a group and
+       spaced by the container's own gap. No magic numbers, and it cannot
+       overlap anything. It stays positioned so it paints above the ::before
+       grid. */
     [class*="-StyledAuthenticationPage"]::after {
       content: "Sign in to edit the site";
-      position: absolute;
-      top: calc(50% - 116px);
-      left: 0; right: 0;
+      order: -1;
+      position: relative;
+      z-index: 2;
       text-align: center;
       font-family: var(--font-heading);
       font-weight: 700;
       font-size: 1.7rem;
       letter-spacing: -0.025em;
       color: var(--ink);
-      z-index: 2;
     }
 
     [class*="-LoginButton"],

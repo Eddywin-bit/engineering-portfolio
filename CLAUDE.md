@@ -252,6 +252,15 @@ falls through to white and reports a bogus ~1:1 on white-on-emerald text.
 
 ## Updates Log
 
+- 2026-07-31: Cleared the login screen. `logo_url` was pointing at
+  `og-engineering.png`, and Decap renders that as the only graphic on the
+  page, so a 1200x630 dark Open Graph tile sat across the middle of an
+  otherwise light screen with the heading on top of it. Removed the key rather
+  than hiding the element, since the element is only there because the key is.
+  The heading was absolutely positioned at a pixel offset measured to clear
+  that logo, which is why the two overlapped; it is a flex item with
+  `order: -1` now, so it sits above the button on its own.
+
 - 2026-07-31: Swapped in the supplied brand artwork. The engineering nav brand
   is an `<img>` now, changed in `build.js` rather than `index.html` because the
   next CMS publish rewrites that region. The admin bar's inlined monogram SVG
