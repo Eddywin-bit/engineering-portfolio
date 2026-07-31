@@ -707,7 +707,28 @@
       border-radius: 0 0 var(--radius-sm) var(--radius-sm) !important;
     }
 
-    /* Primary actions: Publish, Save */
+    /* Primary actions: Publish, Save
+
+       Decap builds these as `height:36px; line-height:36px; padding:0 15px;
+       display:block`, plus an overflow:hidden from its noOverflow fragment,
+       and box-sizing is border-box globally. The vertical padding this rule
+       used to add fought all three: the height stayed pinned at 36px, so the
+       padding ate the content box down to roughly 15px while the 36px line
+       box was still laid out from the top of it. The label ended up sitting
+       low inside the pill and clipped against its bottom edge, which is what
+       threw the button off the line the back link and View Live sit on.
+
+       Fixed by centring the label with flex rather than by leaning on
+       line-height, so it no longer depends on the height, the border width,
+       the font size or the weight, all of which this file has already changed
+       once. Vertical padding goes back to zero and the 36px height Decap
+       intends is restated, which is also the height the neighbouring controls
+       are sized against. align-self guards against a parent that stretches.
+
+       One deliberate trade: text-overflow:ellipsis no longer applies, because
+       the ellipsis needs the text in a block box rather than a flex one.
+       overflow:hidden and white-space:nowrap still hold, and these labels are
+       fixed short strings, so a long one would clip rather than ellipsize. */
     button[class*="-ToolbarButton"],
     [class*="-PublishButton"],
     [class*="-SaveButton"] {
@@ -720,7 +741,13 @@
       font-weight: 500 !important;
       letter-spacing: 0 !important;
       text-transform: none !important;
-      padding: 0.6rem 1.3rem !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      align-self: center !important;
+      height: 36px !important;
+      line-height: 1 !important;
+      padding: 0 1.3rem !important;
       box-shadow: none !important;
       transition: all 0.3s var(--ease) !important;
     }

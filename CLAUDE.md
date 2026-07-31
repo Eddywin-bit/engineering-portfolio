@@ -203,6 +203,14 @@ component name containing it, and exclude it with `:not()` if so. This is the
 single easiest way to break this file, and it has caused every visual defect
 found on this panel so far bar one.
 
+Decap sizes its toolbar buttons with `height:36px`, a matching
+`line-height:36px`, `padding:0 15px` and an `overflow:hidden`, against a global
+`box-sizing:border-box`. Do not add vertical padding to them. The height stays
+pinned, so the padding eats the content box while the 36px line box is still
+laid out from the top of it, and the label sits low and clips against the
+bottom edge. Centre the label with flex instead, which survives later changes
+to height, border width, font size and weight.
+
 The tell is a control that has grown an inner control: a box around a label, a
 pill inside a pill. Watch hover especially, because a child caught this way
 matches `:hover` on its own when the cursor is over it, so it lifts and
