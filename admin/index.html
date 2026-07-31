@@ -352,9 +352,79 @@
       color: var(--emerald) !important;
       background: var(--emerald-soft) !important;
     }
-    [class*="-AppHeaderActions"] [class*="-AppHeaderButton"][class*="active"] {
+    /* Header tabs: Contents and Media.
+
+       Decap renders them as
+         <ul -AppHeaderNavList>
+           <li><a  -AppHeaderNavLink>[icon] Contents</a></li>
+           <li><button -AppHeaderButton>[icon] Media</button></li>
+         </ul>
+       so the pair is addressed structurally, through the list. That is the
+       one hook that cannot miss: -AppHeaderNavList is not a prefix of any
+       other component Decap emits, and nothing else lives in that list.
+
+       The rule that used to sit here,
+       `[class*="-AppHeaderActions"] [class*="-AppHeaderButton"][class*="active"]`,
+       was dead twice over. The tabs are in -AppHeaderNavList, not
+       -AppHeaderActions, and the selected class is not an emotion class at
+       all: Decap passes react-router `activeClassName="header-link-active"`,
+       a plain literal, so no [class*="active"] hook can reach it. That is
+       why there has never been a visible selected state.
+
+       Only Contents can carry it. Media is a <button> that opens the media
+       modal rather than a route, so it has no active class to take. Its lit
+       state is borrowed from body.ReactModal__Body--open, the same hook
+       .ega-brand already uses to step aside for that modal. Any other Decap
+       modal will light it too, but those are all short-lived confirms. */
+    [class*="-AppHeaderNavList"] a,
+    [class*="-AppHeaderNavList"] button {
+      position: relative !important;
+      color: var(--ink-mute) !important;
+      background: transparent !important;
+      border-radius: var(--radius-sm) var(--radius-sm) 0 0 !important;
+      font-weight: 500 !important;
+      transition: color 0.25s var(--ease), background 0.25s var(--ease) !important;
+    }
+    /* Decap gives the leading icon its own `color:#b3b9c4`, so it ignores
+       every colour set on the tab itself and stays grey through hover and
+       select. The icon is the first child of both the link and the button. */
+    [class*="-AppHeaderNavList"] a > :first-child,
+    [class*="-AppHeaderNavList"] button > :first-child,
+    [class*="-AppHeaderNavList"] svg {
+      color: currentColor !important;
+    }
+    [class*="-AppHeaderNavList"] a:hover,
+    [class*="-AppHeaderNavList"] button:hover {
       color: var(--emerald) !important;
       background: var(--emerald-soft) !important;
+    }
+    /* The selected tab: emerald label on the tint, over a 2px emerald rule
+       that reads as the tab sitting on the page below it. */
+    [class*="-AppHeaderNavList"] a.header-link-active,
+    body.ReactModal__Body--open [class*="-AppHeaderNavList"] button {
+      color: var(--emerald-deep) !important;
+      background: var(--emerald-tint) !important;
+      font-weight: 600 !important;
+    }
+    [class*="-AppHeaderNavList"] a.header-link-active::after,
+    body.ReactModal__Body--open [class*="-AppHeaderNavList"] button::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 2px;
+      background: var(--emerald);
+    }
+    /* While the media modal is up, Contents is no longer the tab you are on,
+       so it drops back to the resting treatment and the rule goes with it. */
+    body.ReactModal__Body--open [class*="-AppHeaderNavList"] a.header-link-active {
+      color: var(--ink-mute) !important;
+      background: transparent !important;
+      font-weight: 500 !important;
+    }
+    body.ReactModal__Body--open [class*="-AppHeaderNavList"] a.header-link-active::after {
+      display: none;
     }
     /* The "New" / quick-create control reads as the one primary action. */
     [class*="-AppHeaderActions"] [class*="-AppHeaderNewEntryButton"],
@@ -770,7 +840,26 @@
        above. Both sit near 10:1 instead of the 1.0 the published state had.
 
        "-Published" cannot collide with "-PublishButton": the shared prefix
-       stops at "Publish", and the next character differs ("e" against "B"). */
+       stops at "Publish", and the next character differs ("e" against "B").
+
+       This state also needs the flex centring from the rule above, and does
+       not inherit it. `[class*="-ToolbarButton"]` matches on the substring
+       "-ToolbarButton", hyphen included, and the emotion label here is
+       "PublishedToolbarButton", where the character before "Toolbar" is "d".
+       So the published control matches none of the three selectors that
+       carry the layout fix, and it is not a ToolbarButton in the first
+       place: Decap builds it from DropdownButton, the same base as the
+       unpublished "Publish" half. It arrived with Decap's own
+       `height:36px; line-height:36px; display:block; border:0`, which is
+       centred until the border on this rule turns it into a 34px content box
+       still laying out a 36px line box from the top. That is the same
+       one-pixel-low, clipped-at-the-bottom label the ToolbarButton rule was
+       written to cure, reached by the border rather than by padding.
+
+       The first selector below, `button[class*="-ToolbarButton"][class*="-Published"]`,
+       is dead for the reason just given and is kept only because it is
+       harmless and would be the correct hook if Decap ever relabels. The
+       working hook is the third. */
     button[class*="-ToolbarButton"][class*="-Published"],
     button[class*="-PublishedButton"],
     button[class*="-PublishedToolbarButton"] {
@@ -778,6 +867,27 @@
       color: var(--ink) !important;
       border: 1px solid rgba(28,28,28,0.20) !important;
       font-weight: 600 !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      align-self: center !important;
+      height: 36px !important;
+      line-height: 1 !important;
+      padding: 0 2.4rem 0 1.3rem !important;
+      border-radius: 999px !important;
+    }
+    /* Both halves of the status control carry Decap's dropdown caret as an
+       ::after pinned at `top:16px`, a figure measured against a borderless
+       36px block box. Both halves now have a border and a flex content box,
+       so pin it to the middle instead, which holds whatever the height and
+       border end up being. The caret is a 6px border triangle with no
+       transform of its own, so translateY(-50%) is free. */
+    button[class*="-PublishedToolbarButton"]::after,
+    button[class*="-PublishedButton"]::after,
+    [class*="-Toolbar"] button[class*="-PublishButton"]::after,
+    [class*="-Toolbar"] button[class*="-StatusButton"]::after {
+      top: 50% !important;
+      transform: translateY(-50%) !important;
     }
     button[class*="-ToolbarButton"][class*="-Published"]:hover,
     button[class*="-PublishedButton"]:hover,
@@ -805,6 +915,10 @@
       color: #fff !important;
       border: 1px solid var(--emerald) !important;
       font-weight: 600 !important;
+      /* Dropdown halves need room on the right for the caret, which the
+         symmetric 1.3rem from the primary-action rule does not leave once
+         the label is flex-centred. Matches the published half. */
+      padding: 0 2.4rem 0 1.3rem !important;
     }
     [class*="-Toolbar"] button[class*="-PublishButton"]:hover,
     [class*="-Toolbar"] button[class*="-StatusButton"]:hover {

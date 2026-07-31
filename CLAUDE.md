@@ -275,7 +275,54 @@ Contrast checks on the preview must resolve gradients. `.skill-block
 transparent `background-color`, so a checker that only walks `backgroundColor`
 falls through to white and reports a bogus ~1:1 on white-on-emerald text.
 
+## Known upstream bug: preview sync-scroll
+
+The sync-scroll toggle at the top right of the editor works as a control, but
+the preview never follows. This is a Decap bug, not a theme regression, and it
+is not reachable from `admin/index.html`.
+
+Decap mounts the preview pane's scroll target as
+
+```js
+<ScrollSyncPane attachTo={frameContext.document.scrollingElement}>
+```
+
+passing a raw DOM element. `react-scroll-sync` expects a **ref object** and
+resolves it with `node = this.props.attachTo.current`, so the lookup yields
+`undefined`, `componentDidMount` skips `registerPane`, and the preview is never
+registered. Only the left editor pane is registered, and the sync loop skips
+the pane the event came from, so nothing moves. The toggle itself is fine: it
+flips `scrollSyncEnabled` and writes it to localStorage.
+
+The bundle is loaded from unpkg, so there is nothing local to patch. The only
+in-repo fix is a standalone shim that listens on the control pane and drives
+`iframe.contentDocument.scrollingElement.scrollTop` itself. That reimplements
+the feature rather than fixing it, and it would double-sync if Decap ever ships
+the upstream fix, so it has not been written. Left deliberately broken.
+
 ## Updates Log
+
+- 2026-07-31: Header tabs and the Published control. The Contents/Media tabs
+  had never had a selected state, for two reasons at once: the rule was hung
+  off `-AppHeaderActions` while the tabs live in `-AppHeaderNavList`, and the
+  selected class is not an emotion class at all. Decap passes react-router
+  `activeClassName="header-link-active"`, a plain literal, so `[class*="active"]`
+  could not have reached it either. Media is a `<button>` opening a modal, not
+  a route, so it can never take that class; its lit state comes from
+  `body.ReactModal__Body--open`. Also unstuck the leading icons, which carry
+  Decap's own `color:#b3b9c4` and so ignored every colour set on the tab.
+
+  The Published button was still sitting low after the toolbar centring in
+  06bf3b6, because that fix never reached it. Its label is
+  `PublishedToolbarButton`, and `[class*="-ToolbarButton"]` matches on the
+  hyphen, which the "d" in "Published" occupies. It is not a ToolbarButton in
+  any case, it is a DropdownButton like the "Publish" half. New instance of a
+  familiar failure, but the mirror image of the usual one: not a hook claiming
+  a child it should not, a hook missing a component whose name merely looks
+  like it contains it. **`[class*="-X"]` needs the hyphen too, so a label that
+  ends in X is not matched by a hook for -X.** Both halves also had their
+  dropdown caret pinned at `top:16px`, measured against a borderless box, now
+  centred.
 
 - 2026-07-31: Fixed the light node on the login button. `-LoginButton` is a
   prefix of `-LoginButtonIcon`, so the provider icon was being painted as its
