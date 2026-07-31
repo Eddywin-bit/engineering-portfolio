@@ -100,8 +100,10 @@
        BRAND BAR
 
        Decap has no slot for a wordmark, so this sits above the whole app
-       as its own element. The mark is the same "E" as the favicon and the
-       wordmark matches .brand on index.html: Plus Jakarta Sans 700.
+       as its own element. Mark and name are sized to match .brand on
+       index.html: a 30px cube with the name at 15px/600 beside it, about
+       half its height, so the name reads as a label rather than competing
+       with the logo. 30px clears the 58px --bar comfortably.
        --------------------------------------------------------------- */
     .ega-brand {
       position: fixed;
@@ -123,11 +125,17 @@
        painting its "View site" icon over the top of it. Hiding a fixed
        element costs no layout shift, the body padding-top stays put. */
     body.ReactModal__Body--open .ega-brand { display: none !important; }
-    .ega-brand__mark { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    /* The mark is /images/logo-mark.png, the cube on a transparent ground,
+       not the favicon. No border-radius and no background: the favicon is a
+       black square badge and needed its corners softened, this asset is the
+       linework alone and any rounding would clip it. Height is fixed and
+       width left auto so the 740x881 source keeps its ratio. */
+    .ega-brand__mark { height: 30px; width: auto; display: block; }
     .ega-brand__word {
       font-family: var(--font-heading);
-      font-weight: 700;
-      font-size: 1.05rem;
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1;
       letter-spacing: -0.01em;
       color: var(--ink);
       white-space: nowrap;
@@ -162,7 +170,11 @@
     }
     @media (max-width: 720px) {
       .ega-brand__rule, .ega-brand__meta { display: none; }
-      .ega-brand__word { font-size: 0.95rem; }
+      /* The word used to be stepped down to 0.95rem here from a 1.05rem
+         base. The base is 15px now, which is smaller than that override
+         would set, so shrinking it further is the only sensible direction
+         and 14px keeps it clear of the 30px mark. */
+      .ega-brand__word { font-size: 14px; }
     }
 
     /* ---------------------------------------------------------------
@@ -1145,7 +1157,7 @@
 </head>
 <body>
   <header class="ega-brand">
-    <img class="ega-brand__mark" src="/favicon-32.png" alt="EGO logo" width="26" height="26" />
+    <img class="ega-brand__mark" src="/images/logo-mark.png" alt="" width="30" height="36" />
     <span class="ega-brand__word">Edwin Gyasi Owusu</span>
     <span class="ega-brand__rule"></span>
     <span class="ega-brand__meta">Content Studio</span>

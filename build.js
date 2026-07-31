@@ -244,13 +244,15 @@ function buildEngineering() {
 
   /* ---- nav ---- */
   regions['e-nav'] =
-    // The wordmark is an image now. nav.brand still drives the alt text, so
-    // the accessible name stays CMS-editable even though the glyphs are baked
-    // into the PNG. Intrinsic width/height are declared so the row does not
-    // reflow while the logo loads; CSS caps the rendered height. These two
-    // numbers must match the real pixel size of images/logo.png, or the
-    // reserved box has the wrong aspect ratio and the logo jumps on load.
-    `      <a href="#top" class="brand"><img src="/images/logo.png" alt="${attr(nav.brand)}" width="326" height="160" /></a>\n` +
+    // Icon plus live text. The mark is the cube on its own, so the name is
+    // real text again rather than glyphs baked into a PNG, which means
+    // nav.brand is what the visitor reads and not just the accessible name.
+    // The img is therefore alt="" — decorative, because the adjacent span
+    // already names the link and a screen reader should not hear it twice.
+    // width/height reserve the row against reflow and only need to carry the
+    // right ratio; images/logo-mark.png is 740x881, so 30x36 matches it to
+    // within a percent. CSS sets the rendered height.
+    `      <a href="#top" class="brand"><img src="/images/logo-mark.png" alt="" width="30" height="36" class="brand-mark" /><span>${esc(nav.brand)}</span></a>\n` +
     `      <nav class="nav-links" aria-label="Primary">\n` +
     nav.links
       .map((l) => `        <a href="${attr(l.href)}">${esc(l.label)}</a>`)

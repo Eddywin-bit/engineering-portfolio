@@ -86,30 +86,52 @@
       -webkit-backdrop-filter: blur(16px) saturate(1.2);
       border-bottom: 1px solid var(--line-soft);
     }
+    /* Vertical padding only. This element is `class="wrap nav-inner"`, and
+       .wrap supplies the horizontal gutter, so the `padding: 1rem 0`
+       shorthand that used to be here reset that gutter to zero at every
+       width. Above 1180px the max-width centring hands back a margin and
+       hides it, but from 1180px down the bar runs flush to both viewport
+       edges, which is where the logo and the Contact button touching the
+       screen on mobile came from. Use the longhands so the two rules
+       compose instead of fighting, here and in the .scrolled state. */
     .nav-inner {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 1rem 0;
+      padding-top: 1rem;
+      padding-bottom: 1rem;
       gap: 1rem;
     }
-    .brand {
-      font-family: var(--font-heading);
-      font-weight: 700;
-      font-size: 1.05rem;
-      letter-spacing: -0.01em;
-      color: var(--ink);
-    }
-    /* The brand is an <img> written by build.js. The type rules above still
-       matter: they style the alt text if the PNG fails to load. Height is
-       capped and width left auto so the 326x160 source keeps its ratio.
+    /* Brand: the cube mark, then the name as live text. Written by build.js,
+       so change it there, not in the generated region below.
+
+       The name is deliberately the smaller of the two. It is a label beside
+       the logo, not a wordmark competing with it: 15px against a 30px mark,
+       about half its height. The old rule set 1.05rem/700 here to style a
+       PNG's alt text, and at that size the name outweighs the icon. If this
+       ever looks too small against Plus Jakarta Sans, adjust it, but do not
+       let it creep back up toward the icon's height.
+
        Deliberately not resized in the .scrolled state: the compressed nav
        shrinks .nav-inner padding, and growing the mark at the same moment
        would cancel most of that and read as the logo lurching outward. */
-    .brand img {
-      height: 36px;
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-heading);
+      letter-spacing: -0.01em;
+      color: var(--ink);
+    }
+    .brand-mark {
+      height: 30px;
       width: auto;
       display: block;
+    }
+    .brand span {
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1;
     }
     .nav-links {
       display: none;
@@ -984,7 +1006,7 @@
     header.nav.scrolled {
       box-shadow: 0 1px 0 var(--line-soft), 0 8px 24px rgba(28, 28, 28, 0.05);
     }
-    header.nav.scrolled .nav-inner { padding: 0.75rem 0; }
+    header.nav.scrolled .nav-inner { padding-top: 0.75rem; padding-bottom: 0.75rem; }
     .nav-inner { transition: padding 0.4s var(--ease); }
 
     /* Eon strip: gold glow drifts slowly */
@@ -1038,7 +1060,7 @@
   <header class="nav">
     <div class="wrap nav-inner">
       <!-- CMS:START e-nav -->
-      <a href="#top" class="brand"><img src="/images/logo.png" alt="Edwin Gyasi Owusu" width="326" height="160" /></a>
+      <a href="#top" class="brand"><img src="/images/logo-mark.png" alt="" width="30" height="36" class="brand-mark" /><span>Edwin Gyasi Owusu</span></a>
       <nav class="nav-links" aria-label="Primary">
         <a href="#about">About</a>
         <a href="#work">Projects</a>

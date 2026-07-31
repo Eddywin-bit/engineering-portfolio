@@ -43,10 +43,15 @@ display_url: https://www.edwingyasi.online
 #
 # It previously pointed at og-engineering.png, which is the 1200x630 Open
 # Graph card, a dark social tile with the name burned in, and it landed as a
-# black slab across the middle of a light screen. The wordmark is the right
+# black slab across the middle of a light screen. Then at logo.png, the teal
+# wordmark, which is now retired and deleted. The cube mark is the right
 # asset. Root-relative rather than absolute so it also resolves under
 # `npx decap-server` on localhost; Decap passes this straight to an <img src>.
-logo_url: /images/logo.png
+#
+# This is the one reference that made deleting logo.png a breaking change:
+# Decap renders `logo_url ? <img src=u> : <DecapLogoIcon>`, so a dead path
+# here is a broken image on the login screen, not a fallback.
+logo_url: /images/logo-mark.png
 
 # Default upload target (engineering site). The Eon Designs collection
 # overrides this per field so its uploads land in /designs/images.
