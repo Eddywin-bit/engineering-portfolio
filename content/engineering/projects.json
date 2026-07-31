@@ -4,37 +4,48 @@
   "subtitle": "Three case studies across process engineering, geostatistics, and geotechnical site characterization.",
   "items": [
     {
-      "title": "Energy Efficiency Audit of a Construction Business",
-      "category": "Operations & Cost Optimization",
-      "description": "A self-initiated review of electricity use at a construction materials company, identifying high-consumption areas and proposing practical cost savings.",
-      "href": "case-studies/energy-audit.html",
-      "image": "https://images.unsplash.com/photo-1590274853856-f22d5ee3d228?w=800&q=80&auto=format&fit=crop",
       "image_alt": "Concrete batching plant",
-      "wide": false,
+      "href": "case-studies/energy-audit.html",
       "link_label": "Case Study",
-      "tools": ["Hydraulic Analysis", "Process Modeling"]
+      "wide": false,
+      "title": "Energy Efficiency Audit of a Construction Business",
+      "image": "https://images.unsplash.com/photo-1590274853856-f22d5ee3d228?w=800&q=80&auto=format&fit=crop",
+      "tools": [
+        "Hydraulic Analysis",
+        "Process Modeling"
+      ],
+      "description": "A self-initiated review of electricity use at a construction materials company, identifying high-consumption areas and proposing practical cost savings.",
+      "category": "Operations & Cost Optimization"
     },
     {
-      "title": "Spatial Distribution of Trace Metals in Soil",
-      "category": "Geostatistics",
-      "description": "Mapping As, Pb, Cd, and Ni contamination patterns across Abuakwa South using kriging and spline geostatistics.",
-      "href": "case-studies/trace-metals.html",
-      "image": "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80&auto=format&fit=crop",
       "image_alt": "Soil samples and geological mapping",
-      "wide": false,
+      "href": "case-studies/trace-metals.html",
       "link_label": "Case Study",
-      "tools": ["QGIS", "Python", "Kriging"]
+      "wide": false,
+      "title": "Spatial Distribution of Trace Metals in Soil",
+      "image": "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80&auto=format&fit=crop",
+      "tools": [
+        "QGIS",
+        "Python",
+        "Kriging"
+      ],
+      "description": "Mapping As, Pb, Cd, and Ni contamination patterns across Abuakwa South using kriging and spline geostatistics.",
+      "category": "Geostatistics"
     },
     {
-      "title": "Geotechnical Site Characterization from Borehole Data",
-      "category": "Geotechnical Engineering",
-      "description": "Translating subsurface investigation data into actionable foundation design recommendations, covering SPT correction, soil profiling, and bearing capacity calculations across six borehole locations.",
-      "href": "case-studies/geotechnical.html",
-      "image": "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1600&q=80&auto=format&fit=crop",
       "image_alt": "Geotechnical borehole drilling on site",
-      "wide": true,
+      "href": "case-studies/geotechnical.html",
       "link_label": "Case Study",
-      "tools": ["SPT Analysis", "Soil Profiling", "Foundation Design"]
+      "wide": true,
+      "title": "Geotechnical Site Characterization from Borehole Data",
+      "image": "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1600&q=80&auto=format&fit=crop",
+      "tools": [
+        "SPT Analysis",
+        "Soil Profiling",
+        "Foundation Design"
+      ],
+      "description": "Translating subsurface investigation data into actionable foundation design recommendations, covering SPT correction, soil profiling, and bearing capacity calculations across six borehole locations.",
+      "category": "Geotechnical Engineering"
     }
   ],
   "eon_strip": {
@@ -43,6 +54,6 @@
     "title": "Eon Designs",
     "description": "My design studio, covering brand identity, event collateral, and print production for organisations across Ghana. See the full studio site and portfolio.",
     "link_label": "Visit edwingyasi.online",
-    "link_href": "https://www.edwingyasi.online/designs"
+    "link_href": "https://www.edwingyasi.online/designs/"
   }
 }
