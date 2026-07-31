@@ -243,6 +243,19 @@ falls through to white and reports a bogus ~1:1 on white-on-emerald text.
 
 ## Updates Log
 
+- 2026-07-31: Fixed the editor's Published/Publish control and the media
+  library's non-image placeholder. The status button was white-on-white at
+  1.0:1 because `[class*="-ToolbarButton"][class*="-Toolbar"]` matches itself
+  ("-ToolbarButton" contains "-Toolbar") and outranked the rule supplying the
+  background, keeping only its `color:#fff`. Its unpublished twin was the
+  mirror image, --ink-mute on emerald at 1.05:1, because that state is built
+  from DropdownButton rather than ToolbarButton and so was reached only by a
+  one-attribute selector that `[class*="-Toolbar"] button` beat. Both states
+  now sit above 4.5:1. Also gave non-image media entries a real placeholder:
+  `-CardFileIcon` is an empty div Decap never fills, and `-CardText` is the
+  filename, and both begin with "-Card", so both were being drawn as nested
+  white panels.
+
 - 2026-07-31: Simplified the collection entry cards to plain rectangles with a
   hover lift. Same substring trap as always: `-ListCardLink` and
   `-ListCardTitle` both contain "ListCard", and the collection grid is called

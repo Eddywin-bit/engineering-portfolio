@@ -369,8 +369,14 @@
        Two of those exclusions are grids, not cards. Decap names the collection
        grid -CardsGrid and the media grid -CardGridContainer, both of which
        contain "-Card", so without excluding them the container itself was
-       drawing a panel and a gradient around the entire list. */
-    [class*="-Card"]:not([class*="-CardHeading"]):not([class*="-CardBody"]):not([class*="-CardImage"]):not([class*="-CardFooter"]):not([class*="-CardLink"]):not([class*="-CardsGrid"]):not([class*="-CardGridContainer"]),
+       drawing a panel and a gradient around the entire list.
+
+       -CardText is the filename under a media thumbnail and -CardFileIcon is
+       the placeholder shown for non-images. Both begin with "-Card", so both
+       were being drawn as their own bordered white panels nested inside the
+       card that already had one. Every entry in this list is a component that
+       lives *inside* a card and must never be painted as one. */
+    [class*="-Card"]:not([class*="-CardHeading"]):not([class*="-CardBody"]):not([class*="-CardImage"]):not([class*="-CardFooter"]):not([class*="-CardLink"]):not([class*="-CardsGrid"]):not([class*="-CardGridContainer"]):not([class*="-CardFileIcon"]):not([class*="-CardText"]),
     [class*="-ListCard"]:not([class*="-ListCardLink"]):not([class*="-ListCardTitle"]),
     [class*="-EntryCard"] {
       position: relative !important;
@@ -386,7 +392,7 @@
        border and the emerald-to-gold hairline that used to wipe across the top
        are gone; on a list of nine near-identical section cards they read as a
        selection state that was not actually selecting anything. */
-    [class*="-Card"]:not([class*="-CardHeading"]):not([class*="-CardBody"]):not([class*="-CardImage"]):not([class*="-CardFooter"]):not([class*="-CardLink"]):not([class*="-CardsGrid"]):not([class*="-CardGridContainer"]):hover,
+    [class*="-Card"]:not([class*="-CardHeading"]):not([class*="-CardBody"]):not([class*="-CardImage"]):not([class*="-CardFooter"]):not([class*="-CardLink"]):not([class*="-CardsGrid"]):not([class*="-CardGridContainer"]):not([class*="-CardFileIcon"]):not([class*="-CardText"]):hover,
     [class*="-ListCard"]:not([class*="-ListCardLink"]):not([class*="-ListCardTitle"]):hover,
     [class*="-EntryCard"]:hover {
       transform: translateY(-2px);
@@ -598,7 +604,16 @@
       border-bottom: 1px solid var(--line) !important;
       border-radius: var(--radius-sm) var(--radius-sm) 0 0 !important;
     }
-    [class*="-ToolbarButton"][class*="-Toolbar"] { background: transparent !important; }
+    /* There used to be a `[class*="-ToolbarButton"][class*="-Toolbar"] {
+       background: transparent }` rule here, meant to stop the toolbar panel
+       treatment above from reaching the buttons. It was self-defeating:
+       "-ToolbarButton" already contains "-Toolbar", so the selector matched
+       every toolbar button, and at two attribute selectors it outranked the
+       primary-action rule below. The buttons kept that rule's `color:#fff` but
+       lost its emerald background, which left the Published button as white
+       text on the white toolbar at a contrast ratio of 1.0, readable only by
+       its border. The exclusion list on the -Toolbar rule above already keeps
+       buttons out, so the rule was never needed. */
     [class*="-Toolbar"] button { color: var(--ink-mute) !important; border-radius: 6px !important; }
     [class*="-Toolbar"] button:hover { color: var(--emerald) !important; background: var(--emerald-soft) !important; }
     [data-slate-editor] {
@@ -634,6 +649,61 @@
       transform: translateY(-2px);
       box-shadow: 0 8px 24px rgba(15,118,110,0.25) !important;
     }
+    /* The entry status control, which Decap renders in two states and labels
+       differently for each:
+
+         published    -PublishedButton / -PublishedToolbarButton  ("Published")
+         unpublished  -PublishButton / -StatusButton              ("Publish")
+
+       "Published" is a status plus a dropdown, not the primary action, so it
+       reads as a quiet control with a real border rather than a filled pill.
+       "Publish" is the action, so it keeps the emerald fill from the rule
+       above. Both sit near 10:1 instead of the 1.0 the published state had.
+
+       "-Published" cannot collide with "-PublishButton": the shared prefix
+       stops at "Publish", and the next character differs ("e" against "B"). */
+    button[class*="-ToolbarButton"][class*="-Published"],
+    button[class*="-PublishedButton"],
+    button[class*="-PublishedToolbarButton"] {
+      background: var(--bg-elev) !important;
+      color: var(--ink) !important;
+      border: 1px solid rgba(28,28,28,0.20) !important;
+      font-weight: 600 !important;
+    }
+    button[class*="-ToolbarButton"][class*="-Published"]:hover,
+    button[class*="-PublishedButton"]:hover,
+    button[class*="-PublishedToolbarButton"]:hover {
+      background: var(--emerald-soft) !important;
+      color: var(--emerald-deep) !important;
+      border-color: var(--emerald) !important;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(28,28,28,0.10) !important;
+    }
+
+    /* The unpublished half of the same control. It is built from
+       DropdownButton, not ToolbarButton, so the primary-action rule above
+       reaches it only through its bare [class*="-PublishButton"] selector, at
+       one attribute. `[class*="-Toolbar"] button` further up is one attribute
+       plus a type, so it outranked it and repainted the label --ink-mute over
+       the emerald fill: 1.05:1, the same invisibility the published state had,
+       one state over. Re-stating it as a descendant of the toolbar restores
+       the white label at 11.24:1. StatusButton is dormant under
+       `publish_mode: simple` and is here so the pair cannot drift apart if
+       the editorial workflow is ever switched on. */
+    [class*="-Toolbar"] button[class*="-PublishButton"],
+    [class*="-Toolbar"] button[class*="-StatusButton"] {
+      background: var(--emerald) !important;
+      color: #fff !important;
+      border: 1px solid var(--emerald) !important;
+      font-weight: 600 !important;
+    }
+    [class*="-Toolbar"] button[class*="-PublishButton"]:hover,
+    [class*="-Toolbar"] button[class*="-StatusButton"]:hover {
+      background: var(--emerald-hi) !important;
+      color: #fff !important;
+      border-color: var(--emerald-hi) !important;
+    }
+
     /* Secondary toolbar controls stay quiet, mirroring .btn.ghost */
     [class*="-ToolbarDropdown"] button[class*="-ToolbarButton"],
     button[class*="-ToolbarButton"][class*="disabled"] {
@@ -706,6 +776,34 @@
       color: var(--ink) !important;
     }
     [class*="-MediaLibraryCardGrid"] { background: transparent !important; }
+
+    /* Non-image entries in the media grid. Decap renders an <img> for images
+       and this empty <div data-testid="card-file-icon"> for everything else,
+       with a font-size but no glyph, so it paints nothing. The generic card
+       rule was then filling it with --bg-elev, which is what turned .gitkeep
+       into a blank white panel that reads as a broken thumbnail.
+
+       Hiding non-images instead was the other option, and it is the wrong one
+       here: Decap decides whether to show its "no media" empty state from the
+       file count, not from what is visible, so hiding the only entry leaves a
+       silent empty grid with no message at all, and any non-image a future
+       upload puts in the folder would disappear without explanation. Drawing
+       the placeholder honestly costs nothing and degrades properly.
+
+       Hooked on data-testid rather than the emotion class: it is a stable
+       upstream contract and cannot be renamed out from under us the way the
+       generated class names can. */
+    [data-testid="card-file-icon"] {
+      background-color: var(--bg-tint) !important;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23A8A8A8' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z'/%3E%3Cpath d='M14 3v5h5'/%3E%3C/svg%3E") !important;
+      background-repeat: no-repeat !important;
+      background-position: center !important;
+      background-size: 46px 46px !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+    }
+
     [class*="-MediaCard"] {
       background: var(--bg-elev) !important;
       border: 1px solid var(--line) !important;
