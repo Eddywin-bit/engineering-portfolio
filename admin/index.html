@@ -364,39 +364,53 @@
     /* `-Card` is a substring of every card sub-component Decap emits
        (-CardHeading, -CardBody, -CardImage, …), so an unqualified
        [class*="-Card"] nests the whole card treatment inside the card. The
-       exclusions keep the chrome on the outer card only. */
-    [class*="-Card"]:not([class*="-CardHeading"]):not([class*="-CardBody"]):not([class*="-CardImage"]):not([class*="-CardFooter"]):not([class*="-CardLink"]),
-    [class*="-ListCard"],
+       exclusions keep the chrome on the outer card only.
+
+       Two of those exclusions are grids, not cards. Decap names the collection
+       grid -CardsGrid and the media grid -CardGridContainer, both of which
+       contain "-Card", so without excluding them the container itself was
+       drawing a panel and a gradient around the entire list. */
+    [class*="-Card"]:not([class*="-CardHeading"]):not([class*="-CardBody"]):not([class*="-CardImage"]):not([class*="-CardFooter"]):not([class*="-CardLink"]):not([class*="-CardsGrid"]):not([class*="-CardGridContainer"]),
+    [class*="-ListCard"]:not([class*="-ListCardLink"]):not([class*="-ListCardTitle"]),
     [class*="-EntryCard"] {
       position: relative !important;
       overflow: hidden !important;
       background: var(--bg-elev) !important;
       border: 1px solid var(--line) !important;
-      border-radius: var(--radius) !important;
+      border-radius: var(--radius-sm) !important;
       box-shadow: none !important;
-      transition: border-color .3s var(--ease), transform .3s var(--ease), box-shadow .3s var(--ease) !important;
+      transition: transform .2s var(--ease), box-shadow .2s var(--ease), border-color .2s var(--ease) !important;
     }
-    /* The emerald-to-gold hairline that wipes across every project card. */
-    [class*="-Card"]:not([class*="-CardHeading"]):not([class*="-CardBody"]):not([class*="-CardImage"]):not([class*="-CardFooter"]):not([class*="-CardLink"])::before,
-    [class*="-ListCard"]::before {
-      content: "";
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 3px;
-      background: linear-gradient(90deg, var(--emerald), var(--gold));
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform 0.45s var(--ease);
-      z-index: 2;
+
+    /* Hover: a small lift and a soft shadow, no colour shift. The emerald
+       border and the emerald-to-gold hairline that used to wipe across the top
+       are gone; on a list of nine near-identical section cards they read as a
+       selection state that was not actually selecting anything. */
+    [class*="-Card"]:not([class*="-CardHeading"]):not([class*="-CardBody"]):not([class*="-CardImage"]):not([class*="-CardFooter"]):not([class*="-CardLink"]):not([class*="-CardsGrid"]):not([class*="-CardGridContainer"]):hover,
+    [class*="-ListCard"]:not([class*="-ListCardLink"]):not([class*="-ListCardTitle"]):hover,
+    [class*="-EntryCard"]:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(28,28,28,0.09) !important;
+      border-color: rgba(28,28,28,0.18) !important;
     }
-    [class*="-Card"]:not([class*="-CardHeading"]):not([class*="-CardBody"]):not([class*="-CardImage"]):not([class*="-CardFooter"]):not([class*="-CardLink"]):hover::before,
-    [class*="-ListCard"]:hover::before { transform: scaleX(1); }
-    [class*="-Card"]:not([class*="-CardHeading"]):not([class*="-CardBody"]):not([class*="-CardImage"]):not([class*="-CardFooter"]):not([class*="-CardLink"]):hover,
-    [class*="-ListCard"]:hover {
-      border-color: rgba(15,118,110,0.35) !important;
-      transform: translateY(-3px);
-      box-shadow: 0 12px 32px rgba(28,28,28,0.07) !important;
+
+    /* The clickable link and the heading sit *inside* the card, and both carry
+       "ListCard" in their component names, so the block above used to paint a
+       full card on each of them: a border and a rounded panel wrapped around
+       the "3. Hero" text itself, two rings deep. They are plain text. */
+    [class*="-ListCardLink"],
+    [class*="-ListCardTitle"] {
+      background: transparent !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      transform: none !important;
     }
+    [class*="-ListCardLink"]::before,
+    [class*="-ListCardTitle"]::before,
+    [class*="-CardsGrid"]::before,
+    [class*="-CardGridContainer"]::before { content: none !important; }
+
     [class*="-CardHeading"] a,
     [class*="-ListCardLink"] {
       font-family: var(--font-heading) !important;

@@ -243,6 +243,14 @@ falls through to white and reports a bogus ~1:1 on white-on-emerald text.
 
 ## Updates Log
 
+- 2026-07-31: Simplified the collection entry cards to plain rectangles with a
+  hover lift. Same substring trap as always: `-ListCardLink` and
+  `-ListCardTitle` both contain "ListCard", and the collection grid is called
+  `-CardsGrid`, so the card treatment was painting a bordered panel on the link
+  *and* the heading *and* the grid. That is where the box around the "3. Hero"
+  text came from. Dropped the emerald-to-gold `::before` hairline and the
+  emerald hover border; hover is now a 2px lift plus a soft neutral shadow.
+
 - 2026-07-31: Browser audit of the live panel, then five real fixes. The big
   one: `registerPreviewStyle` was missing `{ raw: true }`, so no preview has
   ever been styled. That also explained the oversized preview images, since the
