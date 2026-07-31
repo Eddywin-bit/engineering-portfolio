@@ -261,7 +261,21 @@
       color: var(--ink);
     }
 
-    [class*="-LoginButton"],
+    /* The provider icon inside this button is called -LoginButtonIcon, so
+       "-LoginButton" is a prefix of it and the button treatment was landing on
+       the icon as well: it got its own 999px radius, its own 1px emerald
+       border and a 0.95rem/1.9rem pad, which is the lighter rounded node that
+       appeared over the left of the pill.
+
+       Hover is what made it obvious. Pointing at the left of the button puts
+       the cursor on the icon, so the icon matched :hover in its own right and
+       took --emerald-hi (#14867D, lighter than the #0F766E underneath it), a
+       translateY(-2px) and a drop shadow, lifting a paler pill out of the
+       button it lives in.
+
+       Same collision as -ListCardTitle and -CardText. Excluded on both rules;
+       the icon only ever needed Decap's own margin-right. */
+    [class*="-LoginButton"]:not([class*="-LoginButtonIcon"]),
     [class*="-StyledAuthenticationPage"] button {
       background: var(--emerald) !important;
       color: #fff !important;
@@ -276,11 +290,23 @@
       box-shadow: none !important;
       transition: all 0.3s var(--ease) !important;
     }
-    [class*="-LoginButton"]:hover,
+    [class*="-LoginButton"]:not([class*="-LoginButtonIcon"]):hover,
     [class*="-StyledAuthenticationPage"] button:hover {
       background: var(--emerald-hi) !important;
       transform: translateY(-2px);
       box-shadow: 0 8px 24px rgba(15,118,110,0.25) !important;
+    }
+
+    /* Belt and braces: whatever else this file grows, the icon is artwork
+       inside a button and must never be painted as a control of its own. */
+    [class*="-LoginButtonIcon"] {
+      background: none !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      padding: 0 !important;
+      box-shadow: none !important;
+      transform: none !important;
+      color: #fff !important;
     }
 
     /* ---------------------------------------------------------------

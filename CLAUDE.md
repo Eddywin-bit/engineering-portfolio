@@ -194,10 +194,27 @@ readable component suffix emotion leaves on its generated class names
 renames a component, that rule silently stops applying, it does not break.
 
 `[class*=...]` matches a **substring**, so a hook written for a parent silently
-claims its children too. `-Card` also matches `-CardHeading` and `-CardBody`,
-`-Toolbar` also matches `-ToolbarContainer`. Before adding a hook, check whether
-Decap emits a longer component name containing it, and exclude it with `:not()`
-if so. This is the single easiest way to break this file.
+claims its children too. `-Card` also matches `-CardHeading`, `-CardBody`,
+`-CardText`, `-CardFileIcon` and `-CardsGrid`; `-Toolbar` also matches
+`-ToolbarContainer` and `-ToolbarButton`; `-ListCard` also matches
+`-ListCardLink` and `-ListCardTitle`; `-LoginButton` also matches
+`-LoginButtonIcon`. Before adding a hook, check whether Decap emits a longer
+component name containing it, and exclude it with `:not()` if so. This is the
+single easiest way to break this file, and it has caused every visual defect
+found on this panel so far bar one.
+
+The tell is a control that has grown an inner control: a box around a label, a
+pill inside a pill. Watch hover especially, because a child caught this way
+matches `:hover` on its own when the cursor is over it, so it lifts and
+lightens independently of the parent it lives in.
+
+The opposite failure also happens: a hook that matches **nothing**, which is
+invisible until you notice the styling it promises never applied. `-Toast`
+(Decap ships react-toastify, the classes are `Toastify__*`), `-MediaCardText`
+(the component is `-CardText`) and `-PageLogoIcon` on the login screen (that
+component belongs to a module the auth page does not use) were all dead. If a
+rule looks like it should explain what you are seeing and does not, verify the
+component name is really emitted before trusting it.
 
 Three structural pieces worth knowing:
 
@@ -251,6 +268,13 @@ transparent `background-color`, so a checker that only walks `backgroundColor`
 falls through to white and reports a bogus ~1:1 on white-on-emerald text.
 
 ## Updates Log
+
+- 2026-07-31: Fixed the light node on the login button. `-LoginButton` is a
+  prefix of `-LoginButtonIcon`, so the provider icon was being painted as its
+  own pill inside the button, and on hover it matched `:hover` in its own
+  right and lifted a lighter pill out of the left of the control. Fourth
+  instance of the same substring collision, so the rule above now lists every
+  pair seen and describes the hover tell.
 
 - 2026-07-31: Login screen, in two passes. First removed `logo_url`, which had
   been pointing at `og-engineering.png` and putting a dark 1200x630 Open Graph
