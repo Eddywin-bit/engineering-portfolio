@@ -244,7 +244,11 @@ function buildEngineering() {
 
   /* ---- nav ---- */
   regions['e-nav'] =
-    `      <a href="#top" class="brand">${esc(nav.brand)}</a>\n` +
+    // The wordmark is an image now. nav.brand still drives the alt text, so
+    // the accessible name stays CMS-editable even though the glyphs are baked
+    // into the PNG. Intrinsic width/height are declared so the row does not
+    // reflow while the logo loads; CSS caps the rendered height.
+    `      <a href="#top" class="brand"><img src="/images/logo.png" alt="${attr(nav.brand)}" width="327" height="160" /></a>\n` +
     `      <nav class="nav-links" aria-label="Primary">\n` +
     nav.links
       .map((l) => `        <a href="${attr(l.href)}">${esc(l.label)}</a>`)

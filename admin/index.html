@@ -837,6 +837,35 @@
 
     [class*="-EmptyMessage"] { color: var(--ink-mute) !important; }
 
+    /* The publish toast. Decap does not render this one itself, it ships
+       react-toastify, so the hooks are plain "Toastify__" class names and not
+       the emotion "-Component" suffixes the rest of this file keys on. The two
+       selectors below never match anything for that reason; they are kept only
+       because they are harmless, and this note is here so nobody edits them
+       expecting the toast to change.
+
+       The overlap: the toast container is position:fixed, top-right, at
+       z-index var(--toastify-z-index), which is 9999, offset 16px from the top
+       of the viewport. .ega-brand is fixed across that same strip at z-index
+       10000, so it won the stack and covered most of a toast that sits inside
+       its first 58px. Rather than just outranking the bar and painting over
+       the wordmark, drop the toast clear of it: --bar plus a small gap, so the
+       two never share space. The raised z-index is belt and braces for any
+       other overlay in that corner.
+
+       `top` is restated on the --top-right modifier because react-toastify
+       resets it to env(safe-area-inset-top) under 480px, which would put the
+       toast back under the bar on a phone. Decap injects its stylesheet at
+       runtime, after this block, so these need !important to land. */
+    .Toastify__toast-container {
+      --toastify-z-index: 10050;
+      z-index: 10050 !important;
+      top: calc(var(--bar) + 12px) !important;
+    }
+    .Toastify__toast-container--top-right {
+      top: calc(var(--bar) + 12px) !important;
+    }
+
     /* Notifications */
     [class*="-Toast"],
     [class*="-SnackbarMessage"] {
@@ -854,19 +883,7 @@
 </head>
 <body>
   <header class="ega-brand">
-    <svg class="ega-brand__mark" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
-      <defs>
-        <linearGradient id="ega-plate" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#0F766E" />
-          <stop offset="1" stop-color="#0A5952" />
-        </linearGradient>
-      </defs>
-      <rect width="100" height="100" rx="22" fill="url(#ega-plate)" />
-      <rect x="30" y="26" width="9.5" height="48" fill="#FAFAF8" />
-      <rect x="30" y="26" width="42" height="9.5" fill="#FAFAF8" />
-      <rect x="30" y="45.25" width="34.5" height="9.5" fill="#FAFAF8" />
-      <rect x="30" y="64.5" width="42" height="9.5" fill="#C89B3C" />
-    </svg>
+    <img class="ega-brand__mark" src="/favicon-32.png" alt="EGO logo" width="26" height="26" />
     <span class="ega-brand__word">Edwin Gyasi Owusu</span>
     <span class="ega-brand__rule"></span>
     <span class="ega-brand__meta">Content Studio</span>
