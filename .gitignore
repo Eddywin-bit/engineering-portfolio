@@ -21,3 +21,11 @@ node_modules/
 
 # Build scratch
 .tmp_*
+
+# Browser-automation output and agent scratch space.
+# Named individually rather than *.png, because the tracked favicon and
+# og: images live at the repo root too and a wildcard would swallow them.
+.playwright-mcp/
+scratchpad/
+01-admin-landing.png
+02-editor-toolbar-under-brandbar.png

@@ -236,6 +236,22 @@
       border-bottom: 1px solid var(--line-soft) !important;
       box-shadow: none !important;
     }
+
+    /* The editor route is absolutely positioned with inset:0 against the
+       viewport, so unlike the collection list it never sees the body's
+       padding-top and starts underneath the brand bar. That put the whole
+       editor toolbar (back link, Published, View Live, site link) in the
+       top 58px, where .ega-brand swallowed the clicks.
+
+       Decap sets an explicit height on this box, so `bottom` is derived and
+       does not constrain it. Moving top alone pushed the bottom 58px of both
+       panes below the viewport, which cost the last of the preview. Height
+       has to come down by the same amount. -EditorContainer is not a prefix
+       of any other Decap component name, so this cannot leak to a child. */
+    [class*="-EditorContainer"] {
+      top: var(--bar) !important;
+      height: calc(100vh - var(--bar)) !important;
+    }
     [class*="-AppHeader"] a,
     [class*="-AppHeader"] button,
     [class*="-AppHeaderButton"] {
@@ -692,7 +708,21 @@
       border-color: var(--emerald) !important;
       box-shadow: 0 0 0 3px var(--emerald-soft) !important;
     }
-    [class*="-MediaCardText"] { color: var(--ink-soft) !important; }
+    /* The filename under each thumbnail. This hook used to read
+       -MediaCardText, which is not a component Decap emits, so the rule never
+       applied and the filename kept Decap's default #798291: 3.88:1 on the
+       card, under the 4.5:1 floor. The real suffix is -CardText. Sibling
+       components are -Card, -CardFileIcon, -CardGridContainer and
+       -CardImageWrapper, none of which contain "CardText", so this cannot
+       leak. Do not shorten it to -Card, which would claim all five. */
+    [class*="-CardText"] { color: var(--ink-soft) !important; }
+
+    /* Copy / Download in the media modal. The composed emotion class carries a
+       visuallyHidden fragment, but ResponsiveActionButton wins above the
+       breakpoint and the labels are really on screen, at Decap's #798291 for
+       3.41:1. --ink-mute is 5.74:1 on the card background. */
+    [class*="-ResponsiveActionButton"] { color: var(--ink-mute) !important; }
+
     [class*="-EmptyMessage"] { color: var(--ink-mute) !important; }
 
     /* Notifications */
@@ -750,6 +780,13 @@
          stylesheet. These are the real class names and real values
          from index.html, trimmed to what the previews use, so the
          pane is a small copy of the page rather than a field dump.
+
+         The second argument matters. registerPreviewStyle treats arg 1 as
+         a URL unless passed { raw: true }, so without the flag the whole
+         stylesheet string is set as a <link href>, fetched as a path, and
+         404s. cssRules comes back empty and every preview renders unstyled
+         in Times New Roman. The font call below is a real URL, so it is the
+         one call here that correctly omits the flag.
          ============================================================ */
       CMS.registerPreviewStyle(
         'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@500;700;900&display=swap'
@@ -933,7 +970,7 @@
         /* shared small parts */
         '.empty{color:var(--ink-faint);font-style:italic}',
         '.count{font-size:.75rem;color:var(--ink-faint);margin-left:.4rem;font-weight:400}',
-      ].join(''));
+      ].join(''), { raw: true });
 
       /* ============================================================
          PREVIEW TEMPLATES
@@ -976,14 +1013,33 @@
         return node ? node : h('span', { className: 'empty' }, fallback);
       }
 
+      /* The designs content predates the CMS and stores artwork paths relative
+         to /designs/ ("Assets/logo.webp", "profile.jpg"), which is correct for
+         designs/index.html because that page is served from /designs/. The
+         preview iframe is not: it resolves against the site root, so every one
+         of those paths 404s in the pane while working fine on the live page.
+         Re-root them here rather than rewriting the JSON, which would break
+         the live page. Anything already absolute is left alone, which covers
+         uploads (public_folder is /designs/images) and the blob: URLs Decap
+         hands back for a file staged but not yet published. */
+      function siteRelative(props, url) {
+        if (!url || /^([a-z][a-z0-9+.-]*:|\/\/|\/)/i.test(url)) return url;
+        var coll = '';
+        try { coll = props.collection.get('name'); } catch (e) {}
+        return coll === 'designs' ? '/designs/' + url : url;
+      }
+
       /** Resolve a media path through Decap so uploads preview before publish. */
       function media(props, path) {
         if (!path) return null;
         try {
           var a = props.getAsset && props.getAsset(path);
-          if (a) return a.toString();
+          if (a) {
+            var s = a.toString();
+            if (s) return siteRelative(props, s);
+          }
         } catch (e) {}
-        return path;
+        return siteRelative(props, path);
       }
 
       function eyebrowTitleSub(d, extra) {
@@ -1266,14 +1322,34 @@
 
       D.about = function (d, props) {
         var img = media(props, d.image) || media(props, d.image_fallback);
+        /* designs/index.html ships this portrait as
+           <img src="profile.jpg" onerror="this.src='Assets/1000007946.webp'">.
+           The primary file does not exist in the repo, on purpose: the live
+           page leans on the onerror hop to reach the fallback. Picking the
+           first truthy path the way the other renderers do therefore left the
+           pane with a permanently broken portrait. Mirror the hop instead, and
+           latch it so a missing fallback cannot loop. */
+        var imgAlt = media(props, d.image_fallback);
+        var onImgError = function (e) {
+          if (imgAlt && !e.target.dataset.fellBack && e.target.src !== imgAlt) {
+            e.target.dataset.fellBack = '1';
+            e.target.src = imgAlt;
+          }
+        };
         return h('div', {},
           stage([
             d.eyebrow ? h('p', { key: key(), className: 'kick' }, d.eyebrow) : null,
             h('h2', { key: key() }, d.heading_line_1 || '', d.heading_line_2 ? h('br') : null, d.heading_line_2 || ''),
             img ? h('div', { key: key(), className: 'tile', style: { marginBottom: '14px' } },
-              h('div', { className: 'ph' }, h('img', { src: img, alt: '' }))) : null,
+              h('div', { className: 'ph' }, h('img', { src: img, alt: '', onError: onImgError }))) : null,
+            /* Same treatment as E.about. Both about entries carry inline markup
+               in their paragraphs (<strong> here, <span class="text-white"> in
+               designs) and build.js injects it raw, so the live pages render it.
+               Rendering it as text instead showed the editor literal tags. The
+               source is repo-committed JSON, the same trust boundary the
+               engineering renderer has always assumed. */
             h('div', { key: key() }, list(d.paragraphs).map(function (p) {
-              return h('p', { key: key() }, txt(p));
+              return h('p', { key: key(), dangerouslySetInnerHTML: { __html: txt(p) } });
             })),
             d.capabilities_heading ? h('p', { key: key(), className: 'kick' }, d.capabilities_heading) : null,
             h('div', { key: key(), className: 'chips' }, list(d.capabilities).map(function (c) {

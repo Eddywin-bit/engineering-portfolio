@@ -212,7 +212,49 @@ Preview keys are positional. `resetKeys()` runs at the top of `Preview` so a
 node keeps its key across renders. Do not make `key()` monotonic again, that
 remounts the entire preview subtree on every keystroke.
 
+`registerPreviewStyle(css)` treats its first argument as a **URL**. Raw CSS
+needs the second argument, `{ raw: true }`. Without it the whole stylesheet
+string is set as a `<link href>`, requested as a path, and 404s, so every
+preview silently renders unstyled in Times New Roman. The one call that should
+omit the flag is the Google Fonts one, because that really is a URL. To check
+it is live: `iframe.contentDocument.styleSheets[1].cssRules.length` should be
+non-zero, and there should be a `<style>` in the iframe, not a giant `<link>`.
+
+The editor route (`-EditorContainer`) is `position:absolute; inset:0` against
+the viewport, so it never inherits the `--bar` body padding the way the
+collection list does. It needs both `top` and `height` overridden; Decap sets
+an explicit height, so moving `top` alone pushes the bottom of both panes off
+screen.
+
+## Verifying admin fixes
+
+Drive the panel with **real clicks** (`a.click()` on the entry links, or
+Playwright clicks). Do **not** navigate by assigning `location.hash`. The URL
+and the field labels update either way, but only a real click fires the
+entry-load side effect, so hash assignment leaves the draft parked on the
+previously loaded entry, and the preview looks frozen. That is a testing
+artifact, not a product bug. It cost a full round of misdiagnosis on
+2026-07-31.
+
+Contrast checks on the preview must resolve gradients. `.skill-block
+.certifications` paints with `background-image: linear-gradient(...)` and a
+transparent `background-color`, so a checker that only walks `backgroundColor`
+falls through to white and reports a bogus ~1:1 on white-on-emerald text.
+
 ## Updates Log
+
+- 2026-07-31: Browser audit of the live panel, then five real fixes. The big
+  one: `registerPreviewStyle` was missing `{ raw: true }`, so no preview has
+  ever been styled. That also explained the oversized preview images, since the
+  missing sheet is what carries `img{max-width:100%}`. Also offset the editor
+  route out from under the brand bar (four toolbar controls were unclickable),
+  re-rooted the designs previews' `Assets/` paths to `/designs/`, stopped
+  `D.about` escaping its inline markup, and corrected two media-modal contrast
+  hooks, one of which (`-MediaCardText`) named a component Decap does not emit.
+  The reported stale-preview bug turned out **not to exist**: it was an artifact
+  of driving navigation with `location.hash`, now written up above. Ignored
+  `.playwright-mcp/`, `scratchpad/`, and the two audit screenshots, by name
+  rather than `*.png`, since the favicons and og: images sit at the repo root.
 
 - 2026-07-30: Fixed five admin preview and chrome defects. Four were the same
   root cause, `[class*=...]` substring collisions claiming child components,
