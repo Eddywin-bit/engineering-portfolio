@@ -315,6 +315,30 @@ the upstream fix, so it has not been written. Left deliberately broken.
 
 ## Updates Log
 
+- 2026-08-01: Flipped the `/designs/` (Eon Designs) site from its dark luxury
+  theme to a warm off-white light theme. Everything else (layout, content,
+  images, animations) is unchanged. The theme was baked into ~180 Tailwind
+  utility classes across three files, so the change spans all three: the
+  `tailwind.config` in `designs/index.html` (base surfaces via the `dark-950`/
+  `dark-900` tokens now resolve to `#f9f8f6`/`#efece7`, a new `ink` `#141414`
+  token for dark text and inverted chips, and a darkened `gray` scale for muted
+  text on light), the CMS-region templates in `build.js`, and the
+  script-injected cards/modals/vault/chat in `designs/js/app.js`. Champagne
+  accent darkened `#E0D4C5` -> `#b8a688` (`brand-500`) so it reads on cream, as
+  the owner approved. `white`/`black` could not be token-remapped because the
+  design uses them in two opposite roles (base light surfaces vs inverted
+  accent chips), so those were converted per-usage. Surfaces kept deliberately
+  dark: the lightbox backdrop and image hover scrims (white captions stay). The
+  nav mark `Assets/logo.webp` is white artwork, invisible on cream, so
+  `#logo-img { filter: brightness(0) }` in the base `<style>` darkens it.
+  `content/designs/about.json` carried two hardcoded `text-white` emphasis
+  spans (the one place a color class lives in content, not a template); changed
+  to `text-ink`. Note the Tailwind CDN the site loads at runtime is blocked in
+  the web session sandbox, so the styled page could not be screenshot-verified
+  there; verification was static plus a direct look at the logo asset. General
+  lesson: this site's color is spread across config + `build.js` + `app.js` +
+  one content JSON, and a token remap only reaches single-role tokens.
+
 - 2026-07-31: New brand assets, and a nav padding bug found while fitting them.
   The nav is the cube mark plus the name as live text now, on `index.html` via
   `build.js`, on the three case studies by hand, and in the admin brand bar.

@@ -156,7 +156,7 @@ function renderMarkdown(src) {
     if (/^###\s+/.test(block)) {
       const text = block.replace(/^###\s+/, '');
       out.push(
-        `<h3 class="text-white font-display text-2xl mt-10 mb-4">${inlineMd(text)}</h3>`
+        `<h3 class="text-ink font-display text-2xl mt-10 mb-4">${inlineMd(text)}</h3>`
       );
       continue;
     }
@@ -202,7 +202,7 @@ function renderMarkdown(src) {
     }
 
     // Paragraph. The first one is the article lede.
-    const cls = ledeUsed ? 'mb-4' : 'mb-6 text-lg font-medium text-white';
+    const cls = ledeUsed ? 'mb-4' : 'mb-6 text-lg font-medium text-ink';
     ledeUsed = true;
     out.push(`<p class="${cls}">${inlineMd(block.replace(/\n/g, ' '))}</p>`);
   }
@@ -459,30 +459,30 @@ function buildDesigns() {
 
   /* ---- desktop nav ---- */
   const navBtn = (l) =>
-    `                <button onclick="scrollToSection('${attr(l.target)}')" class="nav-link text-[10px] uppercase tracking-[0.2em] font-medium text-gray-500 hover:text-white transition-colors relative group">\n` +
+    `                <button onclick="scrollToSection('${attr(l.target)}')" class="nav-link text-[10px] uppercase tracking-[0.2em] font-medium text-gray-500 hover:text-ink transition-colors relative group">\n` +
     `                    ${esc(l.label)} <span class="absolute -bottom-2 left-0 w-0 h-[1px] bg-brand-500 transition-all group-hover:w-full"></span>\n` +
     `                </button>`;
 
   regions['d-nav'] =
     nav.links.map(navBtn).join('\n') +
-    `\n                <button onclick="scrollToSection('${attr(nav.cta_target)}')" class="px-6 py-2 border border-white/20 text-white font-medium text-[10px] tracking-widest uppercase hover:bg-brand-500 hover:text-black hover:border-brand-500 transition-all duration-500">${esc(nav.cta_label)}</button>`;
+    `\n                <button onclick="scrollToSection('${attr(nav.cta_target)}')" class="px-6 py-2 border border-black/20 text-ink font-medium text-[10px] tracking-widest uppercase hover:bg-brand-500 hover:text-black hover:border-brand-500 transition-all duration-500">${esc(nav.cta_label)}</button>`;
 
   /* ---- mobile nav ---- */
   regions['d-mobile-nav'] =
     nav.links
       .map(
         (l) =>
-          `             <button onclick="scrollToSection('${attr(l.target)}'); toggleMobileMenu()" class="text-xl font-display font-medium text-gray-400 hover:text-white text-left transition-colors border-b border-white/10 pb-4">${esc(l.label)}</button>`
+          `             <button onclick="scrollToSection('${attr(l.target)}'); toggleMobileMenu()" class="text-xl font-display font-medium text-gray-400 hover:text-ink text-left transition-colors border-b border-black/10 pb-4">${esc(l.label)}</button>`
       )
       .join('\n') +
-    `\n             <button onclick="scrollToSection('${attr(nav.cta_target)}'); toggleMobileMenu()" class="mt-4 px-6 py-4 bg-white text-black font-bold text-center w-full uppercase tracking-widest text-xs">${esc(nav.cta_label)}</button>`;
+    `\n             <button onclick="scrollToSection('${attr(nav.cta_target)}'); toggleMobileMenu()" class="mt-4 px-6 py-4 bg-ink text-white font-bold text-center w-full uppercase tracking-widest text-xs">${esc(nav.cta_label)}</button>`;
 
   /* ---- hero ---- */
   regions['d-hero'] =
     `            <div class="inline-block mb-8 md:mb-10 animate-fade-in opacity-0" style="animation-delay: 0.2s">\n` +
     `                <span class="py-2 px-4 border border-brand-500/30 rounded-full text-brand-500 text-[10px] md:text-xs tracking-[0.2em] md:tracking-[0.3em] uppercase backdrop-blur-md font-medium">${esc(hero.badge)}</span>\n` +
     `            </div>\n\n` +
-    `            <h1 class="text-4xl sm:text-5xl md:text-7xl lg:text-9xl font-display font-medium text-white mb-6 md:mb-8 leading-[1.1] md:leading-tight animate-slide-up opacity-0" style="animation-delay: 0.3s">\n` +
+    `            <h1 class="text-4xl sm:text-5xl md:text-7xl lg:text-9xl font-display font-medium text-ink mb-6 md:mb-8 leading-[1.1] md:leading-tight animate-slide-up opacity-0" style="animation-delay: 0.3s">\n` +
     `                ${esc(hero.headline)}\n` +
     `            </h1>\n\n` +
     `            <p class="text-gray-400 max-w-xl mx-auto text-sm md:text-lg leading-relaxed mb-10 md:mb-12 font-light animate-slide-up opacity-0 px-4 md:px-0" style="animation-delay: 0.5s">\n` +
@@ -490,14 +490,14 @@ function buildDesigns() {
     `                ${esc(hero.subline_line_2_before)} <span class="text-brand-500 italic font-display text-lg md:text-xl">${esc(hero.subline_emphasis)}</span> ${esc(hero.subline_line_2_after)}\n` +
     `            </p>\n\n` +
     `            <div class="flex flex-col md:flex-row gap-4 md:gap-6 justify-center items-center animate-slide-up opacity-0" style="animation-delay: 0.7s">\n` +
-    `               <button onclick="scrollToSection('work')" class="w-full md:w-auto px-10 py-4 bg-brand-500 text-dark-950 text-xs font-bold tracking-widest uppercase hover:bg-white transition-all duration-300 min-w-[160px] shadow-[0_0_20px_rgba(224,212,197,0.2)]">${esc(hero.primary_button)}</button>\n` +
-    `               <button onclick="scrollToSection('vault')" class="w-full md:w-auto px-10 py-4 border border-white/20 text-white text-xs font-bold tracking-widest uppercase hover:border-brand-500 hover:text-brand-500 transition-all duration-300 min-w-[160px]">${esc(hero.secondary_button)}</button>\n` +
+    `               <button onclick="scrollToSection('work')" class="w-full md:w-auto px-10 py-4 bg-brand-500 text-ink text-xs font-bold tracking-widest uppercase hover:bg-ink hover:text-white transition-all duration-300 min-w-[160px] shadow-[0_0_20px_rgba(184,166,136,0.25)]">${esc(hero.primary_button)}</button>\n` +
+    `               <button onclick="scrollToSection('vault')" class="w-full md:w-auto px-10 py-4 border border-black/20 text-ink text-xs font-bold tracking-widest uppercase hover:border-brand-500 hover:text-brand-500 transition-all duration-300 min-w-[160px]">${esc(hero.secondary_button)}</button>\n` +
     `            </div>`;
 
   /* ---- works heading ---- */
   regions['d-work-head'] =
     `                <div>\n` +
-    `                    <h2 class="text-3xl md:text-6xl font-display font-medium text-white mb-2">${esc(works.heading)}</h2>\n` +
+    `                    <h2 class="text-3xl md:text-6xl font-display font-medium text-ink mb-2">${esc(works.heading)}</h2>\n` +
     `                    <p class="text-gray-500 font-light text-sm md:text-base">${esc(works.subheading)}</p>\n` +
     `                </div>\n` +
     `                <span class="hidden md:block text-brand-500/50 text-sm font-mono">${esc(works.counter)}</span>`;
@@ -509,21 +509,21 @@ function buildDesigns() {
     `                        ${lucide('lock', 'w-3 h-3')}\n` +
     `                        <span class="text-[10px] font-mono uppercase tracking-[0.2em]">${esc(vault.eyebrow)}</span>\n` +
     `                    </div>\n` +
-    `                    <h2 class="text-3xl md:text-6xl font-display font-medium tracking-tight text-white">${esc(vault.heading)}</h2>\n` +
+    `                    <h2 class="text-3xl md:text-6xl font-display font-medium tracking-tight text-ink">${esc(vault.heading)}</h2>\n` +
     `                </div>\n` +
     `                <p class="text-gray-400 max-w-sm text-sm leading-relaxed text-left md:text-left font-light">\n` +
     `                    ${esc(vault.description)}\n` +
     `                </p>`;
 
   regions['d-vault-cta'] =
-    `                <button onclick="openFullVault()" class="w-full md:w-auto group inline-flex items-center justify-center gap-3 px-12 py-4 border border-white/10 rounded-none text-gray-400 hover:text-brand-500 hover:border-brand-500 transition-all duration-500">\n` +
+    `                <button onclick="openFullVault()" class="w-full md:w-auto group inline-flex items-center justify-center gap-3 px-12 py-4 border border-black/10 rounded-none text-gray-400 hover:text-brand-500 hover:border-brand-500 transition-all duration-500">\n` +
     `                    ${lucide('grid', 'w-4 h-4 group-hover:text-brand-500 transition-colors')}\n` +
     `                    <span class="text-xs tracking-[0.2em] uppercase">${esc(vault.load_all_label)}</span>\n` +
     `                </button>`;
 
   regions['d-archive-head'] =
-    `                        <h2 class="text-xl md:text-2xl font-display text-white">${esc(vault.archive_heading)}</h2>\n` +
-    `                        <p class="text-[10px] text-gray-500 uppercase tracking-widest mt-1">Total Artifacts: <span id="artifact-count" class="text-white invisible">0</span></p>`;
+    `                        <h2 class="text-xl md:text-2xl font-display text-ink">${esc(vault.archive_heading)}</h2>\n` +
+    `                        <p class="text-[10px] text-gray-500 uppercase tracking-widest mt-1">Total Artifacts: <span id="artifact-count" class="text-ink invisible">0</span></p>`;
 
   /* ---- about ---- */
   const caps = about.capabilities
@@ -538,7 +538,7 @@ function buildDesigns() {
   const clients = about.clients
     .map(
       (c) =>
-        `                                <span class="px-4 py-1 border border-white/10 text-xs text-gray-400 hover:border-brand-500 hover:text-brand-500 transition-colors cursor-default">${esc(c)}</span>`
+        `                                <span class="px-4 py-1 border border-black/10 text-xs text-gray-400 hover:border-brand-500 hover:text-brand-500 transition-colors cursor-default">${esc(c)}</span>`
     )
     .join('\n');
 
@@ -554,7 +554,7 @@ function buildDesigns() {
     `                <!-- Content -->\n` +
     `                <div class="w-full md:w-7/12">\n` +
     `                    <span class="text-brand-500 font-mono text-xs tracking-[0.2em] uppercase mb-4 md:mb-6 block">${esc(about.eyebrow)}</span>\n\n` +
-    `                    <h2 class="text-3xl md:text-5xl font-display font-medium tracking-tight text-white mb-6 md:mb-8">\n` +
+    `                    <h2 class="text-3xl md:text-5xl font-display font-medium tracking-tight text-ink mb-6 md:mb-8">\n` +
     `                        ${esc(about.heading_line_1)} <br/> ${esc(about.heading_line_2)}\n` +
     `                    </h2>\n\n` +
     `                    <div class="space-y-6 text-gray-400 text-sm md:text-base leading-relaxed font-light">\n` +
@@ -564,11 +564,11 @@ function buildDesigns() {
     `\n                    </div>\n\n` +
     `                    <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-10">\n` +
     `                        <div>\n` +
-    `                            <h4 class="text-white font-display font-medium tracking-wide mb-6 text-lg">${esc(about.capabilities_heading)}</h4>\n` +
+    `                            <h4 class="text-ink font-display font-medium tracking-wide mb-6 text-lg">${esc(about.capabilities_heading)}</h4>\n` +
     `                            <ul class="space-y-3">\n${caps}\n                            </ul>\n` +
     `                        </div>\n` +
     `                        <div>\n` +
-    `                             <h4 class="text-white font-display font-medium tracking-wide mb-6 text-lg">${esc(about.clients_heading)}</h4>\n` +
+    `                             <h4 class="text-ink font-display font-medium tracking-wide mb-6 text-lg">${esc(about.clients_heading)}</h4>\n` +
     `                             <div class="flex flex-wrap gap-2">\n${clients}\n                             </div>\n` +
     `                        </div>\n` +
     `                    </div>\n` +
@@ -576,7 +576,7 @@ function buildDesigns() {
 
   /* ---- journal heading ---- */
   regions['d-journal-head'] =
-    `             <h2 class="text-3xl md:text-5xl font-display font-medium text-white mb-10 md:mb-16">${esc(journal.heading)}</h2>`;
+    `             <h2 class="text-3xl md:text-5xl font-display font-medium text-ink mb-10 md:mb-16">${esc(journal.heading)}</h2>`;
 
   /* ---- contact ---- */
   const socialLink = (s) => {
@@ -586,15 +586,15 @@ function buildDesigns() {
         : lucide(s.network, 'w-4 h-4');
     const extra = s.network === 'pinterest' ? ' flex items-center justify-center' : '';
     return (
-      `                         <a href="${attr(s.href)}" target="_blank" class="p-3 border border-white/10 text-gray-400 hover:text-black hover:bg-brand-500 hover:border-brand-500 transition-all${extra}">${inner}</a>`
+      `                         <a href="${attr(s.href)}" target="_blank" class="p-3 border border-black/10 text-gray-400 hover:text-black hover:bg-brand-500 hover:border-brand-500 transition-all${extra}">${inner}</a>`
     );
   };
 
   regions['d-contact'] =
     `                 <div class="lg:col-span-2">\n` +
-    `                     <h2 class="text-3xl md:text-5xl font-display text-white mb-8">${esc(contact.heading_line_1)} <br/><span class="text-brand-500 italic">${esc(contact.heading_emphasis)}</span></h2>\n\n` +
-    `                     <a href="mailto:${attr(contact.email)}" class="flex items-center gap-4 text-white hover:text-brand-500 transition-colors mb-4 group">\n` +
-    `                         <div class="w-10 h-10 border border-white/10 flex items-center justify-center group-hover:bg-brand-500 group-hover:text-black group-hover:border-brand-500 transition-all">\n` +
+    `                     <h2 class="text-3xl md:text-5xl font-display text-ink mb-8">${esc(contact.heading_line_1)} <br/><span class="text-brand-500 italic">${esc(contact.heading_emphasis)}</span></h2>\n\n` +
+    `                     <a href="mailto:${attr(contact.email)}" class="flex items-center gap-4 text-ink hover:text-brand-500 transition-colors mb-4 group">\n` +
+    `                         <div class="w-10 h-10 border border-black/10 flex items-center justify-center group-hover:bg-brand-500 group-hover:text-black group-hover:border-brand-500 transition-all">\n` +
     `                             ${lucide('mail', 'w-4 h-4')}\n` +
     `                         </div>\n` +
     `                         <span class="text-base md:text-lg font-display">${esc(contact.email)}</span>\n` +
@@ -603,14 +603,14 @@ function buildDesigns() {
     contact.socials.map(socialLink).join('\n') +
     `\n                     </div>\n` +
     `                 </div>\n\n` +
-    `                 <div class="lg:col-span-3 bg-dark-900 p-6 md:p-12 border border-white/5">\n` +
+    `                 <div class="lg:col-span-3 bg-dark-900 p-6 md:p-12 border border-black/5">\n` +
     `                     <form onsubmit="handleFormSubmit(event)" class="space-y-10">\n` +
     `                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">\n` +
-    `                             <input type="text" name="name" required class="bg-transparent border-b border-white/10 py-4 text-white focus:border-brand-500 outline-none font-display text-lg md:text-xl transition-all w-full" placeholder="${attr(contact.name_placeholder)}" />\n` +
-    `                             <input type="email" name="email" required class="bg-transparent border-b border-white/10 py-4 text-white focus:border-brand-500 outline-none font-display text-lg md:text-xl transition-all w-full" placeholder="${attr(contact.email_placeholder)}" />\n` +
+    `                             <input type="text" name="name" required class="bg-transparent border-b border-black/10 py-4 text-ink focus:border-brand-500 outline-none font-display text-lg md:text-xl transition-all w-full" placeholder="${attr(contact.name_placeholder)}" />\n` +
+    `                             <input type="email" name="email" required class="bg-transparent border-b border-black/10 py-4 text-ink focus:border-brand-500 outline-none font-display text-lg md:text-xl transition-all w-full" placeholder="${attr(contact.email_placeholder)}" />\n` +
     `                         </div>\n` +
-    `                         <textarea rows="3" name="message" class="w-full bg-transparent border-b border-white/10 py-4 text-white focus:border-brand-500 outline-none font-display text-lg md:text-xl resize-none transition-all" placeholder="${attr(contact.message_placeholder)}"></textarea>\n` +
-    `                         <button type="submit" id="submit-btn" class="px-10 py-5 bg-brand-500 text-dark-950 font-bold uppercase tracking-widest text-xs hover:bg-white transition-all w-full md:w-auto">${esc(contact.submit_label)}</button>\n` +
+    `                         <textarea rows="3" name="message" class="w-full bg-transparent border-b border-black/10 py-4 text-ink focus:border-brand-500 outline-none font-display text-lg md:text-xl resize-none transition-all" placeholder="${attr(contact.message_placeholder)}"></textarea>\n` +
+    `                         <button type="submit" id="submit-btn" class="px-10 py-5 bg-brand-500 text-ink font-bold uppercase tracking-widest text-xs hover:bg-ink hover:text-white transition-all w-full md:w-auto">${esc(contact.submit_label)}</button>\n` +
     `                     </form>\n` +
     `                 </div>`;
 

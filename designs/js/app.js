@@ -108,7 +108,7 @@ function renderProjects() {
             
             <div class="w-full md:w-3/5 group cursor-pointer" onclick="openProjectModal(${p.id})">
                  
-                 <div class="w-full relative aspect-[1500/1200] bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden transition-colors hover:border-brand-500/50">
+                 <div class="w-full relative aspect-[1500/1200] bg-black/5 border border-black/10 flex items-center justify-center overflow-hidden transition-colors hover:border-brand-500/50">
                     
                     <img src="${p.image}" onerror="this.src='${p.fallbackImage}'" class="max-w-full max-h-full w-auto h-auto object-contain transition-transform duration-500 ease-out group-hover:scale-105 will-change-transform" />
                     
@@ -120,9 +120,9 @@ function renderProjects() {
                 <span class="text-brand-500 tracking-[0.2em] uppercase text-xs font-bold mb-4 block flex items-center gap-2">
                     <span class="w-8 h-[1px] bg-brand-500"></span> ${p.category}
                 </span>
-                <h3 class="text-3xl md:text-5xl font-display font-medium text-white mb-4 md:mb-6 group cursor-pointer hover:text-brand-500 transition-colors" onclick="openProjectModal(${p.id})">${p.title}</h3>
+                <h3 class="text-3xl md:text-5xl font-display font-medium text-ink mb-4 md:mb-6 group cursor-pointer hover:text-brand-500 transition-colors" onclick="openProjectModal(${p.id})">${p.title}</h3>
                 <p class="text-gray-400 mb-6 md:mb-8 font-light leading-relaxed text-base md:text-lg line-clamp-3 md:line-clamp-none">${p.description}</p>
-                <button onclick="openProjectModal(${p.id})" class="text-white border-b border-white/30 pb-2 hover:text-brand-500 hover:border-brand-500 uppercase text-xs tracking-widest flex items-center gap-2 group">
+                <button onclick="openProjectModal(${p.id})" class="text-ink border-b border-black/30 pb-2 hover:text-brand-500 hover:border-brand-500 uppercase text-xs tracking-widest flex items-center gap-2 group">
                     View Case Study <i data-lucide="arrow-up-right" class="w-4 h-4 group-hover:-translate-y-1 group-hover:translate-x-1 transition-transform"></i>
                 </button>
             </div>
@@ -157,32 +157,32 @@ window.openProjectModal = (id) => {
                 <img src="${p.image}" onerror="this.src='${p.fallbackImage}'" class="w-full h-full object-cover" />
                 <div class="absolute inset-0 bg-gradient-to-t from-dark-950/80 to-transparent"></div>
                 <div class="absolute bottom-0 left-0 w-full p-6 md:p-12">
-                    <span class="text-brand-500 tracking-[0.2em] uppercase text-sm font-medium mb-4 block animate-slide-up bg-black/50 backdrop-blur-md w-fit px-4 py-1 rounded-full border border-white/10">${p.category}</span>
-                    <h1 class="text-3xl md:text-6xl font-display font-medium text-white mb-2 animate-slide-up leading-tight" style="animation-delay:0.1s">${p.title}</h1>
+                    <span class="text-brand-500 tracking-[0.2em] uppercase text-sm font-medium mb-4 block animate-slide-up bg-black/50 backdrop-blur-md w-fit px-4 py-1 rounded-full border border-black/10">${p.category}</span>
+                    <h1 class="text-3xl md:text-6xl font-display font-medium text-ink mb-2 animate-slide-up leading-tight" style="animation-delay:0.1s">${p.title}</h1>
                 </div>
             </div>
         </div>
 
         <div class="max-w-7xl mx-auto px-6 py-12 md:py-20 bg-dark-950">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12 md:mb-20 border-b border-white/10 pb-12">
-                 <div><span class="text-gray-500 text-xs uppercase tracking-wider block mb-2">CLIENT</span><span class="text-white font-display text-base md:text-lg">${p.client}</span></div>
-                 <div><span class="text-gray-500 text-xs uppercase tracking-wider block mb-2">YEAR</span><span class="text-white font-display text-base md:text-lg">${p.year}</span></div>
-                 <div><span class="text-gray-500 text-xs uppercase tracking-wider block mb-2">ROLE</span><span class="text-white font-display text-base md:text-lg">${p.role}</span></div>
-                 <div><span class="text-gray-500 text-xs uppercase tracking-wider block mb-2">DELIVERABLES</span><span class="text-white font-display text-base md:text-lg">${p.category}</span></div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12 md:mb-20 border-b border-black/10 pb-12">
+                 <div><span class="text-gray-500 text-xs uppercase tracking-wider block mb-2">CLIENT</span><span class="text-ink font-display text-base md:text-lg">${p.client}</span></div>
+                 <div><span class="text-gray-500 text-xs uppercase tracking-wider block mb-2">YEAR</span><span class="text-ink font-display text-base md:text-lg">${p.year}</span></div>
+                 <div><span class="text-gray-500 text-xs uppercase tracking-wider block mb-2">ROLE</span><span class="text-ink font-display text-base md:text-lg">${p.role}</span></div>
+                 <div><span class="text-gray-500 text-xs uppercase tracking-wider block mb-2">DELIVERABLES</span><span class="text-ink font-display text-base md:text-lg">${p.category}</span></div>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-16 mb-16 md:mb-24">
-                <div class="md:col-span-1"><h3 class="text-xl md:text-2xl font-display font-medium text-white">The Challenge</h3></div>
+                <div class="md:col-span-1"><h3 class="text-xl md:text-2xl font-display font-medium text-ink">The Challenge</h3></div>
                 <div class="md:col-span-2"><p class="text-gray-400 text-base md:text-lg leading-relaxed font-light">${p.challenge}</p></div>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-16 mb-16 md:mb-24">
-                <div class="md:col-span-1"><h3 class="text-xl md:text-2xl font-display font-medium text-white">The Solution</h3></div>
+                <div class="md:col-span-1"><h3 class="text-xl md:text-2xl font-display font-medium text-ink">The Solution</h3></div>
                 <div class="md:col-span-2"><p class="text-gray-400 text-base md:text-lg leading-relaxed font-light">${p.solution}</p></div>
             </div>
             <div class="space-y-12">
                 ${galleryHtml}
             </div>
-            <div class="mt-20 pt-10 border-t border-white/10 flex justify-end">
-                <button onclick="nextProject()" class="text-2xl md:text-6xl font-display italic text-white hover:text-brand-500 flex items-center gap-6 group transition-colors">
+            <div class="mt-20 pt-10 border-t border-black/10 flex justify-end">
+                <button onclick="nextProject()" class="text-2xl md:text-6xl font-display italic text-ink hover:text-brand-500 flex items-center gap-6 group transition-colors">
                     Next Project <i data-lucide="arrow-right" class="w-6 h-6 md:w-12 md:h-12 group-hover:translate-x-4 transition-transform"></i>
                 </button>
             </div>
@@ -253,7 +253,7 @@ function renderFilters() {
     const cats = ['All', ...new Set(vaultItems.map(i => i.category))];
     const container = document.getElementById('vault-filters');
     container.innerHTML = cats.map(c => `
-        <button onclick="filterVault('${c}')" class="filter-btn px-4 py-2 md:px-6 md:py-2 border border-white/10 text-[10px] uppercase tracking-[0.2em] text-gray-400 hover:border-brand-500 hover:text-white transition-all duration-300 ${c === 'All' ? 'bg-brand-500 text-black border-brand-500' : ''}" data-cat="${c}">
+        <button onclick="filterVault('${c}')" class="filter-btn px-4 py-2 md:px-6 md:py-2 border border-black/10 text-[10px] uppercase tracking-[0.2em] text-gray-400 hover:border-brand-500 hover:text-ink transition-all duration-300 ${c === 'All' ? 'bg-brand-500 text-black border-brand-500' : ''}" data-cat="${c}">
             ${c}
         </button>
     `).join('');
@@ -314,7 +314,7 @@ function renderBlogGrid() {
             <div class="flex items-center gap-4 text-[10px] uppercase tracking-wider text-gray-500 mb-3 font-mono">
                 <span>${post.date}</span>
             </div>
-            <h3 class="text-xl md:text-2xl font-display font-medium text-white mb-3 group-hover:text-brand-500 transition-colors">${post.title}</h3>
+            <h3 class="text-xl md:text-2xl font-display font-medium text-ink mb-3 group-hover:text-brand-500 transition-colors">${post.title}</h3>
             <p class="text-gray-500 text-sm leading-relaxed font-light line-clamp-3">${post.excerpt}</p>
             <span class="inline-block mt-4 text-xs text-brand-500 border-b border-brand-500 pb-1">Read Article</span>
         </article>
@@ -399,14 +399,14 @@ window.sendChatMessage = async () => {
     if(!msg) return;
     
     const container = document.getElementById('chat-messages');
-    container.innerHTML += `<div class="flex justify-end"><div class="bg-white text-black max-w-[85%] p-4 text-sm font-light mb-4 rounded-tl-xl rounded-bl-xl rounded-br-xl shadow-lg">${msg}</div></div>`;
+    container.innerHTML += `<div class="flex justify-end"><div class="bg-ink text-white max-w-[85%] p-4 text-sm font-light mb-4 rounded-tl-xl rounded-bl-xl rounded-br-xl shadow-lg">${msg}</div></div>`;
     input.value = '';
     
     // Loading Animation
     const loadId = 'loading-' + Date.now();
     container.innerHTML += `
         <div id="${loadId}" class="flex justify-start">
-            <div class="bg-dark-900 border border-white/10 p-4 flex gap-1 rounded-tr-xl rounded-bl-xl rounded-br-xl">
+            <div class="bg-dark-900 border border-black/10 p-4 flex gap-1 rounded-tr-xl rounded-bl-xl rounded-br-xl">
                 <span class="w-1.5 h-1.5 bg-brand-500 rounded-full animate-bounce"></span>
                 <span class="w-1.5 h-1.5 bg-brand-500 rounded-full animate-bounce" style="animation-delay:0.1s"></span>
                 <span class="w-1.5 h-1.5 bg-brand-500 rounded-full animate-bounce" style="animation-delay:0.2s"></span>
@@ -429,7 +429,7 @@ window.sendChatMessage = async () => {
         const result = await model;
         
         document.getElementById(loadId).remove();
-        container.innerHTML += `<div class="flex justify-start"><div class="bg-dark-900 text-gray-200 border border-white/10 max-w-[85%] p-4 text-sm font-light mb-4 rounded-tr-xl rounded-bl-xl rounded-br-xl leading-relaxed shadow-lg">${result.response.text}</div></div>`;
+        container.innerHTML += `<div class="flex justify-start"><div class="bg-dark-900 text-gray-200 border border-black/10 max-w-[85%] p-4 text-sm font-light mb-4 rounded-tr-xl rounded-bl-xl rounded-br-xl leading-relaxed shadow-lg">${result.response.text}</div></div>`;
     } catch (e) {
         document.getElementById(loadId).remove();
         const errText = e.message === "Missing Key" 
