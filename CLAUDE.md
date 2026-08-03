@@ -315,6 +315,37 @@ the upstream fix, so it has not been written. Left deliberately broken.
 
 ## Updates Log
 
+- 2026-08-01: Hero name set edge to edge, plus two CMS findings from real use.
+
+  **Hero name.** The name now fills the column on phones and still never wraps.
+  A fixed vw value cannot do both: the width the name needs depends on the font
+  that actually loaded, and a value safe for the fallback font leaves the
+  webfont looking small. So `fitHeroName()` in the page script measures the
+  rendered text once at a known size and scales to the available width, to
+  98.5% fill. It re-runs on `document.fonts.ready` and on resize, and only
+  below 600px. The CSS clamp (7.8vw) stays as the no-JS fallback and the
+  pre-fit value, so the name is never oversized before the script runs. The
+  `white-space:nowrap` on the mobile rule is safe only because that fallback
+  fits unaided; do not raise the clamp.
+
+  **Media over 1 MB looks broken in the panel but is fine on the site.** A
+  1.62 MB upload rendered as a broken thumbnail in both the image widget and
+  the preview pane, while displaying correctly on the live site. Decap's GitHub
+  backend loads media through the **Contents API, which only returns file
+  content up to 1 MB**; past that the editor has nothing to draw, but the file
+  is committed normally and Vercel serves it straight from the repo. Not a
+  theme bug and not fixable in `admin/index.html`. The Cover Image field now
+  carries a hint saying to keep uploads under 1 MB.
+
+  **Deleting a list item does not save by itself.** A post removed in the panel
+  was still live because the change was never committed: `publish_mode: simple`
+  means nothing reaches GitHub until **Publish** is clicked, and the button
+  keeps reading "Published" from the previous save, which makes it look done.
+  Confirmed by reading `content/engineering/journal.json` on `origin/main`,
+  where the post was still present. When a deletion "does not take", check the
+  file on the remote before touching the build; the generator is not at fault,
+  the commit never happened.
+
 - 2026-08-01: Second mobile type pass, and the name now holds one line.
 
   Headings came down again (section titles 29.6px -> 25.9px, contact heading

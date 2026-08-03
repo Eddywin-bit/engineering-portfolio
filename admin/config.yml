@@ -310,7 +310,17 @@ collections:
                   widget: string,
                   hint: 'Free text, e.g. Dec 09, 2025',
                 }
-              - { label: Cover Image, name: image, widget: image }
+              # Block style so the hint can be multi-line. A flow mapping
+              # cannot contain a block scalar; see the note in Links To above.
+              - label: Cover Image
+                name: image
+                widget: image
+                hint: >-
+                  Keep the file under 1 MB. Larger images still publish and
+                  still show on the live site, but they appear broken here in
+                  the panel, because the editor loads media through the GitHub
+                  API and that only returns files up to 1 MB. Around 1600px
+                  wide saved as JPEG is plenty.
               - { label: Excerpt, name: excerpt, widget: text }
               - label: Body
                 name: body
