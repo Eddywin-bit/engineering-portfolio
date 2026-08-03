@@ -509,7 +509,12 @@ function buildEngineering() {
   regions['e-hero'] =
     `        <h1 class="reveal" data-d="1">${esc(hero.headline)}</h1>\n\n` +
     `        <p class="hero-role reveal" data-d="2">\n` +
-    `          ${hero.roles.map(esc).join('&nbsp;·&nbsp;')}\n` +
+    // Each role is nowrap so a multi-word role cannot split ("Geological /
+    // Engineer" read as two roles on a phone). The separators must therefore
+    // be ORDINARY spaces, not &nbsp;: with both the roles and the separators
+    // unbreakable the line has no break point at all and overflows the
+    // viewport. Breaking between roles is the behaviour we want.
+    `          ${hero.roles.map((r) => `<span class="role">${esc(r)}</span>`).join(' · ')}\n` +
     `        </p>\n\n` +
     `        <p class="hero-sub reveal" data-d="3">\n` +
     `          ${esc(hero.subline)}\n` +

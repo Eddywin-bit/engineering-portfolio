@@ -315,6 +315,38 @@ the upstream fix, so it has not been written. Left deliberately broken.
 
 ## Updates Log
 
+- 2026-08-01: Second mobile type pass, and the name now holds one line.
+
+  Headings came down again (section titles 29.6px -> 25.9px, contact heading
+  25.9 -> 23.2, card titles ~19 -> 17.6). Body copy stayed at **15.5px and
+  should not go lower**; it is already at the low end of comfortable, and the
+  complaint was about heading weight, not paragraphs.
+
+  The hero is now `clamp(1.35rem, 7.8vw, 2.35rem)`, sized from measurement so
+  "Edwin Gyasi Owusu." stays on ONE line. At this weight and tracking the name
+  needs roughly **10.7px of width per 1px of font size**, so the ceiling is
+  (viewport - 40px gutters) / 10.7: about 26px at 320, 30px at 375, 33px at
+  430. 7.8vw sits under that everywhere. **Raising this re-wraps the name**,
+  and the old fixed `1.95rem` override in the 380px query was removed for the
+  same reason.
+
+  Three traps found in the process, all invisible without a browser:
+
+  - The hero roles joined with `&nbsp;·&nbsp;`, so the ONLY break points were
+    the ordinary spaces inside role names: the line broke as "Geological /
+    Engineer". Each role is a `<span class="role">` with `white-space:nowrap`
+    now and the separators are ordinary spaces. Making both unbreakable is the
+    obvious wrong fix, it leaves no break point at all and overflows.
+  - `.brand span` wrapped at =<340px. It is a **flex item**, so wrapping shows
+    up as doubled height, NOT as two client rects; `getClientRects().length`
+    reports 1 either way. Check the height.
+  - After `white-space:nowrap` fixed that, the name overflowed its flex space
+    at 320px and the CTA painted over the last letters. `getBoundingClientRect`
+    on `.brand` reports the allotted width, not the overflowing content, so it
+    showed no overlap while the screenshot clearly did. Measure the text with a
+    `Range` over the span, and look at a screenshot. Both sides shrink under
+    380px now.
+
 - 2026-08-01: Content edits, plus hardening the CMS against non-coder input.
 
   Removed the Energy Efficiency Audit project (not a real project) and deleted

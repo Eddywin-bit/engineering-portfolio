@@ -132,6 +132,10 @@
       font-size: 15px;
       font-weight: 600;
       line-height: 1;
+      /* The name is a flex item, so wrapping shows up as a doubled height
+         rather than two client rects. Keep it on one line; it still fits
+         beside the mark and the CTA at 320px. */
+      white-space: nowrap;
     }
     .nav-links {
       display: none;
@@ -232,6 +236,9 @@
       margin-bottom: clamp(1.6rem, 3vw, 2rem);
       letter-spacing: -0.005em;
     }
+    /* Keep a multi-word role intact; the line may wrap between roles but
+       never inside one. */
+    .hero-role .role { white-space: nowrap; }
 
     .hero-sub {
       font-size: clamp(1.05rem, 1.8vw, 1.2rem);
@@ -967,19 +974,25 @@
     @media (max-width: 600px) {
       body { font-size: 15.5px; }
 
-      /* Type scale is tuned down on phones. The desktop scale was reading
-         oversized on a 390px screen (hero ~51px, section titles ~35px), which
-         costs vertical space and forces long headings to wrap awkwardly.
-         Headings take the bigger cut; body copy stays near 15-16px so it
-         remains comfortable to read. */
+      /* Type scale is tuned down on phones. The desktop scale read oversized
+         on a 390px screen (hero ~51px, section titles ~35px), which costs
+         vertical space and wraps headings awkwardly. Headings take the cut;
+         body copy stays at 15.5px, which is already at the low end of
+         comfortable and should not go lower. */
       .hero {
         min-height: auto;
         padding: 3rem 0 3.5rem;
       }
+      /* Sized so "Edwin Gyasi Owusu." holds ONE line across phone widths.
+         The name needs about 10.7px of width per 1px of font size at this
+         weight and tracking, so the usable width (viewport minus the ~20px
+         gutters) divided by 10.7 is the ceiling: roughly 26px at 320,
+         30px at 375, 33px at 430. 7.8vw sits under that everywhere with a
+         margin for fallback fonts. Raising this re-wraps the name. */
       .hero h1 {
-        font-size: clamp(2.05rem, 10vw, 2.7rem);
-        line-height: 1.06;
-        word-break: break-word;
+        font-size: clamp(1.35rem, 7.8vw, 2.35rem);
+        line-height: 1.12;
+        word-break: normal;
         hyphens: none;
       }
       .hero-role {
@@ -988,19 +1001,19 @@
       }
       .hero-sub { font-size: 0.98rem; }
 
-      .sec-title { font-size: 1.85rem; line-height: 1.14; }
+      .sec-title { font-size: 1.62rem; line-height: 1.16; }
       .sec-sub { font-size: 0.98rem; }
       .sec-eyebrow { font-size: 0.74rem; }
 
-      .project-title { font-size: 1.18rem; }
+      .project-title { font-size: 1.1rem; }
       .project-desc { font-size: 0.9rem; }
-      .journal-title { font-size: 1.12rem; }
+      .journal-title { font-size: 1.06rem; }
       .journal-excerpt { font-size: 0.9rem; }
-      .exp-role { font-size: 1.05rem; }
+      .exp-role { font-size: 1rem; }
       .exp-desc { font-size: 0.9rem; }
-      .skill-block h3 { font-size: 1.18rem; }
+      .skill-block h3 { font-size: 1.1rem; }
       .skill-note { font-size: 0.9rem; }
-      .contact-card h2 { font-size: 1.62rem; line-height: 1.18; }
+      .contact-card h2 { font-size: 1.45rem; line-height: 1.2; }
       .contact-card p { font-size: 0.98rem; }
       .about-body p { font-size: 0.98rem; }
       .hero-role br { display: none; }
@@ -1046,9 +1059,16 @@
     }
 
     @media (max-width: 380px) {
-      .hero h1 { font-size: 1.95rem; }
+      /* No .hero h1 override here: the 7.8vw rule above already scales down,
+         and a fixed rem value would push the name onto two lines again. */
       .about-stats { grid-template-columns: 1fr; }
-      .nav-cta span, .nav-cta { font-size: 0.8rem; }
+      .nav-cta span, .nav-cta { font-size: 0.75rem; padding: 0.55rem 0.9rem; }
+      /* The brand is nowrap, so when it no longer fits it overflows its flex
+         space and the CTA paints over the last letters rather than pushing
+         it. Both sides shrink here so the full name stays legible at 320px. */
+      .brand span { font-size: 13px; }
+      .brand { gap: 8px; }
+      .brand-mark { height: 26px; }
     }
 
     /* Tap targets: ensure links/buttons are comfortably sized on touch */
@@ -1217,7 +1237,7 @@
         <h1 class="reveal" data-d="1">Edwin Gyasi Owusu.</h1>
 
         <p class="hero-role reveal" data-d="2">
-          Geological Engineer&nbsp;·&nbsp;Mining&nbsp;·&nbsp;Geotechnical&nbsp;·&nbsp;Oil &amp; Gas
+          <span class="role">Geological Engineer</span> · <span class="role">Mining</span> · <span class="role">Geotechnical</span> · <span class="role">Oil &amp; Gas</span>
         </p>
 
         <p class="hero-sub reveal" data-d="3">
