@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GeoField, Offline Field Geology Companion, Edwin Gyasi Owusu</title>
+  <meta name="description" content="GeoField: an offline-first Android app that identifies the geological unit under your feet from GPS alone, covering all 17 mapped units of Ghana." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg:#FAFAF8;--bg-elev:#FFFFFF;--bg-tint:#F3F1EB;--ink:#1C1C1C;--ink-soft:#3D3D3D;--ink-mute:#666666;--ink-faint:#A8A8A8;
+      --emerald:#0F766E;--emerald-hi:#14867D;--emerald-deep:#0A5952;--emerald-soft:rgba(15,118,110,0.08);--emerald-tint:#E8F2F0;
+      --gold:#C89B3C;--gold-deep:#A17F30;--gold-soft:rgba(200,155,60,0.12);--gold-tint:#F7EFD9;
+      --line:rgba(28,28,28,0.10);--line-soft:rgba(28,28,28,0.06);
+      --font-heading:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;--font-body:'Inter',system-ui,-apple-system,sans-serif;
+      --max:820px;--radius:16px;--ease:cubic-bezier(0.22,0.61,0.36,1);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+    body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:17px;line-height:1.7;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
+    a{color:inherit;text-decoration:none;}img{max-width:100%;display:block;}::selection{background:var(--emerald);color:#fff;}
+    .wrap{max-width:var(--max);margin:0 auto;padding:0 clamp(1.25rem,4vw,2rem);}
+    header.nav{position:sticky;top:0;z-index:60;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(16px) saturate(1.2);-webkit-backdrop-filter:blur(16px) saturate(1.2);border-bottom:1px solid var(--line-soft);}
+    .nav-inner{max-width:1180px;margin:0 auto;padding:1rem clamp(1.25rem,4vw,2rem);display:flex;align-items:center;justify-content:space-between;}
+    /* Matches the homepage nav: the cube mark, then the name as live text,
+       the name deliberately smaller than the mark so it reads as a label
+       beside the logo rather than a wordmark competing with it. src is
+       root-absolute because this page sits one level down; a relative path
+       would resolve inside /case-studies/. */
+    .brand{display:flex;align-items:center;gap:10px;font-family:var(--font-heading);letter-spacing:-0.01em;}
+    .brand-mark{height:30px;width:auto;display:block;}
+    .brand span{font-size:15px;font-weight:600;line-height:1;}
+    .back{display:inline-flex;align-items:center;gap:0.5rem;font-size:0.9rem;color:var(--ink-soft);transition:color 0.2s var(--ease);}
+    .back:hover{color:var(--emerald);}.back svg{width:16px;height:16px;}
+    .cs-header{padding:clamp(2.5rem,6vw,4rem) 0 clamp(1.5rem,3vw,2rem);}
+    .cs-cat{display:inline-flex;align-items:center;gap:0.5rem;font-size:0.8rem;font-weight:500;color:var(--emerald);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:1.2rem;}
+    .cs-cat .pin{width:6px;height:6px;border-radius:50%;background:var(--emerald);}
+    .cs-title{font-family:var(--font-heading);font-weight:800;font-size:clamp(2.2rem,6vw,3.4rem);line-height:1.08;letter-spacing:-0.03em;margin-bottom:1.2rem;}
+    .cs-lede{font-size:1.15rem;color:var(--ink-mute);line-height:1.6;max-width:60ch;}
+    .cs-meta{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin:clamp(2rem,4vw,3rem) 0;}
+    @media (min-width:640px){.cs-meta{grid-template-columns:repeat(4,1fr);}}
+    .cs-meta .cell{background:var(--bg-elev);padding:1.2rem 1.3rem;}
+    .cs-meta .k{font-size:0.72rem;font-weight:500;color:var(--ink-mute);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:0.4rem;}
+    .cs-meta .v{font-family:var(--font-heading);font-weight:600;font-size:0.98rem;color:var(--ink);line-height:1.3;}
+    .cs-hero-img{border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);margin-bottom:clamp(2rem,5vw,3.5rem);aspect-ratio:16/8;background:var(--bg-tint);}
+    .cs-hero-img img{width:100%;height:100%;object-fit:cover;}
+    .cs-body{padding-bottom:clamp(3rem,8vw,5rem);}
+    .cs-body h2{font-family:var(--font-heading);font-weight:700;font-size:clamp(1.5rem,3.5vw,2rem);letter-spacing:-0.02em;margin:clamp(2.4rem,5vw,3.2rem) 0 1rem;}
+    .cs-body h2:first-child{margin-top:0;}
+    .cs-body p{color:var(--ink-soft);margin-bottom:1.2rem;max-width:68ch;}
+    .cs-body p strong{color:var(--ink);font-weight:600;}
+    .cs-body ul{list-style:none;margin:0 0 1.4rem;padding:0;max-width:68ch;}
+    .cs-body ul li{position:relative;padding-left:1.6rem;margin-bottom:0.7rem;color:var(--ink-soft);}
+    .cs-body ul li::before{content:"";position:absolute;left:0;top:0.65em;width:6px;height:6px;border-radius:50%;background:var(--emerald);}
+    .cs-body ul li strong{color:var(--ink);font-weight:600;}
+    .callout{background:var(--emerald-tint);border:1px solid rgba(15,118,110,0.15);border-radius:var(--radius);padding:clamp(1.4rem,3vw,1.8rem);margin:2rem 0;color:var(--emerald-deep);}
+    .callout .lbl{font-size:0.75rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--emerald);margin-bottom:0.5rem;}
+    .callout p{color:var(--emerald-deep);margin:0;}
+    .tools{display:flex;flex-wrap:wrap;gap:0.5rem;margin:1.4rem 0 0;}
+    .tools span{font-size:0.82rem;font-weight:500;padding:0.4rem 0.85rem;background:var(--bg-tint);border-radius:999px;color:var(--ink-soft);border:1px solid var(--line-soft);}
+    .gallery{display:grid;grid-template-columns:1fr;gap:1rem;margin:2rem 0;}
+    @media (min-width:640px){.gallery{grid-template-columns:1fr 1fr;}}
+    .gallery figure{border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);background:var(--bg-tint);aspect-ratio:4/3;}
+    .gallery img{width:100%;height:100%;object-fit:cover;}
+    .cs-foot{border-top:1px solid var(--line);padding:clamp(2rem,5vw,3rem) 0;display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:space-between;}
+    .cs-foot p{color:var(--ink-mute);font-size:0.95rem;}
+    .btn{display:inline-flex;align-items:center;gap:0.5rem;padding:0.9rem 1.5rem;border-radius:999px;font-family:var(--font-body);font-weight:500;font-size:0.95rem;background:var(--emerald);color:#fff;border:1px solid var(--emerald);transition:all 0.3s var(--ease);}
+    .btn:hover{background:var(--emerald-hi);transform:translateY(-2px);box-shadow:0 8px 24px rgba(15,118,110,0.25);}
+    .btn svg{width:15px;height:15px;}
+    footer{border-top:1px solid var(--line-soft);padding:2rem 0 2.5rem;}
+    .foot-inner{max-width:1180px;margin:0 auto;padding:0 clamp(1.25rem,4vw,2rem);display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+    .foot-inner .b{font-family:var(--font-heading);font-weight:700;}
+    .foot-inner .n{color:var(--ink-mute);font-size:0.85rem;}
+    @media (max-width:600px){.cs-foot{flex-direction:column;align-items:flex-start;}}
+    .shots{display:grid;grid-template-columns:repeat(2,1fr);gap:1.1rem;margin:2rem 0;}
+    @media (min-width:640px){.shots{grid-template-columns:repeat(3,1fr);}}
+    .shots figure{margin:0;}
+    .shots .frame{border-radius:22px;background:#1C1C1C;padding:6px;box-shadow:0 14px 34px rgba(28,28,28,.16);}
+    .shots .frame img{width:100%;display:block;border-radius:17px;}
+    .shots figcaption{font-size:0.82rem;color:var(--ink-mute);text-align:center;margin-top:0.6rem;}
+  </style>
+</head>
+<body>
+
+  <header class="nav">
+    <div class="nav-inner">
+      <a href="../index.html" class="brand"><img src="/images/logo-mark.png" alt="" width="30" height="36" class="brand-mark" /><span>Edwin Gyasi Owusu</span></a>
+      <a href="../index.html#work" class="back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        All Projects
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap">
+      <div class="cs-header">
+        <div class="cs-cat"><span class="pin"></span> Mobile &amp; Geospatial Software</div>
+        <h1 class="cs-title">GeoField, an Offline Field Geology Companion</h1>
+        <p class="cs-lede">An Android app that answers one question a geology student asks constantly in the field: what am I standing on? It identifies the geological unit from GPS alone, works with no signal, and turns observations into structured field notes.</p>
+      </div>
+
+      <div class="cs-meta">
+        <div class="cell"><div class="k">Role</div><div class="v">Designer &amp; Developer</div></div>
+        <div class="cell"><div class="k">Platform</div><div class="v">Android, self-hosted</div></div>
+        <div class="cell"><div class="k">Users</div><div class="v">KNUST geology students</div></div>
+        <div class="cell"><div class="k">Status</div><div class="v">In active development</div></div>
+      </div>
+
+      <div class="cs-hero-img">
+        <img src="../images/geofield/hero.png" alt="GeoField app showing the Locate screen and the offline geological map of Ghana" loading="lazy" />
+      </div>
+
+      <div class="cs-body">
+        <h2>The problem</h2>
+        <p>Field geology in Ghana runs into a practical wall. The geological map of the country exists, but in the field it lives on a paper sheet, a lecturer's memory, or a PDF on a laptop back at the hostel. Standing on an outcrop three hours from Kumasi, a student often cannot answer the most basic question: <strong>which unit is this?</strong></p>
+        <p>Mobile data makes it worse. Coverage in the field is unreliable and expensive, so any tool that needs a connection to answer that question is the wrong tool. The constraint was clear from the start: <strong>it has to work with the phone in airplane mode.</strong></p>
+
+        <div class="callout">
+          <div class="lbl">The core constraint</div>
+          <p>Identification had to be fully offline. Not "offline-tolerant", not cached after first use, but correct on a phone that has never had signal at that location.</p>
+        </div>
+
+        <h2>What it does</h2>
+        <p>GeoField is built around three jobs, each mapped to a screen a student can reach in one tap.</p>
+        <ul>
+          <li><strong>Locate.</strong> Takes a GPS fix, resolves it against Ghana's geological polygons on the device, and names the unit you are standing on along with the rocks and structures to expect there.</li>
+          <li><strong>Map.</strong> A full geological map of Ghana with an offline basemap, so you can see unit boundaries and where you sit relative to them.</li>
+          <li><strong>Log.</strong> Structured field notes that capture unit, coordinates, GPS accuracy and timestamp automatically, then attach a photo, a voice memo, or a short written note.</li>
+        </ul>
+
+        <div class="shots">
+          <figure>
+            <div class="frame"><img src="../images/geofield/screen-locate.png" alt="GeoField Locate screen showing GPS accuracy and the Locate Me control" loading="lazy" /></div>
+            <figcaption>Locate, with offline status up front</figcaption>
+          </figure>
+          <figure>
+            <div class="frame"><img src="../images/geofield/screen-map.png" alt="Offline geological map of Ghana with coloured units and place labels" loading="lazy" /></div>
+            <figcaption>The geological map, offline</figcaption>
+          </figure>
+          <figure>
+            <div class="frame"><img src="../images/geofield/screen-log.png" alt="Log Observation screen with unit, position, accuracy, photo and voice capture" loading="lazy" /></div>
+            <figcaption>Logging an observation</figcaption>
+          </figure>
+        </div>
+
+        <h2>Making identification work offline</h2>
+        <p>The identification engine carries the geological map of Ghana as GeoJSON bundled into the app: <strong>all 17 mapped units</strong>, from the Birimian volcanics and sediments that host most of the country's gold, through the Tarkwaian, Togo Series and Dahomeyan gneisses, to the Voltaian sequence and the recent coastal cover.</p>
+        <p>A GPS fix becomes a point-in-polygon test run entirely on the phone. No request, no tiles to fetch, no waiting. Each unit carries its own field content: what it is also called, the rocks and structures to expect, plus engineering and mineral notes, so the answer is not just a name but something a student can actually use at the outcrop.</p>
+        <p>Because GPS is the input, accuracy is treated as a first-class piece of information rather than hidden. The app surfaces the current fix accuracy, and every saved observation records it, so a log entry can be judged later on how well the position was known when it was taken.</p>
+
+        <h2>The basemap problem</h2>
+        <p>A geological map with nothing underneath it is hard to navigate. But a country-wide basemap is large, and downloading it repeatedly over field data is not viable.</p>
+        <p>The solution was a <strong>92 MB PMTiles basemap of Ghana</strong>, hosted separately and downloaded once, deliberately, on the student's terms. It is fetched in ranged chunks so a dropped connection resumes instead of restarting, and it is written to durable device storage so clearing the app cache does not destroy it. After that one download, the map is permanently available offline.</p>
+
+        <div class="callout">
+          <div class="lbl">A decision that was tested and reversed</div>
+          <p>An earlier "high precision" mode averaged GPS readings while standing still. Field testing showed it performed worse than simply letting the fix converge, because consecutive GPS errors are correlated rather than random. The feature was removed. Averaging correlated noise does not cancel it.</p>
+        </div>
+
+        <h2>Designing for the field, not the desk</h2>
+        <p>Field conditions shaped the interface more than any style preference. Sunlight, one free hand, gloves, and a phone that must not waste battery all push in the same direction: large targets, high contrast, and short paths.</p>
+        <ul>
+          <li><strong>One primary action per screen.</strong> Locate is a single large target, not a form to fill in first.</li>
+          <li><strong>Capture, do not type.</strong> Photo and voice sit beside the note field, because describing an outcrop out loud is faster than typing it on a hot afternoon.</li>
+          <li><strong>Context is automatic.</strong> Unit, position, accuracy and time are filled in by the app, so the student records observations rather than metadata.</li>
+          <li><strong>Manual coordinate entry.</strong> When a fix cannot be acquired, coordinates can be typed in and identification still runs.</li>
+        </ul>
+
+        <h2>Build &amp; distribution</h2>
+        <p>The app is React and TypeScript wrapped with Capacitor, so it ships as a native Android package while staying a single web codebase. The map renders with MapLibre GL. Field data is stored in durable native storage rather than the browser cache, because losing a day of observations is not an acceptable failure.</p>
+        <p>Distribution is a signed APK published through GitHub Releases rather than the Play Store, which suits a tool aimed at a specific department: updates ship immediately, and students install directly.</p>
+
+        <h2>Tools &amp; methods</h2>
+        <div class="tools">
+          <span>React</span>
+          <span>TypeScript</span>
+          <span>Capacitor</span>
+          <span>MapLibre GL JS</span>
+          <span>GeoJSON</span>
+          <span>PMTiles</span>
+          <span>Point-in-polygon geoprocessing</span>
+          <span>Offline-first architecture</span>
+        </div>
+
+        <h2>Where it stands</h2>
+        <p>GeoField is in active development and already usable in the field. The direction now is durability rather than features: cloud backup and restore, so a lost or reset phone does not take a semester of field notes with it.</p>
+        <p>The project sits exactly where my two interests meet. The geology decides what is correct, and the software decides whether anyone will actually use it in the field.</p>
+      </div>
+
+      <div class="cs-foot">
+        <p>Interested in the app, or in geospatial tooling generally?</p>
+        <a class="btn" href="../index.html#contact">
+          Get in touch
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="foot-inner">
+      <span class="b">Edwin Gyasi Owusu</span>
+      <span class="n">© 2026 · Kumasi, Ghana</span>
+    </div>
+  </footer>
+
+</body>
+</html>

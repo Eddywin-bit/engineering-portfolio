@@ -1093,21 +1093,48 @@
 
     /* =========== MOBILE REFINEMENTS =========== */
     @media (max-width: 600px) {
-      body { font-size: 16px; }
+      body { font-size: 15.5px; }
 
+      /* Type scale is tuned down on phones. The desktop scale was reading
+         oversized on a 390px screen (hero ~51px, section titles ~35px), which
+         costs vertical space and forces long headings to wrap awkwardly.
+         Headings take the bigger cut; body copy stays near 15-16px so it
+         remains comfortable to read. */
       .hero {
         min-height: auto;
         padding: 3rem 0 3.5rem;
       }
       .hero h1 {
-        font-size: clamp(2.6rem, 13vw, 3.4rem);
+        font-size: clamp(2.05rem, 10vw, 2.7rem);
+        line-height: 1.06;
         word-break: break-word;
         hyphens: none;
       }
       .hero-role {
-        font-size: 1.05rem;
+        font-size: 0.98rem;
         line-height: 1.5;
       }
+      .hero-sub { font-size: 0.98rem; }
+
+      .sec-title { font-size: 1.85rem; line-height: 1.14; }
+      .sec-sub { font-size: 0.98rem; }
+      .sec-eyebrow { font-size: 0.74rem; }
+
+      .project-title { font-size: 1.18rem; }
+      .project-desc { font-size: 0.9rem; }
+      .journal-title { font-size: 1.12rem; }
+      .journal-excerpt { font-size: 0.9rem; }
+      .exp-role { font-size: 1.05rem; }
+      .exp-desc { font-size: 0.9rem; }
+      .skill-block h3 { font-size: 1.18rem; }
+      .skill-note { font-size: 0.9rem; }
+      .contact-card h2 { font-size: 1.62rem; line-height: 1.18; }
+      .contact-card p { font-size: 0.98rem; }
+      .about-body p { font-size: 0.98rem; }
+      .post-title { font-size: 1.72rem; }
+      .post-body p, .post-body li { font-size: 0.98rem; }
+      .post-body p.lede { font-size: 1.06rem; }
+      .post-body h3 { font-size: 1.15rem; }
       .hero-role br { display: none; }
 
       /* Buttons stack full-width and are easy to tap */
@@ -1117,7 +1144,7 @@
       /* About stats: 2-up stays, but tighten */
       .about-stats { gap: 0.75rem; }
       .stat { padding: 1.2rem 1rem; }
-      .stat .n { font-size: 1.7rem; }
+      .stat .n { font-size: 1.5rem; }
 
       /* Projects: comfortable single column */
       .project-card { padding: 1.4rem; }
@@ -1151,7 +1178,7 @@
     }
 
     @media (max-width: 380px) {
-      .hero h1 { font-size: 2.3rem; }
+      .hero h1 { font-size: 1.95rem; }
       .about-stats { grid-template-columns: 1fr; }
       .nav-cta span, .nav-cta { font-size: 0.8rem; }
     }
@@ -1398,11 +1425,32 @@
         <!-- CMS:START e-projects -->
         <div class="sec-eyebrow reveal">Projects</div>
         <h2 class="sec-title reveal" data-d="1">Selected engineering work.</h2>
-        <p class="sec-sub reveal" data-d="2">Three case studies across process engineering, geostatistics, and geotechnical site characterization.</p>
+        <p class="sec-sub reveal" data-d="2">Four case studies across geospatial software, process engineering, geostatistics, and geotechnical site characterization.</p>
 
         <div class="projects-grid">
 
-          <a class="project-card reveal" href="case-studies/energy-audit.html">
+          <a class="project-card wide reveal" href="case-studies/geofield.html">
+            <div class="project-visual">
+              <img src="images/geofield/hero.png" alt="GeoField Android app: Locate screen and offline Ghana geological map" loading="lazy" />
+            </div>
+            <div class="project-cat"><span class="pin"></span> Mobile &amp; Geospatial Software</div>
+            <h3 class="project-title">GeoField — Offline Field Geology Companion</h3>
+            <p class="project-desc">An offline-first Android app that identifies the geological unit under your feet from GPS alone, covering all 17 mapped units of Ghana, with a 92 MB offline basemap and structured field logging for photos, voice and notes.</p>
+            <div class="project-footer">
+              <div class="project-tools">
+                <span>React + TypeScript</span>
+                <span>Capacitor</span>
+                <span>MapLibre GL</span>
+                <span>GeoJSON</span>
+              </div>
+              <span class="project-arrow">
+                Case Study
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+              </span>
+            </div>
+          </a>
+
+          <a class="project-card reveal" data-d="1" href="case-studies/energy-audit.html">
             <div class="project-visual">
               <img src="https://images.unsplash.com/photo-1590274853856-f22d5ee3d228?w=800&amp;q=80&amp;auto=format&amp;fit=crop" alt="Concrete batching plant" loading="lazy" />
             </div>
@@ -1421,7 +1469,7 @@
             </div>
           </a>
 
-          <a class="project-card reveal" data-d="1" href="case-studies/trace-metals.html">
+          <a class="project-card reveal" data-d="2" href="case-studies/trace-metals.html">
             <div class="project-visual">
               <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&amp;q=80&amp;auto=format&amp;fit=crop" alt="Soil samples and geological mapping" loading="lazy" />
             </div>
@@ -1441,7 +1489,7 @@
             </div>
           </a>
 
-          <a class="project-card wide reveal" data-d="2" href="case-studies/geotechnical.html">
+          <a class="project-card reveal" data-d="3" href="case-studies/geotechnical.html">
             <div class="project-visual">
               <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1600&amp;q=80&amp;auto=format&amp;fit=crop" alt="Geotechnical borehole drilling on site" loading="lazy" />
             </div>

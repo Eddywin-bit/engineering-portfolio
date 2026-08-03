@@ -315,6 +315,40 @@ the upstream fix, so it has not been written. Left deliberately broken.
 
 ## Updates Log
 
+- 2026-08-01: Added **GeoField** as the lead project, plus a mobile type-scale
+  fix. GeoField lives in two other repos, `Eddywin-bit/geofield-instrument`
+  (the app) and `Eddywin-bit/geofield-assets` (APK and the 92MB Ghana
+  PMTiles); neither is part of this repo, so they were attached to the session
+  and cloned to `/workspace/`.
+
+  The project images are **real UI, not mockups**: the app was installed and
+  run (`npx vite dev --host 127.0.0.1`, IPv4 is required, the sandbox has no
+  IPv6 and the default `--host` fails with `EAFNOSUPPORT`), then screenshotted
+  at 412x892 with geolocation faked to KNUST so the Locate and Log screens show
+  a genuine identification (Granitoid Undifferentiated). Screens are in
+  `images/geofield/`; `hero.png` is a 16:9 composite built by screenshotting a
+  local HTML file that frames two of them, since project cards need 16:9 and a
+  phone screenshot is tall. If the app UI changes, regenerate rather than edit.
+
+  Case study facts come from the app repo, not invention: 17 mapped geological
+  units, `com.eondesigns.geofield`, Capacitor 7 + React/TS, MapLibre GL v5, the
+  92MB PMTiles basemap fetched in resumable ranged chunks, and the removed
+  static-averaging GPS mode. That repo's CLAUDE.md marks the geology engine and
+  data shapes as locked files, so treat its content as read-only reference.
+
+  `projects.json` gained the entry and the previous `wide` card was set narrow,
+  since only one card should span the grid. The section subtitle said "Three
+  case studies" and is now "Four" — that string is content, so it does not
+  update itself.
+
+  Mobile type: the phone scale was genuinely oversized, measured at 390px as
+  hero 50.7px and section titles 35.2px. The `max-width:600px` block now sets an
+  explicit scale (hero 39px, section titles 29.6px, contact heading 25.9px,
+  body 15.5px), and the 380px hero override dropped 2.3rem -> 1.95rem. Headings
+  took the cut; body copy stays near 15-16px. For reference the designs site was
+  already modest on mobile (hero `text-4xl` = 36px, sections `text-3xl` = 30px),
+  so it was left alone; the engineering site was the outlier.
+
 - 2026-08-01: Added a **Journal** section to the root site, and split the
   journal content between the two sites by topic. The root site is the owner's
   personal site (engineering plus data analytics plus writing), not only an

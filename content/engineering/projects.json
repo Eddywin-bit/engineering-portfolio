@@ -1,8 +1,24 @@
 {
   "eyebrow": "Projects",
   "title": "Selected engineering work.",
-  "subtitle": "Three case studies across process engineering, geostatistics, and geotechnical site characterization.",
+  "subtitle": "Four case studies across geospatial software, process engineering, geostatistics, and geotechnical site characterization.",
   "items": [
+    {
+      "image_alt": "GeoField Android app: Locate screen and offline Ghana geological map",
+      "href": "case-studies/geofield.html",
+      "link_label": "Case Study",
+      "wide": true,
+      "title": "GeoField — Offline Field Geology Companion",
+      "image": "images/geofield/hero.png",
+      "tools": [
+        "React + TypeScript",
+        "Capacitor",
+        "MapLibre GL",
+        "GeoJSON"
+      ],
+      "description": "An offline-first Android app that identifies the geological unit under your feet from GPS alone, covering all 17 mapped units of Ghana, with a 92 MB offline basemap and structured field logging for photos, voice and notes.",
+      "category": "Mobile & Geospatial Software"
+    },
     {
       "image_alt": "Concrete batching plant",
       "href": "case-studies/energy-audit.html",
@@ -36,7 +52,7 @@
       "image_alt": "Geotechnical borehole drilling on site",
       "href": "case-studies/geotechnical.html",
       "link_label": "Case Study",
-      "wide": true,
+      "wide": false,
       "title": "Geotechnical Site Characterization from Borehole Data",
       "image": "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1600&q=80&auto=format&fit=crop",
       "tools": [
