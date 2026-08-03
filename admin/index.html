@@ -1268,6 +1268,23 @@
         'background:var(--bg-tint);border-radius:999px;color:var(--ink-soft)}',
         '.project-arrow{color:var(--emerald);font-size:.85rem;font-weight:500}',
 
+        /* journal cards, mirroring .journal-* on index.html */
+        '.journal-card{position:relative;overflow:hidden;background:var(--bg-elev);border:1px solid var(--line);',
+        'border-radius:var(--radius);padding:1.5rem}',
+        '.journal-card:before{content:"";position:absolute;top:0;left:0;width:100%;height:3px;',
+        'background:linear-gradient(90deg,var(--emerald),var(--gold))}',
+        '.journal-visual{aspect-ratio:16/10;background:var(--bg-tint);border-radius:var(--radius-sm);',
+        'margin:0 0 1.1rem;border:1px solid var(--line-soft);overflow:hidden;display:flex;',
+        'align-items:center;justify-content:center;color:var(--ink-faint);font-size:.8rem}',
+        '.journal-visual img{width:100%;height:100%;object-fit:cover}',
+        '.journal-date{display:inline-flex;align-items:center;gap:.5rem;font-size:.78rem;font-weight:500;',
+        'color:var(--emerald);margin:0 0 .6rem}',
+        '.journal-date .pin{width:6px;height:6px;border-radius:50%;background:var(--gold)}',
+        '.journal-title{font-family:var(--fh);font-weight:700;font-size:1.25rem;line-height:1.25;',
+        'letter-spacing:-.015em;color:var(--ink);margin:0 0 .6rem}',
+        '.journal-excerpt{color:var(--ink-mute);font-size:.93rem;line-height:1.6;margin:0 0 1.1rem}',
+        '.journal-arrow{color:var(--emerald);font-size:.85rem;font-weight:500}',
+
         /* dark eon strip, exactly as it appears on the live page */
         '.eon-strip{margin-top:1.4rem;background:var(--ink);color:var(--bg);border-radius:var(--radius);padding:1.7rem}',
         '.eon-strip .sec-eyebrow{color:var(--gold)}',
@@ -1590,6 +1607,24 @@
               h('h3', { className: 'exp-role' }, em(e.role, 'Role')),
               h('p', { className: 'exp-org' }, e.org || ''),
               h('p', { className: 'exp-desc' }, e.description || '')
+            );
+          }))
+        );
+      };
+
+      E.journal = function (d, props) {
+        return h('div', {},
+          eyebrowTitleSub(d),
+          h('div', { className: 'cards' }, list(d.posts).map(function (p) {
+            var src = media(props, p.image);
+            return h('div', { className: 'journal-card', key: key() },
+              h('div', { className: 'journal-visual' },
+                src ? h('img', { src: src, alt: p.title || '' }) : 'No image'
+              ),
+              p.date ? h('p', { className: 'journal-date' }, h('span', { className: 'pin' }), p.date) : null,
+              h('h3', { className: 'journal-title' }, em(p.title, 'Untitled post')),
+              h('p', { className: 'journal-excerpt' }, p.excerpt || ''),
+              h('p', { className: 'journal-arrow' }, 'Read article →')
             );
           }))
         );

@@ -217,6 +217,63 @@ function renderMarkdown(src) {
 }
 
 /* ============================================================
+   Engineering Journal body renderer
+   ------------------------------------------------------------
+   The engineering site is plain custom CSS (no Tailwind), so this
+   emits semantic tags styled under `.post-body` in index.html.
+   ============================================================ */
+
+function ejInline(s) {
+  return esc(s)
+    .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, '<a href="$2">$1</a>')
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    .replace(/(^|[^*])\*([^*]+)\*(?!\*)/g, '$1<em>$2</em>');
+}
+
+function ejBody(src) {
+  const blocks = String(src || '').trim().split(/\n\s*\n/);
+  const out = [];
+  let lede = false;
+  for (let i = 0; i < blocks.length; i++) {
+    const block = blocks[i].trim();
+    if (!block) continue;
+    const lines = block.split('\n').map((l) => l.trim());
+
+    if (/^###\s+/.test(block)) {
+      out.push(`            <h3>${ejInline(block.replace(/^###\s+/, ''))}</h3>`);
+      continue;
+    }
+    if (lines.every((l) => /^[-*]\s+/.test(l))) {
+      const items = lines
+        .map((l) => `<li>${ejInline(l.replace(/^[-*]\s+/, ''))}</li>`)
+        .join('\n                ');
+      out.push(`            <ul>\n                ${items}\n            </ul>`);
+      continue;
+    }
+    if (lines.every((l) => IMG_LINE.test(l))) {
+      const imgs = lines.map((l) => l.match(IMG_LINE));
+      let cap = '';
+      const next = (blocks[i + 1] || '').trim();
+      if (/^\*[^*]+\*$/.test(next)) {
+        cap = next.replace(/^\*|\*$/g, '');
+        i++;
+      }
+      const cells = imgs
+        .map((m) => `<img src="${attr(m[2])}" alt="${attr(m[1])}" loading="lazy">`)
+        .join('\n                ');
+      const capHtml = cap ? `\n                <figcaption>${esc(cap)}</figcaption>` : '';
+      const two = imgs.length > 1 ? ' two' : '';
+      out.push(`            <figure class="post-figs${two}">\n                ${cells}${capHtml}\n            </figure>`);
+      continue;
+    }
+    const cls = lede ? '' : ' class="lede"';
+    lede = true;
+    out.push(`            <p${cls}>${ejInline(block.replace(/\n/g, ' '))}</p>`);
+  }
+  return out.join('\n');
+}
+
+/* ============================================================
    ENGINEERING SITE
    ============================================================ */
 
@@ -228,6 +285,7 @@ function buildEngineering() {
   const projects = json('content', 'engineering', 'projects.json');
   const skills = json('content', 'engineering', 'skills.json');
   const experience = json('content', 'engineering', 'experience.json');
+  const journal = json('content', 'engineering', 'journal.json');
   const contact = json('content', 'engineering', 'contact.json');
   const footer = json('content', 'engineering', 'footer.json');
 
@@ -401,6 +459,48 @@ function buildEngineering() {
     `        <h2 class="sec-title reveal" data-d="1">${esc(experience.title)}</h2>\n` +
     `        <p class="sec-sub reveal" data-d="2">${esc(experience.subtitle)}</p>\n\n` +
     `        <div class="timeline">\n\n${entries}\n\n        </div>`;
+
+  /* ---- journal ---- */
+  const jCards = journal.posts
+    .map((p, i) => {
+      const d = i > 0 ? ` data-d="${i > 3 ? 1 : i}"` : '';
+      return (
+        `          <button type="button" class="journal-card reveal"${d} data-post="${i}" aria-haspopup="dialog">\n` +
+        `            <div class="journal-visual">\n` +
+        `              <img src="${attr(p.image)}" alt="${attr(p.title)}" loading="lazy" />\n` +
+        `            </div>\n` +
+        `            <div class="journal-date"><span class="pin"></span> ${esc(p.date)}</div>\n` +
+        `            <h3 class="journal-title">${esc(p.title)}</h3>\n` +
+        `            <p class="journal-excerpt">${esc(p.excerpt)}</p>\n` +
+        `            <span class="journal-arrow">\n` +
+        `              Read article\n` +
+        `              ${icon('arrow-right', '2.2')}\n` +
+        `            </span>\n` +
+        `          </button>`
+      );
+    })
+    .join('\n\n');
+
+  // Full post bodies live in the DOM (hidden) so they are crawlable and
+  // shareable; the modal script reveals the matching article on click.
+  const jArticles = journal.posts
+    .map(
+      (p, i) =>
+        `        <article class="journal-source" id="jpost-${i}" hidden>\n` +
+        `          <div class="post-date">${esc(p.date)}</div>\n` +
+        `          <h1 class="post-title">${esc(p.title)}</h1>\n` +
+        `          <div class="post-hero"><img src="${attr(p.image)}" alt="${attr(p.title)}" /></div>\n` +
+        `          <div class="post-body">\n${ejBody(p.body)}\n          </div>\n` +
+        `        </article>`
+    )
+    .join('\n');
+
+  regions['e-journal'] =
+    `        <div class="sec-eyebrow reveal">${esc(journal.eyebrow)}</div>\n` +
+    `        <h2 class="sec-title reveal" data-d="1">${esc(journal.title)}</h2>\n` +
+    `        <p class="sec-sub reveal" data-d="2">${esc(journal.subtitle)}</p>\n\n` +
+    `        <div class="journal-grid">\n\n${jCards}\n\n        </div>\n\n` +
+    `        <div class="journal-sources" hidden>\n${jArticles}\n        </div>`;
 
   /* ---- contact ---- */
   regions['e-contact'] =

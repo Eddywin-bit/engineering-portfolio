@@ -315,6 +315,48 @@ the upstream fix, so it has not been written. Left deliberately broken.
 
 ## Updates Log
 
+- 2026-08-01: Added a **Journal** section to the root site, and split the
+  journal content between the two sites by topic. The root site is the owner's
+  personal site (engineering plus data analytics plus writing), not only an
+  engineering CV, so long-form writing lives there now. "Empowering the Next
+  Gen" moved from `content/designs/journal.json` to a new
+  `content/engineering/journal.json`; the two design essays (Typography is
+  Voice, Why 'Eon'?) stay on Eon Designs. Posts are **not** duplicated: each
+  lives in exactly one place, so there is one copy to edit.
+
+  New region `e-journal` (engineering is 10 regions now, was 9), a `#journal`
+  section between Experience and Contact, and a nav link added via
+  `content/engineering/nav.json`. Cards reuse the `.project-card` language
+  (hover lift, emerald-to-gold top rail) with a gold date dot to distinguish
+  them.
+
+  The existing `renderMarkdown` could **not** be reused: it emits Tailwind
+  utility classes, which only exist on the designs site. The root site is plain
+  custom CSS, so `ejBody`/`ejInline` render the same markdown subset (###,
+  bullets, image groups with an italic caption line, bold/italic/links) as
+  semantic tags styled under `.post-body`. Same authoring rules, two renderers,
+  because the two sites do not share a stylesheet.
+
+  Full post bodies are emitted into the page inside a hidden
+  `.journal-sources` block and cloned into the modal on click, so the writing
+  is in the static HTML for SEO rather than existing only in JS.
+
+  CMS: new "8. Journal" file collection (Contact and Footer renumbered to 9 and
+  10). Note both collections now contain a file named `journal`, so the admin
+  preview dispatcher needed `E.journal` added beside `D.journal` — without it
+  the engineering entry silently falls through to the generic `Fallback`
+  preview. Preview styles for `.journal-*` were mirrored into the
+  `registerPreviewStyle` block per the existing rule.
+
+- 2026-08-01: Fixed three empty social icons on both sites' contact rows.
+  lucide dropped its brand icons, so `data-lucide="instagram"`, `"twitter"`,
+  and `"facebook"` rendered nothing, leaving empty bordered boxes (Pinterest
+  was fine because it was already an inline SVG). Added the three brand paths
+  to `FILL_ICONS` in `build.js` and generalised the social renderer to emit an
+  inline SVG for any network present there, falling back to lucide otherwise.
+  General lesson: do not rely on an icon CDN for brand marks, they get removed
+  for trademark reasons. The X mark is keyed as `twitter` to match the content.
+
 - 2026-08-01: Flipped the `/designs/` (Eon Designs) site from its dark luxury
   theme to a warm off-white light theme. Everything else (layout, content,
   images, animations) is unchanged. The theme was baked into ~180 Tailwind

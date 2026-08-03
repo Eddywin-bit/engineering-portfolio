@@ -5,6 +5,7 @@
     { "label": "Projects", "href": "#work" },
     { "label": "Skills", "href": "#skills" },
     { "label": "Experience", "href": "#experience" },
+    { "label": "Journal", "href": "#journal" },
     { "label": "Contact", "href": "#contact" }
   ],
   "cta_label": "Contact",

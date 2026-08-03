@@ -274,8 +274,37 @@ collections:
               - { label: Organisation, name: org, widget: string }
               - { label: Description, name: description, widget: text }
 
+      - name: journal
+        label: 8. Journal
+        file: content/engineering/journal.json
+        fields:
+          - { label: Eyebrow, name: eyebrow, widget: string }
+          - { label: Section Title, name: title, widget: string }
+          - { label: Section Subtitle, name: subtitle, widget: text }
+          - label: Posts
+            name: posts
+            widget: list
+            label_singular: Post
+            summary: '{{fields.date}} — {{fields.title}}'
+            fields:
+              - { label: Title, name: title, widget: string }
+              - {
+                  label: Date,
+                  name: date,
+                  widget: string,
+                  hint: 'Free text, e.g. Dec 09, 2025',
+                }
+              - { label: Cover Image, name: image, widget: image }
+              - { label: Excerpt, name: excerpt, widget: text }
+              - label: Body
+                name: body
+                widget: markdown
+                hint: >-
+                  Two or more images in a row become a side-by-side grid.
+                  An italic line straight after them becomes the caption.
+
       - name: contact
-        label: 8. Contact
+        label: 9. Contact
         file: content/engineering/contact.json
         fields:
           - { label: Heading, name: title, widget: string }
@@ -311,7 +340,7 @@ collections:
               - { label: Download File, name: download, widget: boolean, default: false }
 
       - name: footer
-        label: 9. Footer
+        label: 10. Footer
         file: content/engineering/footer.json
         fields:
           - { label: Brand Name, name: brand, widget: string }
