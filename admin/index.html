@@ -1621,12 +1621,22 @@
         return h('div', {}, eyebrowTitleSub(d));
       };
 
+      /* Dates are stored ISO so they sort; the site prints "Dec 09, 2025", so
+         the preview must too or it drifts from the page it is previewing. */
+      var MONTH_ABBR = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      function prettyDate(v) {
+        var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(v || '').trim());
+        if (!m) return String(v || '');
+        return MONTH_ABBR[+m[2] - 1] + ' ' + m[3] + ', ' + m[1];
+      }
+
       /* One journal post. Folder collections preview a single entry, so this
          renders the article the way its own page will read. */
       E.journal_posts = function (d, props) {
         var src = media(props, d.image);
         return h('div', {},
-          d.date ? h('p', { className: 'journal-date' }, h('span', { className: 'pin' }), d.date) : null,
+          d.date ? h('p', { className: 'journal-date' }, h('span', { className: 'pin' }), prettyDate(d.date)) : null,
           h('h1', { className: 'sec-title' }, em(d.title, 'Untitled post')),
           d.excerpt ? h('p', { className: 'sec-sub' }, d.excerpt) : null,
           h('div', { className: 'journal-visual' },
