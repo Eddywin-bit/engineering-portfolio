@@ -58,6 +58,7 @@ const linkAttrs = (item) => {
 
 const STROKE_ICONS = {
   'arrow-right': '<path d="M5 12h14M13 5l7 7-7 7"/>',
+  'arrow-left': '<path d="M19 12H5M12 19l-7-7 7-7"/>',
   'arrow-up-right': '<path d="M7 17L17 7M9 7h8v8"/>',
   'layers':
     '<path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>',
@@ -274,6 +275,183 @@ function ejBody(src) {
 }
 
 /* ============================================================
+   Journal post pages
+   ------------------------------------------------------------
+   Each post is a real page under /journal/, generated here rather
+   than hand-written, because posts are added through the CMS. The
+   stylesheet mirrors case-studies/*.html so an article and a case
+   study read as the same site. Regenerate, do not hand-edit: this
+   directory is rewritten on every build.
+   ============================================================ */
+
+function slugify(s) {
+  return String(s || '')
+    .toLowerCase()
+    .replace(/['’]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 60) || 'post';
+}
+
+const JOURNAL_CSS = `
+    :root {
+      --bg:#FAFAF8;--bg-elev:#FFFFFF;--bg-tint:#F3F1EB;--ink:#1C1C1C;--ink-soft:#3D3D3D;--ink-mute:#666666;--ink-faint:#A8A8A8;
+      --emerald:#0F766E;--emerald-hi:#14867D;--emerald-deep:#0A5952;--emerald-soft:rgba(15,118,110,0.08);--emerald-tint:#E8F2F0;
+      --gold:#C89B3C;--gold-soft:rgba(200,155,60,0.12);
+      --line:rgba(28,28,28,0.10);--line-soft:rgba(28,28,28,0.06);
+      --font-heading:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;--font-body:'Inter',system-ui,-apple-system,sans-serif;
+      --max:820px;--radius:16px;--ease:cubic-bezier(0.22,0.61,0.36,1);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+    body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:17px;line-height:1.7;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
+    a{color:inherit;text-decoration:none;}img{max-width:100%;display:block;}::selection{background:var(--emerald);color:#fff;}
+    .wrap{max-width:var(--max);margin:0 auto;padding:0 clamp(1.25rem,4vw,2rem);}
+    header.nav{position:sticky;top:0;z-index:60;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(16px) saturate(1.2);-webkit-backdrop-filter:blur(16px) saturate(1.2);border-bottom:1px solid var(--line-soft);}
+    .nav-inner{max-width:1180px;margin:0 auto;padding:1rem clamp(1.25rem,4vw,2rem);display:flex;align-items:center;justify-content:space-between;}
+    .brand{display:flex;align-items:center;gap:10px;font-family:var(--font-heading);letter-spacing:-0.01em;}
+    .brand-mark{height:30px;width:auto;display:block;}
+    .brand span{font-size:15px;font-weight:600;line-height:1;}
+    .back{display:inline-flex;align-items:center;gap:0.5rem;font-size:0.9rem;color:var(--ink-soft);transition:color 0.2s var(--ease);}
+    .back:hover{color:var(--emerald);}.back svg{width:16px;height:16px;}
+    .cs-header{padding:clamp(2.5rem,6vw,4rem) 0 clamp(1.2rem,3vw,1.8rem);}
+    .cs-cat{display:inline-flex;align-items:center;gap:0.5rem;font-size:0.8rem;font-weight:500;color:var(--emerald);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:1.2rem;}
+    .cs-cat .pin{width:6px;height:6px;border-radius:50%;background:var(--emerald);}
+    .cs-title{font-family:var(--font-heading);font-weight:800;font-size:clamp(2rem,5.5vw,3.2rem);line-height:1.08;letter-spacing:-0.03em;margin-bottom:1.2rem;}
+    .cs-lede{font-size:1.15rem;color:var(--ink-mute);line-height:1.6;max-width:60ch;}
+    .cs-hero-img{border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);margin:clamp(2rem,4vw,2.8rem) 0 clamp(2rem,5vw,3rem);background:var(--bg-tint);}
+    .cs-hero-img img{width:100%;height:auto;}
+    .cs-body{padding-bottom:clamp(3rem,8vw,5rem);max-width:68ch;}
+    .cs-body p{color:var(--ink-soft);margin-bottom:1.2rem;}
+    .cs-body p.lede{font-size:1.2rem;line-height:1.7;color:var(--ink);font-weight:500;margin-bottom:1.6rem;}
+    .cs-body h3{font-family:var(--font-heading);font-weight:700;font-size:clamp(1.35rem,3vw,1.7rem);letter-spacing:-0.02em;margin:clamp(2.2rem,5vw,3rem) 0 1rem;}
+    .cs-body strong{color:var(--ink);font-weight:600;}
+    .cs-body a{color:var(--emerald);font-weight:500;border-bottom:1px solid var(--emerald-soft);}
+    .cs-body a:hover{border-bottom-color:var(--emerald);}
+    .cs-body ul{list-style:none;margin:0 0 1.4rem;padding:0;}
+    .cs-body ul li{position:relative;padding-left:1.6rem;margin-bottom:0.7rem;color:var(--ink-soft);}
+    .cs-body ul li::before{content:"";position:absolute;left:0;top:0.65em;width:6px;height:6px;border-radius:50%;background:var(--emerald);}
+    .post-figs{margin:2rem 0;display:grid;gap:0.9rem;grid-template-columns:1fr;}
+    @media (min-width:700px){.post-figs.two{grid-template-columns:1fr 1fr;}}
+    .post-figs img{width:100%;height:100%;max-height:340px;object-fit:cover;border-radius:10px;border:1px solid var(--line-soft);background:var(--bg-tint);}
+    .post-figs figcaption{grid-column:1/-1;text-align:center;font-size:0.82rem;color:var(--ink-mute);margin-top:0.2rem;}
+    .cs-foot{border-top:1px solid var(--line);padding:clamp(2rem,5vw,3rem) 0;display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:space-between;}
+    .cs-foot p{color:var(--ink-mute);font-size:0.95rem;}
+    .btn{display:inline-flex;align-items:center;gap:0.5rem;padding:0.9rem 1.5rem;border-radius:999px;font-weight:500;font-size:0.95rem;background:var(--emerald);color:#fff;border:1px solid var(--emerald);transition:all 0.3s var(--ease);}
+    .btn:hover{background:var(--emerald-hi);transform:translateY(-2px);box-shadow:0 8px 24px rgba(15,118,110,0.25);}
+    .btn svg{width:15px;height:15px;}
+    footer{border-top:1px solid var(--line-soft);padding:2rem 0 2.5rem;}
+    .foot-inner{max-width:1180px;margin:0 auto;padding:0 clamp(1.25rem,4vw,2rem);display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+    .foot-inner .b{font-family:var(--font-heading);font-weight:700;}
+    .foot-inner .n{color:var(--ink-mute);font-size:0.85rem;}
+    @media (max-width:600px){
+      body{font-size:15.5px;}
+      .cs-title{font-size:1.72rem;}
+      .cs-lede{font-size:1.02rem;}
+      .cs-body p,.cs-body ul li{font-size:0.98rem;}
+      .cs-body p.lede{font-size:1.06rem;}
+      .cs-body h3{font-size:1.15rem;}
+      .cs-foot{flex-direction:column;align-items:flex-start;}
+    }`;
+
+function buildJournalPages(journal, posts) {
+  const dir = path.join(ROOT, 'journal');
+  fs.mkdirSync(dir, { recursive: true });
+
+  const wanted = new Set(posts.map((p) => p.slug + '.html'));
+  for (const f of fs.readdirSync(dir)) {
+    if (f.endsWith('.html') && !wanted.has(f)) fs.unlinkSync(path.join(dir, f));
+  }
+
+  for (const p of posts) {
+    // Paths in content are root-absolute or site-relative; a page one level
+    // down needs the leading slash so it does not resolve inside /journal/.
+    const img = /^(https?:)?\/\//.test(p.image) || p.image.startsWith('/')
+      ? p.image
+      : '/' + p.image.replace(/^\.?\//, '');
+    const url = `https://www.edwingyasi.online/journal/${p.slug}.html`;
+    const html =
+`<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${esc(p.title)}, Edwin Gyasi Owusu</title>
+  <meta name="description" content="${attr(p.excerpt)}" />
+  <link rel="canonical" href="${attr(url)}" />
+
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="${attr(url)}" />
+  <meta property="og:title" content="${attr(p.title)}" />
+  <meta property="og:description" content="${attr(p.excerpt)}" />
+  <meta property="og:image" content="${attr(/^https?:/.test(img) ? img : 'https://www.edwingyasi.online' + img)}" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>${JOURNAL_CSS}
+  </style>
+</head>
+<body>
+
+  <header class="nav">
+    <div class="nav-inner">
+      <a href="/index.html" class="brand"><img src="/images/logo-mark.png" alt="" width="30" height="36" class="brand-mark" /><span>Edwin Gyasi Owusu</span></a>
+      <a href="/index.html#journal" class="back">
+        ${icon('arrow-left', '2')}
+        All Writing
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap">
+      <div class="cs-header">
+        <div class="cs-cat"><span class="pin"></span> ${esc(p.date)}</div>
+        <h1 class="cs-title">${esc(p.title)}</h1>
+        <p class="cs-lede">${esc(p.excerpt)}</p>
+      </div>
+
+      <div class="cs-hero-img">
+        <img src="${attr(img)}" alt="${attr(p.title)}" />
+      </div>
+
+      <div class="cs-body">
+${ejBody(p.body)}
+      </div>
+
+      <div class="cs-foot">
+        <p>Thoughts on this, or want to work together?</p>
+        <a class="btn" href="/index.html#contact">
+          Get in touch
+          ${icon('arrow-right', '2.2')}
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="foot-inner">
+      <span class="b">Edwin Gyasi Owusu</span>
+      <span class="n">© 2026 · Kumasi, Ghana</span>
+    </div>
+  </footer>
+
+</body>
+</html>
+`;
+    fs.writeFileSync(path.join(dir, p.slug + '.html'), html);
+  }
+  return posts.length;
+}
+
+/* ============================================================
    ENGINEERING SITE
    ============================================================ */
 
@@ -461,11 +639,26 @@ function buildEngineering() {
     `        <div class="timeline">\n\n${entries}\n\n        </div>`;
 
   /* ---- journal ---- */
-  const jCards = journal.posts
+  // Slugs must be unique: two posts with the same title would otherwise
+  // overwrite one another's page.
+  const seen = new Map();
+  const jPosts = journal.posts.map((p) => {
+    let slug = slugify(p.title);
+    if (seen.has(slug)) {
+      const n = seen.get(slug) + 1;
+      seen.set(slug, n);
+      slug = `${slug}-${n}`;
+    } else {
+      seen.set(slug, 1);
+    }
+    return { ...p, slug };
+  });
+
+  const jCards = jPosts
     .map((p, i) => {
       const d = i > 0 ? ` data-d="${i > 3 ? 1 : i}"` : '';
       return (
-        `          <button type="button" class="journal-card reveal"${d} data-post="${i}" aria-haspopup="dialog">\n` +
+        `          <a class="journal-card reveal"${d} href="journal/${attr(p.slug)}.html">\n` +
         `            <div class="journal-visual">\n` +
         `              <img src="${attr(p.image)}" alt="${attr(p.title)}" loading="lazy" />\n` +
         `            </div>\n` +
@@ -476,31 +669,18 @@ function buildEngineering() {
         `              Read article\n` +
         `              ${icon('arrow-right', '2.2')}\n` +
         `            </span>\n` +
-        `          </button>`
+        `          </a>`
       );
     })
     .join('\n\n');
 
-  // Full post bodies live in the DOM (hidden) so they are crawlable and
-  // shareable; the modal script reveals the matching article on click.
-  const jArticles = journal.posts
-    .map(
-      (p, i) =>
-        `        <article class="journal-source" id="jpost-${i}" hidden>\n` +
-        `          <div class="post-date">${esc(p.date)}</div>\n` +
-        `          <h1 class="post-title">${esc(p.title)}</h1>\n` +
-        `          <div class="post-hero"><img src="${attr(p.image)}" alt="${attr(p.title)}" /></div>\n` +
-        `          <div class="post-body">\n${ejBody(p.body)}\n          </div>\n` +
-        `        </article>`
-    )
-    .join('\n');
+  buildJournalPages(journal, jPosts);
 
   regions['e-journal'] =
     `        <div class="sec-eyebrow reveal">${esc(journal.eyebrow)}</div>\n` +
     `        <h2 class="sec-title reveal" data-d="1">${esc(journal.title)}</h2>\n` +
     `        <p class="sec-sub reveal" data-d="2">${esc(journal.subtitle)}</p>\n\n` +
-    `        <div class="journal-grid">\n\n${jCards}\n\n        </div>\n\n` +
-    `        <div class="journal-sources" hidden>\n${jArticles}\n        </div>`;
+    `        <div class="journal-grid">\n\n${jCards}\n\n        </div>`;
 
   /* ---- contact ---- */
   regions['e-contact'] =

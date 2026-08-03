@@ -406,7 +406,7 @@
       position: absolute;
       top: 0; left: 0;
       width: 100%; height: 3px;
-      background: linear-gradient(90deg, var(--emerald), var(--gold));
+      background: var(--emerald);
       transform: scaleX(0);
       transform-origin: left;
       transition: transform 0.5s var(--ease);
@@ -527,7 +527,7 @@
       position: absolute;
       top: 0; left: 0;
       width: 100%; height: 3px;
-      background: linear-gradient(90deg, var(--emerald), var(--gold));
+      background: var(--emerald);
       transform: scaleX(0);
       transform-origin: left;
       transition: transform 0.5s var(--ease);
@@ -563,7 +563,7 @@
     .journal-date .pin {
       width: 6px; height: 6px;
       border-radius: 50%;
-      background: var(--gold);
+      background: var(--emerald);
     }
     .journal-title {
       font-family: var(--font-heading);
@@ -595,140 +595,6 @@
     .journal-card:hover .journal-arrow { gap: 0.6rem; }
     .journal-arrow svg { width: 12px; height: 12px; }
 
-    /* ---- Reader modal ---- */
-    .journal-modal { position: fixed; inset: 0; z-index: 200; }
-    .journal-modal[hidden] { display: none; }
-    .journal-modal-backdrop {
-      position: absolute; inset: 0;
-      background: rgba(28, 28, 28, 0.45);
-      backdrop-filter: blur(3px);
-      animation: jmFade 0.25s var(--ease);
-    }
-    .journal-modal-panel {
-      position: absolute; inset: 0;
-      overflow-y: auto;
-      overscroll-behavior: contain;
-      background: var(--bg);
-      animation: jmRise 0.35s var(--ease);
-    }
-    @media (min-width: 900px) {
-      .journal-modal-panel {
-        inset: 3vh 50% auto 50%;
-        transform: translateX(-50%);
-        width: min(860px, 92vw);
-        max-height: 94vh;
-        border-radius: var(--radius);
-        border: 1px solid var(--line);
-        box-shadow: 0 24px 70px rgba(28, 28, 28, 0.22);
-      }
-    }
-    @keyframes jmFade { from { opacity: 0; } to { opacity: 1; } }
-    @keyframes jmRise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
-    @media (min-width: 900px) {
-      @keyframes jmRise {
-        from { opacity: 0; transform: translate(-50%, 14px); }
-        to   { opacity: 1; transform: translate(-50%, 0); }
-      }
-    }
-    .journal-modal-close {
-      position: sticky;
-      top: 1rem;
-      float: right;
-      margin: 1rem 1rem 0 0;
-      z-index: 5;
-      width: 40px; height: 40px;
-      display: inline-flex; align-items: center; justify-content: center;
-      border-radius: 50%;
-      background: var(--bg-elev);
-      border: 1px solid var(--line);
-      color: var(--ink);
-      cursor: pointer;
-      transition: background 0.25s var(--ease), transform 0.25s var(--ease);
-    }
-    .journal-modal-close:hover { background: var(--emerald); color: #fff; transform: rotate(90deg); }
-    .journal-modal-close svg { width: 18px; height: 18px; }
-    .journal-modal-inner { padding-block: clamp(1.5rem, 4vw, 2.6rem) clamp(3rem, 7vw, 4.5rem); }
-
-    .post-date {
-      font-size: 0.8rem;
-      font-weight: 500;
-      color: var(--emerald);
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      margin-bottom: 0.8rem;
-    }
-    .post-title {
-      font-family: var(--font-heading);
-      font-weight: 700;
-      font-size: clamp(1.9rem, 4.6vw, 2.9rem);
-      line-height: 1.12;
-      letter-spacing: -0.025em;
-      color: var(--ink);
-      margin-bottom: 1.6rem;
-      max-width: 22ch;
-    }
-    .post-hero {
-      border-radius: var(--radius);
-      overflow: hidden;
-      border: 1px solid var(--line-soft);
-      margin-bottom: 2rem;
-      background: var(--bg-tint);
-    }
-    .post-hero img { width: 100%; height: auto; display: block; }
-
-    .post-body { max-width: 68ch; }
-    .post-body p {
-      font-size: 1.05rem;
-      line-height: 1.8;
-      color: var(--ink-soft);
-      margin-bottom: 1.15rem;
-    }
-    .post-body p.lede {
-      font-size: 1.2rem;
-      line-height: 1.7;
-      color: var(--ink);
-      font-weight: 500;
-      margin-bottom: 1.6rem;
-    }
-    .post-body h3 {
-      font-family: var(--font-heading);
-      font-weight: 700;
-      font-size: 1.3rem;
-      letter-spacing: -0.015em;
-      color: var(--ink);
-      margin: 2.4rem 0 0.9rem;
-    }
-    .post-body ul { margin: 0 0 1.3rem 1.1rem; }
-    .post-body li {
-      font-size: 1.05rem;
-      line-height: 1.75;
-      color: var(--ink-soft);
-      margin-bottom: 0.6rem;
-      padding-left: 0.3rem;
-    }
-    .post-body li::marker { color: var(--gold); }
-    .post-body strong { color: var(--ink); font-weight: 600; }
-    .post-body a { color: var(--emerald); font-weight: 500; border-bottom: 1px solid var(--emerald-soft); }
-    .post-body a:hover { border-bottom-color: var(--emerald); }
-
-    .post-figs { margin: 2rem 0; display: grid; gap: 0.8rem; grid-template-columns: 1fr; }
-    @media (min-width: 700px) { .post-figs.two { grid-template-columns: 1fr 1fr; } }
-    .post-figs img {
-      width: 100%; height: 100%;
-      max-height: 340px;
-      object-fit: cover;
-      border-radius: var(--radius-sm);
-      border: 1px solid var(--line-soft);
-      background: var(--bg-tint);
-    }
-    .post-figs figcaption {
-      grid-column: 1 / -1;
-      text-align: center;
-      font-size: 0.82rem;
-      color: var(--ink-mute);
-      margin-top: 0.2rem;
-    }
-    body.modal-open { overflow: hidden; }
 
     /* Eon spotlight strip */
     .eon-strip {
@@ -1131,10 +997,6 @@
       .contact-card h2 { font-size: 1.62rem; line-height: 1.18; }
       .contact-card p { font-size: 0.98rem; }
       .about-body p { font-size: 0.98rem; }
-      .post-title { font-size: 1.72rem; }
-      .post-body p, .post-body li { font-size: 0.98rem; }
-      .post-body p.lede { font-size: 1.06rem; }
-      .post-body h3 { font-size: 1.15rem; }
       .hero-role br { display: none; }
 
       /* Buttons stack full-width and are easy to tap */
@@ -1673,7 +1535,7 @@
 
         <div class="journal-grid">
 
-          <button type="button" class="journal-card reveal" data-post="0" aria-haspopup="dialog">
+          <a class="journal-card reveal" href="journal/empowering-the-next-gen.html">
             <div class="journal-visual">
               <img src="/designs/Assets/NewJuaben1.webp" alt="Empowering the Next Gen" loading="lazy" />
             </div>
@@ -1684,30 +1546,8 @@
               Read article
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
             </span>
-          </button>
+          </a>
 
-        </div>
-
-        <div class="journal-sources" hidden>
-        <article class="journal-source" id="jpost-0" hidden>
-          <div class="post-date">Dec 09, 2025</div>
-          <h1 class="post-title">Empowering the Next Gen</h1>
-          <div class="post-hero"><img src="/designs/Assets/NewJuaben1.webp" alt="Empowering the Next Gen" /></div>
-          <div class="post-body">
-            <p class="lede">The narrative that "Africa is catching up" is outdated. Walking into New Juaben Senior High School, I didn't see students who needed to be convinced about technology. I saw students who were already hungry for it.</p>
-            <p>On December 9th, I joined a team of professionals for a tech outreach program. The energy in the room was electric. These students know what AI is. They know what coding is. The barrier isn't a lack of interest; it is simply a lack of access.</p>
-            <figure class="post-figs two">
-                <img src="/designs/Assets/NewJuaben2.webp" alt="Students in class" loading="lazy">
-                <img src="/designs/Assets/NewJuaben3.webp" alt="The Outreach Team" loading="lazy">
-                <figcaption>Scenes from the New Juaben SHS Outreach</figcaption>
-            </figure>
-            <h3>Beyond the "Computer Lab"</h3>
-            <p>For years, IT education has been theoretical. Students write code on paper. Our mission was to bridge that gap. I spent time discussing the reality of the design industry—showing them that being a "creative" isn't just about drawing; it's about solving problems.</p>
-            <h3>The Hybrid Professional</h3>
-            <p>The most critical lesson I shared is that in today's world, having just one skill is not enough. The future belongs to those who are constantly learning. You cannot afford to be static.</p>
-            <p>To succeed, you must build a diverse "stack" of skills. It is not enough to just know how to design; you need to understand strategy, learn new software, and adapt to AI tools. The professionals who win are the ones who are versatile enough to solve any problem that is thrown at them. That is the mindset of continuous growth I champion wherever.</p>
-          </div>
-        </article>
         </div>
 <!-- CMS:END e-journal -->
       </div>
@@ -1764,17 +1604,6 @@
 <!-- CMS:END e-footer -->
       </div>
     </footer>
-
-    <!-- ============ JOURNAL READER MODAL ============ -->
-    <div class="journal-modal" id="journal-modal" hidden role="dialog" aria-modal="true" aria-label="Journal article">
-      <div class="journal-modal-backdrop" data-close></div>
-      <div class="journal-modal-panel">
-        <button class="journal-modal-close" type="button" data-close aria-label="Close article">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
-        </button>
-        <div class="wrap journal-modal-inner" id="journal-modal-inner"></div>
-      </div>
-    </div>
 
   </main>
 
@@ -1841,44 +1670,7 @@
         stats.forEach(el => cio.observe(el));
       }
 
-      /* ---- 5. Journal reader modal ---- */
-      const jModal = document.getElementById('journal-modal');
-      const jInner = document.getElementById('journal-modal-inner');
-      if (jModal && jInner) {
-        let lastFocused = null;
-
-        const closeJournal = () => {
-          jModal.hidden = true;
-          jInner.innerHTML = '';
-          document.body.classList.remove('modal-open');
-          if (lastFocused) lastFocused.focus();
-        };
-
-        const openJournal = (i, trigger) => {
-          const src = document.getElementById('jpost-' + i);
-          if (!src) return;
-          lastFocused = trigger || null;
-          jInner.innerHTML = src.innerHTML;
-          jModal.hidden = false;
-          document.body.classList.add('modal-open');
-          jModal.querySelector('.journal-modal-panel').scrollTop = 0;
-          jModal.querySelector('.journal-modal-close').focus();
-        };
-
-        document.querySelectorAll('.journal-card').forEach(card => {
-          card.addEventListener('click', () => openJournal(card.dataset.post, card));
-        });
-
-        jModal.querySelectorAll('[data-close]').forEach(el => {
-          el.addEventListener('click', closeJournal);
-        });
-
-        document.addEventListener('keydown', (e) => {
-          if (e.key === 'Escape' && !jModal.hidden) closeJournal();
-        });
-      }
-
-      /* ---- 6. Nav elevation on scroll ---- */
+      /* ---- 5. Nav elevation on scroll ---- */
       const nav = document.querySelector('header.nav');
       let ticking = false;
       window.addEventListener('scroll', () => {
