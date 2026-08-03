@@ -315,6 +315,43 @@ the upstream fix, so it has not been written. Left deliberately broken.
 
 ## Updates Log
 
+- 2026-08-01: Journal posts moved from a list widget to a **folder collection**,
+  so the panel can delete them.
+
+  A post deleted in the panel stayed live, and the toolbar read "Published"
+  (Decap's label for "no unsaved changes") rather than offering "Publish".
+  Removing an item from a `widget: list` inside a file collection had not
+  marked the entry dirty, so nothing was ever committed. Verified against
+  `origin/main`: the only CMS commit touching the file was the one that added
+  the post, and no delete commit exists. This could not be reproduced here,
+  because the panel loads Decap from unpkg and the sandbox blocks it.
+
+  Rather than work around the list widget, posts are now **one file each** in
+  `content/engineering/journal/`, exposed as a top-level `journal_posts` folder
+  collection. Folder collections have first-class **New Post** and **Delete
+  entry** actions that commit immediately, which sidesteps the dirty-tracking
+  problem entirely. `content/engineering/journal.json` keeps only the section
+  heading now.
+
+  Consequences worth knowing:
+  - The **filename is the slug and therefore the URL**, so renaming a post no
+    longer changes its link. `build.js` reads the folder with
+    `loadJournalPosts()`.
+  - Dates are stored ISO (`YYYY-MM-DD`) via a datetime widget so posts sort
+    newest first, and `displayDate()` renders "Dec 09, 2025". It parses the
+    string by hand rather than with `Date()`, which would shift a bare
+    `YYYY-MM-DD` by a day in a negative-offset timezone.
+  - The preview dispatcher keyed on entry slug **before** collection name,
+    which was safe only while every entry was a fixed file name. With
+    user-named posts, an article titled "Hero" would have rendered with the
+    hero-section renderer. It now skips the slug lookup for folder
+    collections (`props.collection.get('folder')`).
+  - A folder collection is a **top-level** entry in `collections:`, not an item
+    under a file collection's `files:`. Nesting it parses but does nothing.
+
+  The projects list still uses a list widget, so the same deletion problem may
+  apply there; it has not been converted.
+
 - 2026-08-01: Hero name set edge to edge, plus two CMS findings from real use.
 
   **Hero name.** The name now fills the column on phones and still never wraps.

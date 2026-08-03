@@ -1284,6 +1284,9 @@
         'letter-spacing:-.015em;color:var(--ink);margin:0 0 .6rem}',
         '.journal-excerpt{color:var(--ink-mute);font-size:.93rem;line-height:1.6;margin:0 0 1.1rem}',
         '.journal-arrow{color:var(--emerald);font-size:.85rem;font-weight:500}',
+        '.post-preview-body{margin-top:1.2rem}',
+        '.post-preview-body p{color:var(--ink-soft);margin:0 0 1rem;line-height:1.7}',
+        '.post-preview-body h3{font-family:var(--fh);font-weight:700;font-size:1.2rem;margin:1.6rem 0 .7rem;color:var(--ink)}',
 
         /* dark eon strip, exactly as it appears on the live page */
         '.eon-strip{margin-top:1.4rem;background:var(--ink);color:var(--bg);border-radius:var(--radius);padding:1.7rem}',
@@ -1612,21 +1615,36 @@
         );
       };
 
-      E.journal = function (d, props) {
+      /* "8. Journal Section" is now only the heading above the grid; the
+         posts live in the journal_posts folder collection below. */
+      E.journal = function (d) {
+        return h('div', {}, eyebrowTitleSub(d));
+      };
+
+      /* One journal post. Folder collections preview a single entry, so this
+         renders the article the way its own page will read. */
+      E.journal_posts = function (d, props) {
+        var src = media(props, d.image);
         return h('div', {},
-          eyebrowTitleSub(d),
-          h('div', { className: 'cards' }, list(d.posts).map(function (p) {
-            var src = media(props, p.image);
-            return h('div', { className: 'journal-card', key: key() },
-              h('div', { className: 'journal-visual' },
-                src ? h('img', { src: src, alt: p.title || '' }) : 'No image'
-              ),
-              p.date ? h('p', { className: 'journal-date' }, h('span', { className: 'pin' }), p.date) : null,
-              h('h3', { className: 'journal-title' }, em(p.title, 'Untitled post')),
-              h('p', { className: 'journal-excerpt' }, p.excerpt || ''),
-              h('p', { className: 'journal-arrow' }, 'Read article →')
-            );
-          }))
+          d.date ? h('p', { className: 'journal-date' }, h('span', { className: 'pin' }), d.date) : null,
+          h('h1', { className: 'sec-title' }, em(d.title, 'Untitled post')),
+          d.excerpt ? h('p', { className: 'sec-sub' }, d.excerpt) : null,
+          h('div', { className: 'journal-visual' },
+            src ? h('img', { src: src, alt: d.title || '' }) : 'No image'
+          ),
+          h('div', { className: 'post-preview-body' },
+            String(d.body || '')
+              .split(/\n\s*\n/)
+              .filter(function (b) { return b.trim(); })
+              .map(function (b) {
+                var t = b.trim();
+                if (/^###\s+/.test(t)) {
+                  return h('h3', { key: key() }, t.replace(/^###\s+/, ''));
+                }
+                if (/^!\[/.test(t)) return null; /* images render on the page */
+                return h('p', { key: key() }, t.replace(/\n/g, ' '));
+              })
+          )
         );
       };
 
@@ -1863,7 +1881,12 @@
         var collection = props.collection.get('name');
         var slug = props.entry.get('slug') || '';
         var table = collection === 'designs' ? D : E;
-        var render = table[slug] || table[collection] || Fallback;
+        // File collections are keyed by file name (meta, nav, hero, ...).
+        // Folder collections must NOT be, because their slug comes from the
+        // post title: an article called "Hero" would otherwise be previewed
+        // with the hero-section renderer.
+        var isFolder = !!props.collection.get('folder');
+        var render = (!isFolder && table[slug]) || table[collection] || Fallback;
         try {
           return render(data, props);
         } catch (err) {
@@ -1877,6 +1900,7 @@
       [
         'meta', 'nav', 'hero', 'about', 'projects', 'skills',
         'experience', 'contact', 'footer', 'works', 'vault', 'journal',
+        'journal_posts',
         'engineering', 'designs',
       ].forEach(function (name) {
         try { CMS.registerPreviewTemplate(name, Preview); } catch (e) {}

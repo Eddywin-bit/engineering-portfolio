@@ -293,6 +293,35 @@ function slugify(s) {
     .slice(0, 60) || 'post';
 }
 
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+/* Posts store an ISO date so they can sort; the page shows "Dec 09, 2025".
+   Parsed by hand rather than with Date() so a plain YYYY-MM-DD is not shifted
+   a day by the local timezone. */
+function displayDate(v) {
+  const s = String(v || '').trim();
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(s);
+  if (!m) return s;
+  return `${MONTHS[+m[2] - 1]} ${m[3]}, ${m[1]}`;
+}
+
+/* One file per post, so the CMS can create and DELETE them as real entries.
+   The filename is the slug and therefore the URL, which means renaming a post
+   does not break its link. Newest first. */
+function loadJournalPosts() {
+  const dir = path.join(ROOT, 'content', 'engineering', 'journal');
+  if (!fs.existsSync(dir)) return [];
+  return fs
+    .readdirSync(dir)
+    .filter((f) => f.endsWith('.json'))
+    .map((f) => {
+      const p = JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8'));
+      return { ...p, slug: f.replace(/\.json$/, ''), display_date: displayDate(p.date) };
+    })
+    .sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
+}
+
 const JOURNAL_CSS = `
     :root {
       --bg:#FAFAF8;--bg-elev:#FFFFFF;--bg-tint:#F3F1EB;--ink:#1C1C1C;--ink-soft:#3D3D3D;--ink-mute:#666666;--ink-faint:#A8A8A8;
@@ -413,7 +442,7 @@ function buildJournalPages(journal, posts) {
   <main>
     <div class="wrap">
       <div class="cs-header">
-        <div class="cs-cat"><span class="pin"></span> ${esc(p.date)}</div>
+        <div class="cs-cat"><span class="pin"></span> ${esc(p.display_date || p.date)}</div>
         <h1 class="cs-title">${esc(p.title)}</h1>
         <p class="cs-lede">${esc(p.excerpt)}</p>
       </div>
@@ -657,20 +686,9 @@ function buildEngineering() {
     `        <div class="timeline">\n\n${entries}\n\n        </div>`;
 
   /* ---- journal ---- */
-  // Slugs must be unique: two posts with the same title would otherwise
-  // overwrite one another's page.
-  const seen = new Map();
-  const jPosts = journal.posts.map((p) => {
-    let slug = slugify(p.title);
-    if (seen.has(slug)) {
-      const n = seen.get(slug) + 1;
-      seen.set(slug, n);
-      slug = `${slug}-${n}`;
-    } else {
-      seen.set(slug, 1);
-    }
-    return { ...p, slug };
-  });
+  // Posts are one file each (see loadJournalPosts), so the slug is the
+  // filename and uniqueness is guaranteed by the filesystem.
+  const jPosts = loadJournalPosts();
 
   const jCards = jPosts
     .map((p, i) => {
@@ -680,7 +698,7 @@ function buildEngineering() {
         `            <div class="journal-visual">\n` +
         `              <img src="${attr(p.image)}" alt="${attr(p.title)}" loading="lazy" />\n` +
         `            </div>\n` +
-        `            <div class="journal-date"><span class="pin"></span> ${esc(p.date)}</div>\n` +
+        `            <div class="journal-date"><span class="pin"></span> ${esc(p.display_date)}</div>\n` +
         `            <h3 class="journal-title">${esc(p.title)}</h3>\n` +
         `            <p class="journal-excerpt">${esc(p.excerpt)}</p>\n` +
         `            <span class="journal-arrow">\n` +

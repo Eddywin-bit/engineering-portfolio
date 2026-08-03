@@ -287,47 +287,15 @@ collections:
               - { label: Description, name: description, widget: text }
 
       - name: journal
-        label: 8. Journal
+        label: 8. Journal Section
         file: content/engineering/journal.json
         description: >-
-          Add a post here and its own page is created automatically when the
-          site publishes. Nothing else needs to be set up. Deleting a post
-          removes its page too.
+          Only the heading above the journal on the home page. The posts
+          themselves are in "9. Journal Posts".
         fields:
           - { label: Eyebrow, name: eyebrow, widget: string }
           - { label: Section Title, name: title, widget: string }
           - { label: Section Subtitle, name: subtitle, widget: text }
-          - label: Posts
-            name: posts
-            widget: list
-            label_singular: Post
-            summary: '{{fields.date}} — {{fields.title}}'
-            fields:
-              - { label: Title, name: title, widget: string }
-              - {
-                  label: Date,
-                  name: date,
-                  widget: string,
-                  hint: 'Free text, e.g. Dec 09, 2025',
-                }
-              # Block style so the hint can be multi-line. A flow mapping
-              # cannot contain a block scalar; see the note in Links To above.
-              - label: Cover Image
-                name: image
-                widget: image
-                hint: >-
-                  Keep the file under 1 MB. Larger images still publish and
-                  still show on the live site, but they appear broken here in
-                  the panel, because the editor loads media through the GitHub
-                  API and that only returns files up to 1 MB. Around 1600px
-                  wide saved as JPEG is plenty.
-              - { label: Excerpt, name: excerpt, widget: text }
-              - label: Body
-                name: body
-                widget: markdown
-                hint: >-
-                  Two or more images in a row become a side-by-side grid.
-                  An italic line straight after them becomes the caption.
 
       - name: contact
         label: 9. Contact
@@ -386,6 +354,53 @@ collections:
               - { label: Link, name: href, widget: string }
               - { label: Accessible Label, name: label, widget: string }
               - { label: Open in New Tab, name: new_tab, widget: boolean, default: true }
+
+  # A FOLDER collection, not a list inside a file. This is deliberate:
+  # each post is its own entry, so the editor gets a real "New Post"
+  # button and a real "Delete entry" button. Removing an item from a list
+  # widget did not reliably register as a change, which left deleted posts
+  # live on the site. One file per post also means the filename is the
+  # slug, so renaming a post never changes its URL.
+  - name: journal_posts
+    label: Journal Posts
+    label_singular: Post
+    folder: content/engineering/journal
+    extension: json
+    format: json
+    create: true
+    delete: true
+    slug: '{{slug}}'
+    summary: '{{date}} — {{title}}'
+    sortable_fields: [date, title]
+    description: >-
+      One entry per article. Use "New Post" to add one, and open a post
+      and choose Delete entry to remove it. Its page on the site is
+      created and removed automatically, newest first.
+    fields:
+      - { label: Title, name: title, widget: string }
+      - label: Date
+        name: date
+        widget: datetime
+        date_format: 'YYYY-MM-DD'
+        time_format: false
+        format: 'YYYY-MM-DD'
+        hint: Controls the order on the page. Newest posts show first.
+      - label: Cover Image
+        name: image
+        widget: image
+        hint: >-
+          Keep the file under 1 MB. Larger images still publish and still
+          show on the live site, but they appear broken here in the panel,
+          because the editor loads media through the GitHub API and that
+          only returns files up to 1 MB. Around 1600px wide saved as JPEG
+          is plenty.
+      - { label: Excerpt, name: excerpt, widget: text }
+      - label: Body
+        name: body
+        widget: markdown
+        hint: >-
+          Two or more images in a row become a side-by-side grid.
+          An italic line straight after them becomes the caption.
 
   ####################################################################
   # EON DESIGNS SITE  (edwingyasi.online/designs)
