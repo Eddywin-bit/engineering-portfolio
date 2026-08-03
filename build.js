@@ -541,15 +541,31 @@ function buildEngineering() {
     `\n          </div>\n        </div>`;
 
   /* ---- projects ---- */
+  // Written defensively because these entries are authored in the CMS by
+  // someone who does not edit code. A project with no case study page yet
+  // renders as a non-clickable card rather than a link to a 404, and a
+  // missing list must not throw and take the whole build down with it.
   const cards = projects.items
     .map((p, i) => {
       const d = i > 0 ? ` data-d="${i}"` : '';
       const wide = p.wide ? ' wide' : '';
-      const tools = p.tools
+      const tools = (p.tools || [])
         .map((t) => `                <span>${esc(t)}</span>`)
         .join('\n');
+      const href = String(p.href || '').trim();
+      const ext = /^https?:\/\//i.test(href) ? ' target="_blank" rel="noopener"' : '';
+      const open = href
+        ? `          <a class="project-card${wide} reveal"${d} href="${attr(href)}"${ext}>`
+        : `          <div class="project-card${wide} reveal no-link"${d}>`;
+      const close = href ? `          </a>` : `          </div>`;
+      const arrow = href
+        ? `              <span class="project-arrow">\n` +
+          `                ${esc(p.link_label || 'View project')}\n` +
+          `                ${icon('arrow-right', '2.2')}\n` +
+          `              </span>\n`
+        : '';
       return (
-        `          <a class="project-card${wide} reveal"${d} href="${attr(p.href)}">\n` +
+        `${open}\n` +
         `            <div class="project-visual">\n` +
         `              <img src="${attr(p.image)}" alt="${attr(p.image_alt)}" loading="lazy" />\n` +
         `            </div>\n` +
@@ -558,12 +574,9 @@ function buildEngineering() {
         `            <p class="project-desc">${esc(p.description)}</p>\n` +
         `            <div class="project-footer">\n` +
         `              <div class="project-tools">\n${tools}\n              </div>\n` +
-        `              <span class="project-arrow">\n` +
-        `                ${esc(p.link_label)}\n` +
-        `                ${icon('arrow-right', '2.2')}\n` +
-        `              </span>\n` +
+        arrow +
         `            </div>\n` +
-        `          </a>`
+        `${close}`
       );
     })
     .join('\n\n');
@@ -595,7 +608,7 @@ function buildEngineering() {
   const blocks = skills.blocks
     .map((b, i) => {
       const d = i > 0 ? ` data-d="${i > 2 ? 1 : i}"` : '';
-      const badges = b.badges
+      const badges = (b.badges || [])
         .map((x) => `              <span class="badge">${esc(x)}</span>`)
         .join('\n');
       return (

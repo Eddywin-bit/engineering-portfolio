@@ -1,7 +1,7 @@
 {
   "eyebrow": "Projects",
   "title": "Selected engineering work.",
-  "subtitle": "Four case studies across geospatial software, process engineering, geostatistics, and geotechnical site characterization.",
+  "subtitle": "Case studies across geospatial software, geostatistics, and geotechnical site characterization.",
   "items": [
     {
       "image_alt": "GeoField Android app: Locate screen and offline Ghana geological map",
@@ -18,20 +18,6 @@
       ],
       "description": "An offline-first Android app that identifies the geological unit under your feet from GPS alone, covering all 17 mapped units of Ghana, with a 92 MB offline basemap and structured field logging for photos, voice and notes.",
       "category": "Mobile & Geospatial Software"
-    },
-    {
-      "image_alt": "Concrete batching plant",
-      "href": "case-studies/energy-audit.html",
-      "link_label": "Case Study",
-      "wide": false,
-      "title": "Energy Efficiency Audit of a Construction Business",
-      "image": "https://images.unsplash.com/photo-1590274853856-f22d5ee3d228?w=800&q=80&auto=format&fit=crop",
-      "tools": [
-        "Hydraulic Analysis",
-        "Process Modeling"
-      ],
-      "description": "A self-initiated review of electricity use at a construction materials company, identifying high-consumption areas and proposing practical cost savings.",
-      "category": "Operations & Cost Optimization"
     },
     {
       "image_alt": "Soil samples and geological mapping",

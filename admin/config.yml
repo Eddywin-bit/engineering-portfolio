@@ -192,24 +192,36 @@ collections:
                   widget: string,
                   hint: Describes the image for screen readers and Google.,
                 }
-              - {
-                  label: Links To,
-                  name: href,
-                  widget: string,
-                  hint: 'e.g. case-studies/energy-audit.html',
-                }
-              - { label: Link Label, name: link_label, widget: string, default: Case Study }
-              - {
-                  label: Full Width Card,
-                  name: wide,
-                  widget: boolean,
-                  default: false,
-                  hint: Makes this card span the whole row.,
-                }
+              # Block style, not { flow } style: a YAML block scalar (>-)
+              # cannot be used inside a flow mapping, and doing so throws a
+              # parse error that takes the whole admin panel down.
+              - label: Links To
+                name: href
+                widget: string
+                required: false
+                hint: >-
+                  Optional. Leave EMPTY unless the page already exists, and the
+                  card simply will not be clickable. An existing case study
+                  looks like case-studies/geofield.html. A full address starting
+                  with https:// also works and opens in a new tab.
+              - label: Link Label
+                name: link_label
+                widget: string
+                required: false
+                default: Case Study
+                hint: Ignored when Links To is empty.
+              - label: Full Width Card
+                name: wide
+                widget: boolean
+                default: false
+                hint: >-
+                  Makes this card span the whole row. Use it on one card at
+                  most, otherwise the grid stops alternating.
               - label: Tools & Methods
                 name: tools
                 widget: list
                 label_singular: Tool
+                required: false
                 field: { label: Tool, name: tool, widget: string }
           - label: Eon Designs Spotlight
             name: eon_strip
@@ -277,6 +289,10 @@ collections:
       - name: journal
         label: 8. Journal
         file: content/engineering/journal.json
+        description: >-
+          Add a post here and its own page is created automatically when the
+          site publishes. Nothing else needs to be set up. Deleting a post
+          removes its page too.
         fields:
           - { label: Eyebrow, name: eyebrow, widget: string }
           - { label: Section Title, name: title, widget: string }

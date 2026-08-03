@@ -315,6 +315,37 @@ the upstream fix, so it has not been written. Left deliberately broken.
 
 ## Updates Log
 
+- 2026-08-01: Content edits, plus hardening the CMS against non-coder input.
+
+  Removed the Energy Efficiency Audit project (not a real project) and deleted
+  its now-orphaned `case-studies/energy-audit.html`, recoverable from git.
+  Certifications: Google Data Analytics is complete, so `· 3 / 8` became
+  `Certificate`; French and Genser were dropped.
+
+  The projects subtitle hardcoded a count ("Three case studies", later "Four"),
+  which silently goes stale every time a project is added or removed. It is
+  count-free now. **Do not reintroduce a number into that string.**
+
+  The panel is operated by someone who does not edit code, so two real traps
+  were closed in the project card renderer:
+  - `href` was always rendered as an `<a>`, so a project added before its case
+    study page exists would have linked to a 404. `href` is optional now: blank
+    renders a `<div class="project-card no-link">` with the arrow suppressed and
+    the hover lift disabled, and an `https://` value opens in a new tab.
+  - `p.tools.map` and `b.badges.map` threw on an empty list, which fails the
+    whole build, not just that card. Both are `(x || [])` now.
+  Verified by adding a project with no link and no tools plus a new journal
+  post, building, and confirming the page renders and the post's page appears.
+
+  `admin/config.yml` gained hints saying exactly this, and the Journal
+  collection has a description noting its pages are created automatically.
+
+  **YAML trap worth remembering:** a block scalar (`>-`) cannot be used inside
+  a flow mapping (`- { label: x, hint: >- ... }`). It throws
+  `BAD_SCALAR_START` and takes the entire admin panel down, not just that
+  field. Fields needing a multi-line hint must be written in block style. This
+  was caught only because the config is parse-checked; do that after editing it.
+
 - 2026-08-01: Journal posts are **real pages** now, not a modal, and the card
   hover rail is one colour.
 

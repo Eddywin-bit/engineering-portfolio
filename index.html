@@ -401,6 +401,12 @@
       border-color: var(--emerald-soft);
       box-shadow: 0 12px 32px rgba(28, 28, 28, 0.06);
     }
+    /* A project added in the CMS before its case study page exists renders as
+       a plain card, so it never advertises a link that would 404. */
+    .project-card.no-link { cursor: default; }
+    .project-card.no-link:hover { transform: none; box-shadow: none; border-color: var(--line); }
+    .project-card.no-link:hover::before { transform: scaleX(0); }
+    .project-card.no-link .project-footer { border-top: none; padding-top: 0; }
     .project-card::before {
       content: "";
       position: absolute;
@@ -1287,7 +1293,7 @@
         <!-- CMS:START e-projects -->
         <div class="sec-eyebrow reveal">Projects</div>
         <h2 class="sec-title reveal" data-d="1">Selected engineering work.</h2>
-        <p class="sec-sub reveal" data-d="2">Four case studies across geospatial software, process engineering, geostatistics, and geotechnical site characterization.</p>
+        <p class="sec-sub reveal" data-d="2">Case studies across geospatial software, geostatistics, and geotechnical site characterization.</p>
 
         <div class="projects-grid">
 
@@ -1312,26 +1318,7 @@
             </div>
           </a>
 
-          <a class="project-card reveal" data-d="1" href="case-studies/energy-audit.html">
-            <div class="project-visual">
-              <img src="https://images.unsplash.com/photo-1590274853856-f22d5ee3d228?w=800&amp;q=80&amp;auto=format&amp;fit=crop" alt="Concrete batching plant" loading="lazy" />
-            </div>
-            <div class="project-cat"><span class="pin"></span> Operations &amp; Cost Optimization</div>
-            <h3 class="project-title">Energy Efficiency Audit of a Construction Business</h3>
-            <p class="project-desc">A self-initiated review of electricity use at a construction materials company, identifying high-consumption areas and proposing practical cost savings.</p>
-            <div class="project-footer">
-              <div class="project-tools">
-                <span>Hydraulic Analysis</span>
-                <span>Process Modeling</span>
-              </div>
-              <span class="project-arrow">
-                Case Study
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-              </span>
-            </div>
-          </a>
-
-          <a class="project-card reveal" data-d="2" href="case-studies/trace-metals.html">
+          <a class="project-card reveal" data-d="1" href="case-studies/trace-metals.html">
             <div class="project-visual">
               <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&amp;q=80&amp;auto=format&amp;fit=crop" alt="Soil samples and geological mapping" loading="lazy" />
             </div>
@@ -1351,7 +1338,7 @@
             </div>
           </a>
 
-          <a class="project-card reveal" data-d="3" href="case-studies/geotechnical.html">
+          <a class="project-card reveal" data-d="2" href="case-studies/geotechnical.html">
             <div class="project-visual">
               <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1600&amp;q=80&amp;auto=format&amp;fit=crop" alt="Geotechnical borehole drilling on site" loading="lazy" />
             </div>
@@ -1459,11 +1446,9 @@
             <h3>Certifications</h3>
             <p class="skill-note">Ongoing training and formal credentials.</p>
             <div class="badges">
-              <span class="badge">Google Data Analytics · 3 / 8</span>
+              <span class="badge">Google Data Analytics Certificate</span>
               <span class="badge">AusIMM Member</span>
-              <span class="badge">Genser Energy Technical Assessment</span>
               <span class="badge">AI for Creatives · Google Accra</span>
-              <span class="badge">French · A2 in progress</span>
             </div>
           </div>
 
