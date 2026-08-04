@@ -218,15 +218,84 @@
       50%      { box-shadow: 0 0 0 6px transparent; }
     }
 
-    .hero h1 {
-      font-family: var(--font-heading);
-      font-weight: 800;
-      font-size: clamp(3rem, 8vw, 5.5rem);
-      line-height: 1.02;
+    /* =========== HERO WORDMARK =========== */
+    /* The name is set as a Didone wordmark: the first name large, the rest
+       small beneath it, with the last letter of the first name left as an
+       outline. Sized from the mark's OWN width, not the viewport, so it fills
+       the measure exactly and can never overflow whatever box it sits in.
+       "Edwin" in Bodoni Black measures about 3.16x its font size at this
+       tracking, including the gap before the outlined letter, which is where
+       that divisor comes from. Remeasure it if the name or tracking changes. */
+    @font-face {
+      font-family: 'Bodoni Moda';
+      src: url('/fonts/bodoni-moda-900.woff2') format('woff2');
+      font-weight: 900;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    .hero-mark {
+      --ratio: 3.22;
+      --fs: min(calc((100vw - 2 * clamp(1.25rem, 4vw, 2rem)) / var(--ratio)), 200px);
+      position: relative;
+      text-align: center;
+      max-width: calc(200px * 3.22);
+      margin: 0 auto clamp(1.3rem, 3vw, 1.7rem);
+      padding: 1.4rem 0 1rem;
+    }
+    @supports (container-type: inline-size) {
+      .hero-mark { container-type: inline-size; }
+      .hero-mark { --fs: min(calc(100cqw / var(--ratio)), 200px); }
+    }
+
+    .hero-first {
+      display: block;
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-weight: 900;
+      font-size: var(--fs);
+      line-height: 0.9;
       letter-spacing: -0.035em;
       color: var(--ink);
-      margin-bottom: clamp(1.4rem, 3vw, 1.8rem);
     }
+    /* Transparent fill with a hairline stroke. The stroke is a fraction of the
+       font size so it reads identically on a 320px phone and a desktop.
+       The letter needs clearance: with no fill, a solid neighbour in front of
+       it shows straight through and the stem disappears. */
+    .hero-first .hero-out {
+      color: transparent;
+      -webkit-text-stroke: calc(var(--fs) * 0.007) var(--emerald-deep);
+      margin-left: 0.10em;
+      paint-order: stroke fill;
+    }
+    .hero-last {
+      display: block;
+      margin-top: 0.55rem;
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: clamp(0.72rem, 3.4vw, 0.95rem);
+      letter-spacing: 0.42em;
+      text-transform: uppercase;
+      color: var(--ink);
+      padding-left: 0.42em;
+    }
+
+    /* Guide rules, framing the mark like drafting lines. Decorative only. */
+    .hero-rules .r,
+    .hero-rules .v { position: absolute; background: var(--line-soft); }
+    .hero-rules .r { left: 0; right: 0; height: 1px; }
+    .hero-rules .v { top: 0; bottom: 0; width: 1px; }
+    .hero-rules .r-top { top: 0; }
+    .hero-rules .r-cap { top: 1.4rem; }
+    .hero-rules .r-base { top: calc(1.4rem + var(--fs) * 0.70); }
+    .hero-rules .r-foot { bottom: 0; }
+    .hero-rules .v-l { left: 0; }
+    .hero-rules .v-r { right: 0; }
+
+    /* The mark is centred, so the rest of the hero centres with it. Left
+       aligned text under a centred wordmark reads as a mistake. */
+    .hero .hero-role,
+    .hero .hero-sub { text-align: center; margin-left: auto; margin-right: auto; }
+    .hero .hero-buttons { justify-content: center; }
 
     .hero-role {
       font-family: var(--font-heading);
@@ -988,21 +1057,11 @@
         min-height: auto;
         padding: 1.8rem 0 2.2rem;
       }
-      /* The name is set edge to edge on phones: it fills the column and never
-         wraps. The exact size is computed at runtime by fitHeroName() in the
-         script at the bottom, because the width the name needs depends on the
-         font that actually loaded, which CSS cannot measure.
-         This clamp is the no-JS fallback and the pre-fit starting value. It is
-         deliberately conservative (7.8vw fits at every phone width even with a
-         fallback font); the script scales it up to fill the row. */
-      .hero h1 {
-        font-size: clamp(1.35rem, 7.8vw, 2.35rem);
-        line-height: 1.1;
-        letter-spacing: -0.035em;
-        white-space: nowrap;
-        word-break: normal;
-        hyphens: none;
-      }
+      /* The wordmark sizes itself from its container, so it needs no phone
+         override. Only its breathing room is tightened here. */
+      .hero-mark { padding: 1rem 0 0.8rem; margin-bottom: 1.1rem; }
+      .hero-rules .r-cap { top: 1rem; }
+      .hero-rules .r-base { top: calc(1rem + var(--fs) * 0.70); }
       .hero-role {
         font-size: 0.94rem;
         line-height: 1.45;
@@ -1255,14 +1314,22 @@
     <section class="hero">
       <div class="wrap hero-inner">
         <!-- CMS:START e-hero -->
-        <h1 class="reveal" data-d="1">Edwin Gyasi Owusu.</h1>
+        <h1 class="hero-mark reveal" data-d="1">
+          <span class="hero-rules" aria-hidden="true">
+            <span class="r r-top"></span><span class="r r-cap"></span>
+            <span class="r r-base"></span><span class="r r-foot"></span>
+            <span class="v v-l"></span><span class="v v-r"></span>
+          </span>
+          <span class="hero-first">Edwi<span class="hero-out">n</span></span>
+          <span class="hero-last">Gyasi Owusu</span>
+        </h1>
 
         <p class="hero-role reveal" data-d="2">
           <span class="role">Geological Engineer</span> · <span class="role">Mining</span> · <span class="role">Geotechnical</span> · <span class="role">Oil &amp; Gas</span>
         </p>
 
         <p class="hero-sub reveal" data-d="3">
-          Engineering the future through geology, data analytics, and AI.
+          Using geology, data, and AI to shape the future of engineering.
         </p>
 
         <div class="hero-buttons reveal" data-d="4">
@@ -1696,56 +1763,7 @@
         stats.forEach(el => cio.observe(el));
       }
 
-      /* ---- 5. Fit the hero name to the column width on phones ----
-         The name should read edge to edge and stay on one line. How wide it
-         actually is depends on the loaded font, so it is measured rather than
-         guessed: render it once at a known size, then scale to the available
-         width. Runs again once webfonts land and on resize/orientation change,
-         since Plus Jakarta Sans is wider than the system fallback. */
-      const heroName = document.querySelector('.hero h1');
-      if (heroName) {
-        const MAX_PX = 44;   /* never overshoot the desktop scale */
-        const SAFETY = 0.985; /* leave a hair so it cannot clip */
-
-        const fitHeroName = () => {
-          heroName.style.fontSize = '';
-          if (window.innerWidth > 600) return; /* desktop keeps the CSS clamp */
-
-          const avail = heroName.clientWidth;
-          if (!avail) return;
-
-          const cs = getComputedStyle(heroName);
-          const basePx = parseFloat(cs.fontSize);
-          const probe = document.createElement('span');
-          probe.textContent = heroName.textContent.trim();
-          probe.style.cssText =
-            'position:absolute;left:-9999px;top:0;visibility:hidden;white-space:nowrap;';
-          probe.style.fontFamily = cs.fontFamily;
-          probe.style.fontWeight = cs.fontWeight;
-          probe.style.fontStyle = cs.fontStyle;
-          probe.style.fontSize = basePx + 'px';
-          probe.style.letterSpacing = cs.letterSpacing;
-          document.body.appendChild(probe);
-          const needed = probe.getBoundingClientRect().width;
-          probe.remove();
-          if (!needed) return;
-
-          const target = Math.min(basePx * (avail / needed) * SAFETY, MAX_PX);
-          if (target > basePx) heroName.style.fontSize = target.toFixed(2) + 'px';
-        };
-
-        fitHeroName();
-        if (document.fonts && document.fonts.ready) {
-          document.fonts.ready.then(fitHeroName).catch(() => {});
-        }
-        let fitPending;
-        window.addEventListener('resize', () => {
-          clearTimeout(fitPending);
-          fitPending = setTimeout(fitHeroName, 120);
-        }, { passive: true });
-      }
-
-      /* ---- 6. Nav elevation on scroll ---- */
+      /* ---- 5. Nav elevation on scroll ---- */
       const nav = document.querySelector('header.nav');
       let ticking = false;
       window.addEventListener('scroll', () => {

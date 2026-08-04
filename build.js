@@ -591,8 +591,30 @@ function buildEngineering() {
     `      </a>`;
 
   /* ---- hero ---- */
+  /* Hero wordmark. The headline is split into the first word, set large, and
+     the remainder, set small beneath it. The LAST letter of the first word is
+     left as an outline, which is the one decorative move in the mark.
+     Both are derived from hero.headline rather than stored as separate CMS
+     fields, so editing the name in the panel cannot desynchronise them.
+     The <h1> still reads "Edwin Gyasi Owusu" to a screen reader and to Google:
+     the spans carry no semantics. */
+  const headline = String(hero.headline || '').trim().replace(/[.\s]+$/, '');
+  const hParts = headline.split(/\s+/);
+  const hFirst = hParts.shift() || '';
+  const hRest = hParts.join(' ');
+  const hLead = hFirst.slice(0, -1);
+  const hTail = hFirst.slice(-1);
+
   regions['e-hero'] =
-    `        <h1 class="reveal" data-d="1">${esc(hero.headline)}</h1>\n\n` +
+    `        <h1 class="hero-mark reveal" data-d="1">\n` +
+    `          <span class="hero-rules" aria-hidden="true">\n` +
+    `            <span class="r r-top"></span><span class="r r-cap"></span>\n` +
+    `            <span class="r r-base"></span><span class="r r-foot"></span>\n` +
+    `            <span class="v v-l"></span><span class="v v-r"></span>\n` +
+    `          </span>\n` +
+    `          <span class="hero-first">${esc(hLead)}<span class="hero-out">${esc(hTail)}</span></span>\n` +
+    (hRest ? `          <span class="hero-last">${esc(hRest)}</span>\n` : '') +
+    `        </h1>\n\n` +
     `        <p class="hero-role reveal" data-d="2">\n` +
     // Each role is nowrap so a multi-word role cannot split ("Geological /
     // Engineer" read as two roles on a phone). The separators must therefore

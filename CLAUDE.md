@@ -350,6 +350,43 @@ Outside the repo, and only the owner can do these:
 
 ## Updates Log
 
+- 2026-08-04: The hero name is a **Didone wordmark** now, not a plain heading.
+
+  "Edwin" is set large in **Bodoni Moda Black**, self-hosted at
+  `fonts/bodoni-moda-900.woff2`, with "GYASI OWUSU" in letterspaced caps
+  beneath and drafting-style guide rules framing the block. The last letter of
+  the first name is left as an **outline**: transparent fill plus a hairline
+  `-webkit-text-stroke` in `--emerald-deep`. Modelled on the Affinity wordmark
+  the owner supplied.
+
+  Both halves are **derived from `hero.headline`**, splitting on the first
+  space, rather than stored as separate CMS fields, so renaming in the panel
+  cannot desynchronise them. The `<h1>` still reads "Edwin Gyasi Owusu" to a
+  screen reader and to Google; the spans carry no semantics.
+
+  Three things that are easy to get wrong here:
+
+  - **The mark sizes itself from its OWN box, not the viewport**
+    (`100cqw / --ratio`, with a `100vw` fallback under `@supports`). Sizing
+    from viewport width overflows the moment the mark sits inside anything
+    with padding, which is exactly what happened first time.
+  - `--ratio` (3.22) is the measured width of "Edwin" in this face at this
+    tracking, **including the gap before the outlined letter**. Remeasure it if
+    the name, tracking, or that gap changes, or the mark will clip or float.
+  - **The outlined letter needs clearance.** With no fill, a solid neighbour in
+    front of it shows straight through and the stem vanishes, so the glyph
+    stops reading as a letter. It carries `margin-left: 0.10em` for that
+    reason, not for looks. The stroke is a fraction of the font size so the
+    hairline is identical on a 320px phone and a desktop.
+
+  `fitHeroName()` is **gone**. It measured the old single-line heading and is
+  meaningless against this markup; CSS does the fitting now. The hero body
+  (roles, subline, buttons) is centred to match the centred mark. The subline
+  copy changed to "Using geology, data, and AI to shape the future of
+  engineering." and the old "Engineering the future through..." line is
+  retired, since the two said the same thing.
+
+
 - 2026-08-04: A third mobile pass that cut **spacing** rather than type.
 
   **The nav brand name stays visible at all times.** A scroll-reveal was tried
