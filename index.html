@@ -279,17 +279,6 @@
       padding-left: 0.42em;
     }
 
-    /* Guide rules, framing the mark like drafting lines. Decorative only. */
-    .hero-rules .r,
-    .hero-rules .v { position: absolute; background: var(--line-soft); }
-    .hero-rules .r { left: 0; right: 0; height: 1px; }
-    .hero-rules .v { top: 0; bottom: 0; width: 1px; }
-    .hero-rules .r-top { top: 0; }
-    .hero-rules .r-cap { top: 1.4rem; }
-    .hero-rules .r-base { top: calc(1.4rem + var(--fs) * 0.70); }
-    .hero-rules .r-foot { bottom: 0; }
-    .hero-rules .v-l { left: 0; }
-    .hero-rules .v-r { right: 0; }
 
     /* The mark is centred, so the rest of the hero centres with it. Left
        aligned text under a centred wordmark reads as a mistake. */
@@ -1059,10 +1048,8 @@
       }
       /* The wordmark sizes itself from its container, so it needs no phone
          override. Only its breathing room is tightened here.
-         The guide rules are desktop only: on a phone they sit close enough to
-         the letterforms to read as clutter rather than structure. */
+         */
       .hero-mark { padding: 0.6rem 0 0.4rem; margin-bottom: 1.1rem; }
-      .hero-rules { display: none; }
       .hero-role {
         font-size: 0.94rem;
         line-height: 1.45;
@@ -1316,11 +1303,6 @@
       <div class="wrap hero-inner">
         <!-- CMS:START e-hero -->
         <h1 class="hero-mark reveal" data-d="1">
-          <span class="hero-rules" aria-hidden="true">
-            <span class="r r-top"></span><span class="r r-cap"></span>
-            <span class="r r-base"></span><span class="r r-foot"></span>
-            <span class="v v-l"></span><span class="v v-r"></span>
-          </span>
           <span class="hero-first">Edwi<span class="hero-out">n</span></span>
           <span class="hero-last">Gyasi Owusu</span>
         </h1>

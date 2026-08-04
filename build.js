@@ -607,11 +607,6 @@ function buildEngineering() {
 
   regions['e-hero'] =
     `        <h1 class="hero-mark reveal" data-d="1">\n` +
-    `          <span class="hero-rules" aria-hidden="true">\n` +
-    `            <span class="r r-top"></span><span class="r r-cap"></span>\n` +
-    `            <span class="r r-base"></span><span class="r r-foot"></span>\n` +
-    `            <span class="v v-l"></span><span class="v v-r"></span>\n` +
-    `          </span>\n` +
     `          <span class="hero-first">${esc(hLead)}<span class="hero-out">${esc(hTail)}</span></span>\n` +
     (hRest ? `          <span class="hero-last">${esc(hRest)}</span>\n` : '') +
     `        </h1>\n\n` +
