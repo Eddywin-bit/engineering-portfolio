@@ -425,10 +425,27 @@ Outside the repo, and only the owner can do these:
   in the taller box the tail adds. Desktop drops the mask entirely for a plain
   rounded rectangle, as the reference does, and must undo the ratio too.
 
-  On phones the name runs to **three lines**, "Edwin / Gyasi / Owusu", since it
-  already stacks there and the surname fits. `.hero-extra` carries that third
-  word and is visually hidden on desktop, where only two halves fit either side
-  of the photo. It stays in the `<h1>` text at both sizes.
+  On phones the name is **two lines**, "Edwin" over "Gyasi Owusu". The surname
+  and the word after it are separate elements, because desktop splits them
+  either side of the photo, so on phones they are simply made `inline` and flow
+  together. That rule must be **undone explicitly at the breakpoint**:
+  `.hero-part` is blockified anyway as a grid item, but `.hero-word` is not a
+  grid item and stays inline, which shifted the right name's baseline off the
+  left one by a pixel.
+
+  Phones size the name from `.hero-mark` as the container, desktop from
+  `.hero-part`; both can be declared because a container query unit resolves to
+  the **nearest** ancestor container. `--ratio-m: 6.12` is measured on the
+  longer line, "Gyasi Owusu", which renders 6.04x its font size **including the
+  `word-spacing: 0.08em`** the line needs (Clash Display's word space is narrow
+  and the tracking is negative, so without it the two words read as one).
+  Changing the word-spacing changes the ratio; remeasure both together.
+
+  **The cube mark is black artwork**, so it vanished on the dark dock and the
+  dark top bar. Both apply `filter: brightness(0) invert(1)`, which crushes any
+  colour to black then flips it to white, the reliable way to recolour an
+  arbitrary PNG. The menu overlay and the case study pages are light and keep
+  the mark as drawn.
 
   **Heading weights were taken down one step** across the whole site on the
   owner's note that Clash Display read too heavy: display type 700 -> 600,
