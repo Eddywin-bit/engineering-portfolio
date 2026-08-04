@@ -303,36 +303,6 @@
     }
 
     /* =========== HERO =========== */
-    /* Hexagonal field behind the hero, echoing the reference. Generated as an
-       inline SVG rather than an image file, so it is a few hundred bytes, needs
-       no request, and stays crisp at any density.
-
-       It is deliberately almost invisible: the reference measures a contrast of
-       only 3 to 4 luma out of 255, about 1.5%, and anything stronger reads as a
-       pattern rather than as texture. Measure before changing it.
-
-       The fade is a mask, not a gradient overlay, so it works whatever the page
-       background is and cannot leave a visible seam against --bg. The reference
-       is completely flat by about a third of the way down the hero, measured,
-       which is what the stops below reproduce. */
-    .hero::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='93.53' height='162.00' viewBox='0 0 93.53 162.00'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0.55' y2='1'%3E%3Cstop offset='0' stop-color='%23ffffff'/%3E%3Cstop offset='1' stop-color='%23ebe9e3'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpolygon points='0.00,-54.00 46.77,-27.00 46.77,27.00 0.00,54.00 -46.77,27.00 -46.77,-27.00' fill='url(%23g)' stroke='%23ffffff' stroke-width='1.2'/%3E%3Cpolygon points='93.53,-54.00 140.30,-27.00 140.30,27.00 93.53,54.00 46.77,27.00 46.77,-27.00' fill='url(%23g)' stroke='%23ffffff' stroke-width='1.2'/%3E%3Cpolygon points='0.00,108.00 46.77,135.00 46.77,189.00 0.00,216.00 -46.77,189.00 -46.77,135.00' fill='url(%23g)' stroke='%23ffffff' stroke-width='1.2'/%3E%3Cpolygon points='93.53,108.00 140.30,135.00 140.30,189.00 93.53,216.00 46.77,189.00 46.77,135.00' fill='url(%23g)' stroke='%23ffffff' stroke-width='1.2'/%3E%3Cpolygon points='46.77,27.00 93.53,54.00 93.53,108.00 46.77,135.00 0.00,108.00 0.00,54.00' fill='url(%23g)' stroke='%23ffffff' stroke-width='1.2'/%3E%3Cpolygon points='46.77,-135.00 93.53,-108.00 93.53,-54.00 46.77,-27.00 0.00,-54.00 0.00,-108.00' fill='url(%23g)' stroke='%23ffffff' stroke-width='1.2'/%3E%3Cpolygon points='46.77,189.00 93.53,216.00 93.53,270.00 46.77,297.00 0.00,270.00 0.00,216.00' fill='url(%23g)' stroke='%23ffffff' stroke-width='1.2'/%3E%3C/svg%3E");
-      /* Sized in vw, not px. Measured on the reference, a hexagon is about 20%
-         of the viewport width at BOTH phone and desktop size, so the field
-         scales with the page rather than turning into a fine mesh on a large
-         screen. The height factor is the tile's own 162:93.53 ratio; change one
-         and the hexagons stop being regular. */
-      background-size: 20vw 34.64vw;
-      background-position: 50% 0;
-      -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 8%, transparent 47%);
-      mask-image: linear-gradient(to bottom, #000 0%, #000 8%, transparent 47%);
-    }
-
     .hero {
       position: relative;
       /* The navigations are fixed, so neither eats into the viewport the way

@@ -350,33 +350,6 @@ Outside the repo, and only the owner can do these:
 
 ## Updates Log
 
-- 2026-08-04: **Hexagonal field behind the hero**, on both layouts, fading into
-  the page background. Matched to the reference by measurement, not by eye:
-
-  - **Contrast is the thing to get right, and it is tiny.** The reference paints
-    at a standard deviation of only 3 to 4 luma out of 255, about 1.5%. Anything
-    stronger stops reading as texture and starts reading as a pattern. Mine
-    measures 3.5 against his 3.9 over the same depth profile.
-  - **Sized in `vw`, not px.** A hexagon is about 20% of the viewport width on
-    the reference at BOTH phone and desktop, so it scales with the page instead
-    of turning into a fine mesh on a large screen. The tile's height factor is
-    its own 162:93.53 ratio; change one without the other and the hexagons stop
-    being regular.
-  - The fade is a **mask**, not an overlay gradient, so it cannot leave a seam
-    against `--bg` and survives a background colour change. The reference is
-    flat by about a third of the way down the hero.
-
-  It is an **inline SVG data URI**, a few hundred bytes, no request, crisp at any
-  density. Regenerate it with the small Python snippet in the commit rather than
-  hand-editing the polygon points.
-
-  Note the owner reports the reference's background **animating on WiFi but not
-  on mobile data**. Every still frame of the recording supplied measures
-  pixel-identical, on both layouts, so what was captured is the static fallback.
-  That pattern (motion on fast connections, still image otherwise) usually means
-  a background video or a canvas effect. If motion is added here it must degrade
-  the same way, because most of this site's visitors are on Ghanaian mobile data.
-
 - 2026-08-04: Engineering site rebuilt around **Nikola Radeski's** layout, at the
   owner's request and from his screenshots. Three changes plus one bug fix.
 
