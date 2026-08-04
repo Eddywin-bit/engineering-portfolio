@@ -388,7 +388,11 @@
        taller box the tail adds. */
     .hero-photo {
       display: block;
-      width: 104px;
+      /* Measured off the reference on the same handset: his avatar is 18.9% of
+         the viewport width, so 19vw. It was 104px flat here, which came out a
+         third too big at 390px. The bounds keep it sane on very small and very
+         large phones. */
+      width: clamp(64px, 19vw, 88px);
       aspect-ratio: 100 / 121;
       margin-bottom: 1.4rem;
     }
@@ -410,6 +414,12 @@
       mask-size: 100% 100%;
       -webkit-mask-repeat: no-repeat;
       mask-repeat: no-repeat;
+      /* drop-shadow, not box-shadow: it follows the MASK's alpha, so it traces
+         the bubble outline including the tail. Needed because this portrait has
+         a near-white background against a near-white page, so without it the
+         silhouette dissolves and the tail cannot be read at all. A box-shadow
+         would draw the element's rectangle instead. */
+      filter: drop-shadow(0 1px 2px rgba(28, 28, 28, 0.16));
     }
     .hero-eyebrow {
       font-size: clamp(0.98rem, 4vw, 1.12rem);
@@ -517,6 +527,9 @@
         object-position: 50% 50%;
         -webkit-mask-image: none;
         mask-image: none;
+        /* The phone drop-shadow traces the mask. With no mask it would trace
+           the plain rectangle and double up with the box-shadow on the wrapper. */
+        filter: none;
       }
       /* The surname beyond the first two words is a phone-only line. Hidden
          from view here but kept in the heading text, so the <h1> still reads

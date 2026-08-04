@@ -435,6 +435,23 @@ Outside the repo, and only the owner can do these:
   normalise both by circle radius and diff them. Current agreement is within 1-2
   units in 50 at every sample.
 
+  **Size is `19vw`**, measured off the reference on the same handset, where the
+  avatar is 18.9% of the viewport width. It was a flat 104px first, which is a
+  third too big at 390px and was the most visible error of the three.
+
+  It also carries a **`drop-shadow` filter, not a `box-shadow`**. `drop-shadow`
+  follows the mask's alpha, so it traces the bubble including the tail;
+  `box-shadow` would draw the element's rectangle. Without it the silhouette
+  dissolves: this portrait has a near-white background against a near-white
+  page, so the tail simply cannot be seen. The reference's photo has a grey
+  backdrop and does not need one. Desktop sets `filter: none`, since there is no
+  mask there and the wrapper already has a real box-shadow.
+
+  That near-white background also defeats the threshold method above on a
+  screenshot of the LIVE page: the scan cannot find the photo's edge and reports
+  a wildly wrong outline. Always measure against a local render with the image
+  forced to a solid fill, never against a screenshot of the real page.
+
   The mask carries its own `viewBox`, so it scales, but the box must keep the
   mask's **100:121 ratio** or the tail stretches. The image is pulled up with
   `object-position: 50% 38%` because the face has to centre in the CIRCLE, not
