@@ -355,43 +355,46 @@
       margin: 0 0 clamp(1.2rem, 3vw, 1.6rem);
     }
     .hero-side { display: block; }
-    /* Any part of the name not shown in the mark still belongs to the heading,
-       so it is hidden visually but left in the accessibility tree and in the
-       text Google indexes. Not display:none, which would remove it from both. */
-    .hero-vh {
-      position: absolute;
-      width: 1px; height: 1px;
-      margin: -1px; padding: 0; border: 0;
-      overflow: hidden;
-      clip: rect(0 0 0 0);
-      clip-path: inset(50%);
-      white-space: nowrap;
-    }
-    /* Phones: a speech-bubble avatar, round except for a tapered point at the
-       bottom left, matching the reference. Done with border-radius on the
-       image itself rather than a pseudo-element tail, so the point is filled
-       with the PHOTO. A separate tail would have to be painted a flat colour,
-       and no flat colour matches a photographic background. */
-    /* block, not inline-block: an inline-block sits on the text baseline and
-       leaves a strip of descender space under it, which read as an extra half
-       centimetre of gap between the avatar and the label. */
+    /* Phones: a speech-bubble avatar. A full circle with a small tail hanging
+       off the lower right and tapering to a point just below centre, traced
+       from the reference.
+
+       Drawn as an SVG mask rather than with border-radius. Two earlier
+       attempts are worth not repeating: a pseudo-element tail has to be
+       painted a flat colour, and no flat colour matches a photographic
+       background; and the rotated-square trick (three corners rounded, the
+       fourth left sharp, the box turned 45deg) makes a tail far too big,
+       because the straight edges meeting at that corner are half the box wide,
+       so the whole bottom of the circle becomes a cone.
+
+       The mask carries its own viewBox, so it scales with the element and the
+       box must keep the mask's 100:122 ratio or the tail stretches. The image
+       is nudged up because the face should centre in the CIRCLE, not in the
+       taller box the tail adds. */
     .hero-photo {
       display: block;
-      margin-bottom: 1.1rem;
+      width: 104px;
+      aspect-ratio: 100 / 122;
+      margin-bottom: 1.4rem;
     }
     .hero-portrait {
-      width: 92px;
-      /* Required. The width/height attributes on the <img> are presentational
-         hints, so height="600" lands as `height:600px` and beats aspect-ratio,
-         which only governs when one axis is auto. Without this the portrait
-         renders at its attribute height at every breakpoint. The attributes
-         still earn their keep by reserving the right box before the image
-         loads, so do not remove them. */
-      height: auto;
-      aspect-ratio: 1;
+      width: 100%;
+      /* The width/height attributes on the <img> are presentational hints, so
+         height="600" lands as `height:600px` and beats any aspect-ratio, which
+         only governs when one axis is auto. Sizing both axes here settles it.
+         The attributes still earn their keep by reserving the right box before
+         the image loads, so do not remove them. */
+      height: 100%;
       object-fit: cover;
-      border-radius: 50% 50% 50% 8%;
+      object-position: 50% 38%;
       display: block;
+      --bubble: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 122'%3E%3Ccircle cx='50' cy='50' r='50' fill='white'/%3E%3Cpath d='M80 92C81 108 67 117 50 119C48 112 46 105 46 99Z' fill='white'/%3E%3C/svg%3E");
+      -webkit-mask-image: var(--bubble);
+      mask-image: var(--bubble);
+      -webkit-mask-size: 100% 100%;
+      mask-size: 100% 100%;
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
     }
     .hero-eyebrow {
       font-size: clamp(0.98rem, 4vw, 1.12rem);
@@ -455,12 +458,32 @@
       .hero-loc     { align-self: start; }
 
       /* Desktop drops the bubble entirely: the reference sets a plain rounded
-         rectangle between the two names, no tail. */
-      .hero-portrait {
+         rectangle between the two names, no tail. Every part of the phone
+         treatment has to be undone explicitly, the rotation on both elements
+         included, or the portrait sits on the diagonal. */
+      .hero-photo {
         width: clamp(215px, 23vw, 285px);
         aspect-ratio: 3 / 4;
         border-radius: 20px;
+        overflow: hidden;
         box-shadow: 0 24px 60px rgba(28, 28, 28, 0.16);
+      }
+      .hero-portrait {
+        object-position: 50% 50%;
+        -webkit-mask-image: none;
+        mask-image: none;
+      }
+      /* The surname beyond the first two words is a phone-only line. Hidden
+         from view here but kept in the heading text, so the <h1> still reads
+         as the full name. Not display:none, which would drop it from the
+         accessibility tree and from what Google indexes. */
+      .hero-extra {
+        position: absolute;
+        width: 1px; height: 1px;
+        margin: -1px; padding: 0; border: 0;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
       }
       .hero-loc {
         display: block;
@@ -1541,7 +1564,7 @@
           <span class="hero-side right">
             <span class="hero-eyebrow">Founder, Eon Designs</span>
             <span class="hero-part"><span class="hero-word">Gyasi</span></span>
-            <span class="hero-vh"> Owusu</span>
+            <span class="hero-part hero-extra"><span class="hero-word">Owusu</span></span>
             <span class="hero-loc">Kumasi, Ghana</span>
           </span>
         </h1>

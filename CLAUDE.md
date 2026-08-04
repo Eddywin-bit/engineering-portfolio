@@ -408,11 +408,27 @@ Outside the repo, and only the owner can do these:
     away from the name. They are pinned with `align-self: end` and
     `align-self: start` respectively.
 
-  The phone avatar is a **speech bubble**, round except for a tapered point at
-  the bottom left, done with `border-radius: 50% 50% 50% 8%` on the image
-  itself. Deliberately not a pseudo-element tail: a separate tail has to be
-  painted a flat colour and no flat colour matches a photographic background.
-  Desktop drops the bubble for a plain rounded rectangle, as the reference does.
+  The phone avatar is a **speech bubble**: a full circle with a small tail off
+  the lower right tapering to a point below centre. It is an **SVG mask** in a
+  `data:` URI, and two simpler approaches were tried and are wrong:
+
+  - A **pseudo-element tail** has to be painted a flat colour, and no flat
+    colour matches a photographic background.
+  - The **rotated-square trick** (three corners rounded, the fourth left sharp,
+    the box turned 45deg) makes a tail far too big, because the two straight
+    edges meeting at that corner are each half the box wide, so the entire
+    bottom of the circle becomes a wide cone rather than a small tail.
+
+  The mask carries its own `viewBox`, so it scales, but the box must keep the
+  mask's **100:122 ratio** or the tail stretches. The image is pulled up with
+  `object-position: 50% 38%` because the face has to centre in the CIRCLE, not
+  in the taller box the tail adds. Desktop drops the mask entirely for a plain
+  rounded rectangle, as the reference does, and must undo the ratio too.
+
+  On phones the name runs to **three lines**, "Edwin / Gyasi / Owusu", since it
+  already stacks there and the surname fits. `.hero-extra` carries that third
+  word and is visually hidden on desktop, where only two halves fit either side
+  of the photo. It stays in the `<h1>` text at both sizes.
 
   **Heading weights were taken down one step** across the whole site on the
   owner's note that Clash Display read too heavy: display type 700 -> 600,

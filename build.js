@@ -670,7 +670,14 @@ function buildEngineering() {
     `          <span class="hero-side right">\n` +
     `            <span class="hero-eyebrow">${esc(hero.eyebrow_right || '')}</span>\n` +
     `            <span class="hero-part"><span class="hero-word">${esc(hSecond)}</span></span>\n` +
-    (hRest ? `            <span class="hero-vh"> ${esc(hRest)}</span>\n` : '') +
+    // Any name beyond the first two words is a third visible line on phones,
+    // where the name already stacks and there is room for it, and visually
+    // hidden on desktop, where only two halves fit either side of the photo.
+    // It stays in the <h1> text either way, so the heading always reads as the
+    // full name to a screen reader and to Google.
+    (hRest
+      ? `            <span class="hero-part hero-extra"><span class="hero-word">${esc(hRest)}</span></span>\n`
+      : '') +
     `            <span class="hero-loc">${esc(nav.location || '')}</span>\n` +
     `          </span>\n` +
     `        </h1>\n\n` +
