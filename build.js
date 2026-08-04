@@ -371,22 +371,22 @@ const JOURNAL_CSS = `
     .wrap{max-width:var(--max);margin:0 auto;padding:0 clamp(1.25rem,4vw,2rem);}
     header.nav{position:sticky;top:0;z-index:60;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(16px) saturate(1.2);-webkit-backdrop-filter:blur(16px) saturate(1.2);border-bottom:1px solid var(--line-soft);}
     .nav-inner{max-width:1180px;margin:0 auto;padding:1rem clamp(1.25rem,4vw,2rem);display:flex;align-items:center;justify-content:space-between;}
-    .brand{display:flex;align-items:center;gap:10px;font-family:var(--font-heading);letter-spacing:-0.01em;}
+    .brand{display:flex;align-items:center;gap:10px;font-family:var(--font-heading);font-weight:500;letter-spacing:-0.01em;}
     .brand-mark{height:30px;width:auto;display:block;}
-    .brand span{font-size:15px;font-weight:600;line-height:1;}
+    .brand span{font-size:15px;font-weight:500;line-height:1;}
     .back{display:inline-flex;align-items:center;gap:0.5rem;font-size:0.9rem;color:var(--ink-soft);transition:color 0.2s var(--ease);}
     .back:hover{color:var(--emerald);}.back svg{width:16px;height:16px;}
     .cs-header{padding:clamp(2.5rem,6vw,4rem) 0 clamp(1.2rem,3vw,1.8rem);}
     .cs-cat{display:inline-flex;align-items:center;gap:0.5rem;font-size:0.8rem;font-weight:500;color:var(--emerald);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:1.2rem;}
     .cs-cat .pin{width:6px;height:6px;border-radius:50%;background:var(--emerald);}
-    .cs-title{font-family:var(--font-heading);font-weight:700;font-size:clamp(2rem,5.5vw,3.2rem);line-height:1.08;letter-spacing:-0.03em;margin-bottom:1.2rem;}
+    .cs-title{font-family:var(--font-heading);font-weight:600;font-size:clamp(2rem,5.5vw,3.2rem);line-height:1.08;letter-spacing:-0.03em;margin-bottom:1.2rem;}
     .cs-lede{font-size:1.15rem;color:var(--ink-mute);line-height:1.6;max-width:60ch;}
     .cs-hero-img{border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);margin:clamp(2rem,4vw,2.8rem) 0 clamp(2rem,5vw,3rem);background:var(--bg-tint);}
     .cs-hero-img img{width:100%;height:auto;}
     .cs-body{padding-bottom:clamp(3rem,8vw,5rem);max-width:68ch;}
     .cs-body p{color:var(--ink-soft);margin-bottom:1.2rem;}
     .cs-body p.lede{font-size:1.2rem;line-height:1.7;color:var(--ink);font-weight:500;margin-bottom:1.6rem;}
-    .cs-body h3{font-family:var(--font-heading);font-weight:700;font-size:clamp(1.35rem,3vw,1.7rem);letter-spacing:-0.02em;margin:clamp(2.2rem,5vw,3rem) 0 1rem;}
+    .cs-body h3{font-family:var(--font-heading);font-weight:600;font-size:clamp(1.35rem,3vw,1.7rem);letter-spacing:-0.02em;margin:clamp(2.2rem,5vw,3rem) 0 1rem;}
     .cs-body strong{color:var(--ink);font-weight:600;}
     .cs-body a{color:var(--emerald);font-weight:500;border-bottom:1px solid var(--emerald-soft);}
     .cs-body a:hover{border-bottom-color:var(--emerald);}
@@ -404,7 +404,7 @@ const JOURNAL_CSS = `
     .btn svg{width:15px;height:15px;}
     footer{border-top:1px solid var(--line-soft);padding:2rem 0 2.5rem;}
     .foot-inner{max-width:1180px;margin:0 auto;padding:0 clamp(1.25rem,4vw,2rem);display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
-    .foot-inner .b{font-family:var(--font-heading);font-weight:700;}
+    .foot-inner .b{font-family:var(--font-heading);font-weight:600;}
     .foot-inner .n{color:var(--ink-mute);font-size:0.85rem;}
     @media (max-width:600px){
       body{font-size:15.5px;}
@@ -653,8 +653,11 @@ function buildEngineering() {
 
   regions['e-hero'] =
     `        <h1 class="hero-mark${portrait ? '' : ' no-portrait'} reveal" data-d="1">\n` +
+    // Wrapped rather than a bare <img>, because the phone treatment is a
+    // speech-bubble avatar and a replaced element cannot carry the ::after
+    // that draws the tail. The wrapper is also what the grid places.
     (portrait
-      ? `          <img class="hero-portrait" src="${attr(portrait)}" alt="${attr(headline)}" width="600" height="800" />\n`
+      ? `          <span class="hero-photo"><img class="hero-portrait" src="${attr(portrait)}" alt="${attr(headline)}" width="600" height="600" /></span>\n`
       : '') +
     // .hero-part is the container query container and .hero-word is what gets
     // sized from it. They cannot be the same element: container query units

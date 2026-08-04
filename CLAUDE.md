@@ -394,8 +394,32 @@ Outside the repo, and only the owner can do these:
     desktop and every child is placed by `grid-area`.
 
   The portrait is a new **optional** CMS field. With none set, `.no-portrait`
-  collapses the middle column and moves the two labels to the outer edges. The
-  photo was still missing when this shipped.
+  collapses the middle column and moves the two labels to the outer edges.
+
+  Two more traps found once the real photo went in:
+
+  - **`<img width> / <height>` are CSS presentational hints**, so `height="600"`
+    lands as `height:600px` and beats `aspect-ratio`, which only governs when
+    one axis is `auto`. The portrait rendered at its attribute height at every
+    breakpoint until `.hero-portrait` got an explicit `height: auto`. Keep the
+    attributes, they still reserve the box before the image loads.
+  - **Rows 1 and 3 of the hero grid are as tall as the PHOTO**, not as tall as
+    their own text, so `align-items:center` floats the label and the location
+    away from the name. They are pinned with `align-self: end` and
+    `align-self: start` respectively.
+
+  The phone avatar is a **speech bubble**, round except for a tapered point at
+  the bottom left, done with `border-radius: 50% 50% 50% 8%` on the image
+  itself. Deliberately not a pseudo-element tail: a separate tail has to be
+  painted a flat colour and no flat colour matches a photographic background.
+  Desktop drops the bubble for a plain rounded rectangle, as the reference does.
+
+  **Heading weights were taken down one step** across the whole site on the
+  owner's note that Clash Display read too heavy: display type 700 -> 600,
+  secondary headings 600 -> 500, in `index.html`, the journal template and all
+  three case studies. Note this **changes `--ratio`**: "EDWIN" measures 3.29x
+  its font size at weight 700 but 3.21x at 600, so the two are coupled and both
+  must be remeasured together.
 
   Also: the hero **roles line was removed** (it repeated the new label directly
   above it) and **experience descriptions were removed** from both the page and
