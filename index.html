@@ -136,24 +136,6 @@
          rather than two client rects. Keep it on one line; it still fits
          beside the mark and the CTA at 320px. */
       white-space: nowrap;
-      /* The hero already says the name in full, so repeating it in the bar
-         directly above is redundant. It stays hidden while the hero is on
-         screen and fades in once you scroll past, so the bar still identifies
-         the site everywhere else. Opacity rather than display, so the layout
-         does not shift when it appears.
-         .no-js-brand is set by the script below when the observer cannot run,
-         which keeps the name visible rather than permanently hidden. */
-      opacity: 0;
-      transform: translateX(-4px);
-      transition: opacity 0.35s var(--ease), transform 0.35s var(--ease);
-    }
-    header.nav.past-hero .brand span,
-    header.nav.no-js-brand .brand span {
-      opacity: 1;
-      transform: none;
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .brand span { transition: none; }
     }
     .nav-links {
       display: none;
@@ -1763,23 +1745,7 @@
         }, { passive: true });
       }
 
-      /* ---- 6. Reveal the nav name only once the hero name is gone ----
-         Avoids showing "Edwin Gyasi Owusu" twice on the first screen. If the
-         observer is unavailable, show the name rather than hide it forever. */
-      const navEl = document.querySelector('header.nav');
-      const heroTitle = document.querySelector('.hero h1');
-      if (navEl) {
-        if (!heroTitle || !('IntersectionObserver' in window)) {
-          navEl.classList.add('no-js-brand');
-        } else {
-          const brandIO = new IntersectionObserver((entries) => {
-            entries.forEach(e => navEl.classList.toggle('past-hero', !e.isIntersecting));
-          }, { rootMargin: '-40px 0px 0px 0px', threshold: 0 });
-          brandIO.observe(heroTitle);
-        }
-      }
-
-      /* ---- 7. Nav elevation on scroll ---- */
+      /* ---- 6. Nav elevation on scroll ---- */
       const nav = document.querySelector('header.nav');
       let ticking = false;
       window.addEventListener('scroll', () => {

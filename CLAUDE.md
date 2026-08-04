@@ -350,17 +350,12 @@ Outside the repo, and only the owner can do these:
 
 ## Updates Log
 
-- 2026-08-04: Nav name hidden over the hero, and a third mobile pass that cut
-  **spacing** rather than type.
+- 2026-08-04: A third mobile pass that cut **spacing** rather than type.
 
-  The name read twice on the first screen, once in the bar and once as the
-  hero. `.brand span` is now `opacity: 0` until the hero `h1` scrolls out of
-  view, when an IntersectionObserver puts `.past-hero` on the nav and fades it
-  in. Opacity, not `display`, so nothing reflows when it appears. If the
-  observer cannot run the script adds `.no-js-brand`, which shows the name,
-  because failing open is better than a permanently nameless bar. The three
-  `case-studies/` pages and the journal template are unaffected: they have no
-  hero, and their nav name is plain markup.
+  **The nav brand name stays visible at all times.** A scroll-reveal was tried
+  here (hide `.brand span` until the hero scrolls away, to stop the name
+  reading twice on the first screen) and the owner rejected it: the name is
+  wanted beside the mark permanently. Do not reintroduce it.
 
   On "everything looks too big" the measurement said the type was already fine
   (body 15.5px, section titles 25.9px) and the real cost was **vertical
