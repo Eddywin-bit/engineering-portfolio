@@ -352,7 +352,13 @@ Outside the repo, and only the owner can do these:
 
 - 2026-08-01: Clean URLs, and link-preview cards that actually render.
 
-  **`cleanUrls: true` in `vercel.json`.** Pages are now `/journal/my-post` and
+  **`cleanUrls: true` in `vercel.json`.** Note `vercel.json` is validated
+  against a strict schema that **rejects unknown top-level keys**, so the
+  `"//name": "explanation"` trick for commenting JSON breaks the deployment
+  outright. It is not a warning, the build fails and the previous version
+  stays live. Explanations for that file belong here, not in it.
+
+  Pages are now `/journal/my-post` and
   `/case-studies/geofield`, no `.html`. Vercel 308-redirects the old `.html`
   form, so anything already shared keeps working. Canonical and `og:url` must
   be the **clean** form or they point at a redirect. Note `python3 -m
