@@ -379,6 +379,10 @@ Outside the repo, and only the owner can do these:
     reason, not for looks. The stroke is a fraction of the font size so the
     hairline is identical on a 320px phone and a desktop.
 
+  The guide rules are **desktop only**. On a phone they sit close enough to the
+  letterforms to read as clutter rather than structure, so the mobile block
+  hides `.hero-rules` outright.
+
   `fitHeroName()` is **gone**. It measured the old single-line heading and is
   meaningless against this markup; CSS does the fitting now. The hero body
   (roles, subline, buttons) is centred to match the centred mark. The subline

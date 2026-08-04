@@ -1058,10 +1058,11 @@
         padding: 1.8rem 0 2.2rem;
       }
       /* The wordmark sizes itself from its container, so it needs no phone
-         override. Only its breathing room is tightened here. */
-      .hero-mark { padding: 1rem 0 0.8rem; margin-bottom: 1.1rem; }
-      .hero-rules .r-cap { top: 1rem; }
-      .hero-rules .r-base { top: calc(1rem + var(--fs) * 0.70); }
+         override. Only its breathing room is tightened here.
+         The guide rules are desktop only: on a phone they sit close enough to
+         the letterforms to read as clutter rather than structure. */
+      .hero-mark { padding: 0.6rem 0 0.4rem; margin-bottom: 1.1rem; }
+      .hero-rules { display: none; }
       .hero-role {
         font-size: 0.94rem;
         line-height: 1.45;
