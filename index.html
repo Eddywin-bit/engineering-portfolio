@@ -136,6 +136,24 @@
          rather than two client rects. Keep it on one line; it still fits
          beside the mark and the CTA at 320px. */
       white-space: nowrap;
+      /* The hero already says the name in full, so repeating it in the bar
+         directly above is redundant. It stays hidden while the hero is on
+         screen and fades in once you scroll past, so the bar still identifies
+         the site everywhere else. Opacity rather than display, so the layout
+         does not shift when it appears.
+         .no-js-brand is set by the script below when the observer cannot run,
+         which keeps the name visible rather than permanently hidden. */
+      opacity: 0;
+      transform: translateX(-4px);
+      transition: opacity 0.35s var(--ease), transform 0.35s var(--ease);
+    }
+    header.nav.past-hero .brand span,
+    header.nav.no-js-brand .brand span {
+      opacity: 1;
+      transform: none;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .brand span { transition: none; }
     }
     .nav-links {
       display: none;
@@ -972,16 +990,21 @@
 
     /* =========== MOBILE REFINEMENTS =========== */
     @media (max-width: 600px) {
-      body { font-size: 15.5px; }
+      body { font-size: 15px; }
 
-      /* Type scale is tuned down on phones. The desktop scale read oversized
-         on a 390px screen (hero ~51px, section titles ~35px), which costs
-         vertical space and wraps headings awkwardly. Headings take the cut;
-         body copy stays at 15.5px, which is already at the low end of
-         comfortable and should not go lower. */
+      /* Phone scale. The type was already close, but the SPACING was what
+         made the page feel oversized: every section carried 72px of padding
+         top and bottom, so the page ran 8800px on a 390px screen. Vertical
+         rhythm is roughly two thirds of the desktop values here, and the type
+         is nudged down a step with it. */
+      section.sec { padding: 2.6rem 0; }
+      .sec-sub { margin-bottom: 1.5rem; }
+      .sec-title { margin-bottom: 0.6rem; }
+      .sec-eyebrow { margin-bottom: 0.6rem; }
+
       .hero {
         min-height: auto;
-        padding: 3rem 0 3.5rem;
+        padding: 1.8rem 0 2.2rem;
       }
       /* The name is set edge to edge on phones: it fills the column and never
          wraps. The exact size is computed at runtime by fitHeroName() in the
@@ -999,39 +1022,43 @@
         hyphens: none;
       }
       .hero-role {
-        font-size: 0.98rem;
-        line-height: 1.5;
+        font-size: 0.94rem;
+        line-height: 1.45;
+        margin-bottom: 1.1rem;
       }
-      .hero-sub { font-size: 0.98rem; }
+      .hero-sub { font-size: 0.94rem; margin-bottom: 1.4rem; }
 
-      .sec-title { font-size: 1.62rem; line-height: 1.16; }
-      .sec-sub { font-size: 0.98rem; }
-      .sec-eyebrow { font-size: 0.74rem; }
+      .sec-title { font-size: 1.45rem; line-height: 1.18; }
+      .sec-sub { font-size: 0.94rem; }
+      .sec-eyebrow { font-size: 0.72rem; }
 
-      .project-title { font-size: 1.1rem; }
-      .project-desc { font-size: 0.9rem; }
-      .journal-title { font-size: 1.06rem; }
-      .journal-excerpt { font-size: 0.9rem; }
-      .exp-role { font-size: 1rem; }
-      .exp-desc { font-size: 0.9rem; }
-      .skill-block h3 { font-size: 1.1rem; }
-      .skill-note { font-size: 0.9rem; }
-      .contact-card h2 { font-size: 1.45rem; line-height: 1.2; }
-      .contact-card p { font-size: 0.98rem; }
-      .about-body p { font-size: 0.98rem; }
+      .project-title { font-size: 1.02rem; }
+      .project-desc { font-size: 0.87rem; }
+      .journal-title { font-size: 1rem; }
+      .journal-excerpt { font-size: 0.87rem; }
+      .exp-role { font-size: 0.95rem; }
+      .exp-desc { font-size: 0.87rem; }
+      .skill-block h3 { font-size: 1.02rem; }
+      .skill-note { font-size: 0.87rem; }
+      .contact-card h2 { font-size: 1.3rem; line-height: 1.2; }
+      .contact-card p { font-size: 0.94rem; }
+      .about-body p { font-size: 0.94rem; }
       .hero-role br { display: none; }
 
       /* Buttons stack full-width and are easy to tap */
       .hero-buttons { flex-direction: column; align-items: stretch; }
-      .hero-buttons .btn { width: 100%; padding: 1rem 1.4rem; }
+      .hero-buttons .btn { width: 100%; padding: 0.85rem 1.2rem; }
 
       /* About stats: 2-up stays, but tighten */
-      .about-stats { gap: 0.75rem; }
-      .stat { padding: 1.2rem 1rem; }
-      .stat .n { font-size: 1.5rem; }
+      .about-stats { gap: 0.6rem; }
+      .stat { padding: 0.95rem 0.85rem; }
+      .stat .n { font-size: 1.3rem; }
 
       /* Projects: comfortable single column */
-      .project-card { padding: 1.4rem; }
+      .project-card { padding: 1.15rem; }
+      .projects-grid { gap: 0.85rem; }
+      .about-grid { gap: 1.4rem; }
+      .skills-blocks { gap: 0.85rem; }
       .project-footer {
         flex-direction: column;
         align-items: flex-start;
@@ -1040,15 +1067,24 @@
       .project-arrow { align-self: flex-start; }
 
       /* Eon strip stacks, button full-width */
-      .eon-strip { flex-direction: column; align-items: flex-start; padding: 1.6rem; }
+      .eon-strip { flex-direction: column; align-items: flex-start; padding: 1.25rem; margin-top: 1.4rem; }
       .eon-link { width: 100%; justify-content: center; }
 
       /* Skill blocks full padding */
-      .skill-block { padding: 1.5rem; }
-      .skill-block.certifications h3 { font-size: 1.4rem; }
+      .skill-block { padding: 1.15rem; }
+      .skill-icon { width: 34px; height: 34px; border-radius: 8px; margin-bottom: 0.8rem; }
+      .skill-icon svg { width: 17px; height: 17px; }
+      .badge { padding: 0.34rem 0.7rem; font-size: 0.8rem; }
+      .badges { gap: 0.4rem; }
+      .project-tools span { font-size: 0.68rem; padding: 0.2rem 0.5rem; }
+      .exp { padding-bottom: 1.1rem; }
+      .timeline { padding-left: 1.3rem; }
+      .exp::before { left: -1.3rem; }
+      .foot-inner { padding-block: 0.4rem; }
+      .skill-block.certifications h3 { font-size: 1.2rem; }
 
       /* Contact buttons full-width, single column */
-      .contact-card { padding: 2rem 1.4rem; }
+      .contact-card { padding: 1.6rem 1.15rem; }
       .contact-links { flex-direction: column; align-items: stretch; }
       .contact-links .btn { width: 100%; }
 
@@ -1727,7 +1763,23 @@
         }, { passive: true });
       }
 
-      /* ---- 6. Nav elevation on scroll ---- */
+      /* ---- 6. Reveal the nav name only once the hero name is gone ----
+         Avoids showing "Edwin Gyasi Owusu" twice on the first screen. If the
+         observer is unavailable, show the name rather than hide it forever. */
+      const navEl = document.querySelector('header.nav');
+      const heroTitle = document.querySelector('.hero h1');
+      if (navEl) {
+        if (!heroTitle || !('IntersectionObserver' in window)) {
+          navEl.classList.add('no-js-brand');
+        } else {
+          const brandIO = new IntersectionObserver((entries) => {
+            entries.forEach(e => navEl.classList.toggle('past-hero', !e.isIntersecting));
+          }, { rootMargin: '-40px 0px 0px 0px', threshold: 0 });
+          brandIO.observe(heroTitle);
+        }
+      }
+
+      /* ---- 7. Nav elevation on scroll ---- */
       const nav = document.querySelector('header.nav');
       let ticking = false;
       window.addEventListener('scroll', () => {

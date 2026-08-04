@@ -350,6 +350,28 @@ Outside the repo, and only the owner can do these:
 
 ## Updates Log
 
+- 2026-08-04: Nav name hidden over the hero, and a third mobile pass that cut
+  **spacing** rather than type.
+
+  The name read twice on the first screen, once in the bar and once as the
+  hero. `.brand span` is now `opacity: 0` until the hero `h1` scrolls out of
+  view, when an IntersectionObserver puts `.past-hero` on the nav and fades it
+  in. Opacity, not `display`, so nothing reflows when it appears. If the
+  observer cannot run the script adds `.no-js-brand`, which shows the name,
+  because failing open is better than a permanently nameless bar. The three
+  `case-studies/` pages and the journal template are unaffected: they have no
+  hero, and their nav name is plain markup.
+
+  On "everything looks too big" the measurement said the type was already fine
+  (body 15.5px, section titles 25.9px) and the real cost was **vertical
+  rhythm**: `section.sec` carried 72px of padding top and bottom, so a 390px
+  screen scrolled 8821px. Phone spacing is now roughly two thirds of desktop
+  (sections 41.6px, cards 18.4px, grid gaps 13.6px, badges and skill icons
+  tightened), with type nudged one step down alongside it. Page height came
+  down to 7582px, about 14 percent shorter, and four skill badges now fit a row
+  where two did before. Body copy is 15px and should not go below that.
+
+
 - 2026-08-01: Clean URLs, and link-preview cards that actually render.
 
   **`cleanUrls: true` in `vercel.json`.** Note `vercel.json` is validated
