@@ -5,7 +5,7 @@
   "items": [
     {
       "image_alt": "GeoField Android app: Locate screen and offline Ghana geological map",
-      "href": "case-studies/geofield.html",
+      "href": "case-studies/geofield",
       "link_label": "Case Study",
       "wide": true,
       "title": "GeoField — Offline Field Geology Companion",
@@ -21,7 +21,7 @@
     },
     {
       "image_alt": "Soil samples and geological mapping",
-      "href": "case-studies/trace-metals.html",
+      "href": "case-studies/trace-metals",
       "link_label": "Case Study",
       "wide": false,
       "title": "Spatial Distribution of Trace Metals in Soil",
@@ -36,7 +36,7 @@
     },
     {
       "image_alt": "Geotechnical borehole drilling on site",
-      "href": "case-studies/geotechnical.html",
+      "href": "case-studies/geotechnical",
       "link_label": "Case Study",
       "wide": false,
       "title": "Geotechnical Site Characterization from Borehole Data",

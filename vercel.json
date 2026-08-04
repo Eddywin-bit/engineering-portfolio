@@ -3,6 +3,8 @@
   "buildCommand": "node build.js",
   "outputDirectory": ".",
   "framework": null,
+  "//cleanUrls": "Serves /journal/my-post instead of /journal/my-post.html. Vercel also 308-redirects the .html form to the clean one, so links shared before this change keep working.",
+  "cleanUrls": true,
   "headers": [
     {
       "source": "/admin/config.yml",

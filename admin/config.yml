@@ -389,11 +389,13 @@ collections:
         name: image
         widget: image
         hint: >-
-          Keep the file under 1 MB. Larger images still publish and still
-          show on the live site, but they appear broken here in the panel,
-          because the editor loads media through the GitHub API and that
-          only returns files up to 1 MB. Around 1600px wide saved as JPEG
-          is plenty.
+          Save it as JPG or PNG, not WEBP, and keep it under 1 MB. Around
+          1200x630 is ideal. This picture is what shows when the post is
+          shared on WhatsApp or LinkedIn, and those apps will not display a
+          WEBP, so a WEBP cover falls back to the generic site image. Files
+          over 1 MB also look broken here in the panel (the editor loads
+          media through the GitHub API, which stops at 1 MB), though they
+          still publish fine to the site.
       - { label: Excerpt, name: excerpt, widget: text }
       - label: Body
         name: body

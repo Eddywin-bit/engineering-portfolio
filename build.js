@@ -398,7 +398,30 @@ function buildJournalPages(journal, posts) {
     const img = /^(https?:)?\/\//.test(p.image) || p.image.startsWith('/')
       ? p.image
       : '/' + p.image.replace(/^\.?\//, '');
-    const url = `https://www.edwingyasi.online/journal/${p.slug}.html`;
+    // Clean URL (vercel.json cleanUrls). The canonical must be the clean
+    // form, otherwise it points at a URL that 308-redirects.
+    const url = `https://www.edwingyasi.online/journal/${p.slug}`;
+
+    // Share-card image. WhatsApp and most scrapers will not render WebP and
+    // want roughly 1200x630, so the cover image is only used directly when it
+    // is already a JPEG or PNG. A pre-rendered card in images/og wins, and the
+    // site card is the last resort, so a post always previews with something.
+    const ogFile = `images/og/${p.slug}.jpg`;
+    const ogPath = fs.existsSync(path.join(ROOT, ogFile))
+      ? '/' + ogFile
+      : /\.(jpe?g|png)$/i.test(img)
+        ? img
+        : '/og-engineering.png';
+    const ogUrl = /^https?:/.test(ogPath)
+      ? ogPath
+      : 'https://www.edwingyasi.online' + ogPath;
+    // Only declare dimensions for the images we know are 1200x630. Stating
+    // them for an arbitrary CMS upload would tell the scraper the wrong shape.
+    const ogSized = ogPath.startsWith('/images/og/') || ogPath === '/og-engineering.png';
+    const ogDims = ogSized
+      ? `\n  <meta property="og:image:width" content="1200" />` +
+        `\n  <meta property="og:image:height" content="630" />`
+      : '';
     const html =
 `<!DOCTYPE html>
 <html lang="en">
@@ -414,11 +437,16 @@ function buildJournalPages(journal, posts) {
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
   <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Edwin Gyasi Owusu" />
   <meta property="og:url" content="${attr(url)}" />
   <meta property="og:title" content="${attr(p.title)}" />
   <meta property="og:description" content="${attr(p.excerpt)}" />
-  <meta property="og:image" content="${attr(/^https?:/.test(img) ? img : 'https://www.edwingyasi.online' + img)}" />
+  <meta property="og:image" content="${attr(ogUrl)}" />${ogDims}
+  <meta property="og:image:alt" content="${attr(p.title)}" />
   <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="${attr(p.title)}" />
+  <meta name="twitter:description" content="${attr(p.excerpt)}" />
+  <meta name="twitter:image" content="${attr(ogUrl)}" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -431,8 +459,8 @@ function buildJournalPages(journal, posts) {
 
   <header class="nav">
     <div class="nav-inner">
-      <a href="/index.html" class="brand"><img src="/images/logo-mark.png" alt="" width="30" height="36" class="brand-mark" /><span>Edwin Gyasi Owusu</span></a>
-      <a href="/index.html#journal" class="back">
+      <a href="/" class="brand"><img src="/images/logo-mark.png" alt="" width="30" height="36" class="brand-mark" /><span>Edwin Gyasi Owusu</span></a>
+      <a href="/#journal" class="back">
         ${icon('arrow-left', '2')}
         All Writing
       </a>
@@ -457,7 +485,7 @@ ${ejBody(p.body)}
 
       <div class="cs-foot">
         <p>Thoughts on this, or want to work together?</p>
-        <a class="btn" href="/index.html#contact">
+        <a class="btn" href="/#contact">
           Get in touch
           ${icon('arrow-right', '2.2')}
         </a>
@@ -694,7 +722,7 @@ function buildEngineering() {
     .map((p, i) => {
       const d = i > 0 ? ` data-d="${i > 3 ? 1 : i}"` : '';
       return (
-        `          <a class="journal-card reveal"${d} href="journal/${attr(p.slug)}.html">\n` +
+        `          <a class="journal-card reveal"${d} href="journal/${attr(p.slug)}">\n` +
         `            <div class="journal-visual">\n` +
         `              <img src="${attr(p.image)}" alt="${attr(p.title)}" loading="lazy" />\n` +
         `            </div>\n` +
