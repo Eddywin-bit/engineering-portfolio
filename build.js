@@ -28,6 +28,36 @@ const read = (...p) => fs.readFileSync(path.join(ROOT, ...p), 'utf8');
 const json = (...p) => JSON.parse(read(...p));
 
 /* ============================================================
+   Canonical origin
+   ------------------------------------------------------------
+   THE ONE PLACE THE DOMAIN IS WRITTEN. Everything generated
+   (canonical links, og:/twitter: tags) is built from this, so a
+   domain move is a one-line change here, or an SITE_URL
+   environment variable set in Vercel, with no code edit at all.
+
+   No trailing slash. Must be the canonical host, since these
+   values are what Google and link scrapers are told to treat as
+   the real address, and pointing them at a host that redirects
+   wastes the redirect.
+
+   Not covered by this constant, so they still need editing by
+   hand on a domain move:
+     admin/config.yml   base_url, site_url, display_url
+     case-studies/*.html canonical + og: tags (static pages)
+     robots.txt, sitemap.xml
+     admin/index.html   the brand bar link
+   ============================================================ */
+const SITE = (process.env.SITE_URL || 'https://www.edwingyasi.online').replace(/\/+$/, '');
+
+/** Make a site path absolute. Leaves full URLs untouched. */
+const abs = (p) => {
+  const s = String(p || '');
+  if (!s) return '';
+  if (/^https?:\/\//i.test(s)) return s;
+  return SITE + (s.startsWith('/') ? s : '/' + s);
+};
+
+/* ============================================================
    Helpers
    ============================================================ */
 
@@ -400,7 +430,7 @@ function buildJournalPages(journal, posts) {
       : '/' + p.image.replace(/^\.?\//, '');
     // Clean URL (vercel.json cleanUrls). The canonical must be the clean
     // form, otherwise it points at a URL that 308-redirects.
-    const url = `https://www.edwingyasi.online/journal/${p.slug}`;
+    const url = `${SITE}/journal/${p.slug}`;
 
     // Share-card image. WhatsApp and most scrapers will not render WebP and
     // want roughly 1200x630, so the cover image is only used directly when it
@@ -412,9 +442,7 @@ function buildJournalPages(journal, posts) {
       : /\.(jpe?g|png)$/i.test(img)
         ? img
         : '/og-engineering.png';
-    const ogUrl = /^https?:/.test(ogPath)
-      ? ogPath
-      : 'https://www.edwingyasi.online' + ogPath;
+    const ogUrl = abs(ogPath);
     // Only declare dimensions for the images we know are 1200x630. Stating
     // them for an arbitrary CMS upload would tell the scraper the wrong shape.
     const ogSized = ogPath.startsWith('/images/og/') || ogPath === '/og-engineering.png';
@@ -796,16 +824,16 @@ function buildDesigns() {
     `    <title>${esc(meta.title)}</title>\n\n` +
     `    <!-- SOCIAL SHARE PREVIEW (The "Link Card") -->\n` +
     `    <meta property="og:type" content="website">\n` +
-    `    <meta property="og:url" content="${attr(meta.og_url)}">\n` +
+    `    <meta property="og:url" content="${attr(abs(meta.og_url))}">\n` +
     `    <meta property="og:title" content="${attr(meta.og_title)}">\n` +
     `    <meta property="og:description" content="${attr(meta.og_description)}">\n` +
-    `    <meta property="og:image" content="${attr(meta.og_image)}">\n\n` +
+    `    <meta property="og:image" content="${attr(abs(meta.og_image))}">\n\n` +
     `    <!-- TWITTER / X CARD -->\n` +
     `    <meta name="twitter:card" content="summary_large_image">\n` +
-    `    <meta name="twitter:url" content="${attr(meta.og_url)}">\n` +
+    `    <meta name="twitter:url" content="${attr(abs(meta.og_url))}">\n` +
     `    <meta name="twitter:title" content="${attr(meta.og_title)}">\n` +
     `    <meta name="twitter:description" content="${attr(meta.og_description)}">\n` +
-    `    <meta name="twitter:image" content="${attr(meta.og_image)}">`;
+    `    <meta name="twitter:image" content="${attr(abs(meta.og_image))}">`;
 
   /* ---- desktop nav ---- */
   const navBtn = (l) =>

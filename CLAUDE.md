@@ -313,6 +313,41 @@ in-repo fix is a standalone shim that listens on the control pane and drives
 the feature rather than fixing it, and it would double-sync if Decap ever ships
 the upstream fix, so it has not been written. Left deliberately broken.
 
+## Changing the domain
+
+`build.js` has a single `SITE` constant near the top, and everything it
+generates (canonical links, og:/twitter: tags on the journal pages and the
+designs site) is built from it. Setting the `SITE_URL` environment variable in
+Vercel overrides it with **no code change at all**. Verified by running
+`SITE_URL=https://edwingyasi.me node build.js` and confirming every generated
+absolute URL moved, then reverting.
+
+Same-site links in `/content` are stored **root-relative** (`/designs`,
+`/og-designs.png`) precisely so they survive a domain move untouched.
+`abs()` in `build.js` absolutises them at build time where a full URL is
+required, which is only ever og:/twitter: and canonical.
+
+These are NOT generated and still need editing by hand:
+
+| File | What |
+|---|---|
+| `admin/config.yml` | `base_url`, `site_url`, `display_url` |
+| `admin/index.html` | brand-bar link, and the URL shown in the login preview |
+| `case-studies/*.html` | canonical + og:/twitter: on all three, they are static |
+| `robots.txt` | the `Sitemap:` line |
+| `sitemap.xml` | the one `<loc>` |
+| `content/engineering/projects.json` | the Eon strip label reads "Visit edwingyasi.online" — display text, so it is CMS content |
+
+Outside the repo, and only the owner can do these:
+
+- Add the new domain in Vercel and point DNS at it.
+- **Keep the old domain registered and redirecting.** That 301 is what carries
+  the existing Google ranking. Google's guidance is a year minimum.
+- Update the **GitHub OAuth App callback URL**. It must match exactly or the
+  CMS login breaks the moment the domain changes.
+- Google Search Console: add the new property, verify, then run **Change of
+  Address**.
+
 ## Updates Log
 
 - 2026-08-01: Clean URLs, and link-preview cards that actually render.
