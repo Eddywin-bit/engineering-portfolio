@@ -419,13 +419,24 @@ Outside the repo, and only the owner can do these:
     edges meeting at that corner are each half the box wide, so the entire
     bottom of the circle becomes a wide cone rather than a small tail.
 
-  The shape was eventually **traced by measurement, not by eye**, and two
-  guesses missed it first. The geometry that matters: the tail's **left edge is
-  a straight vertical drop on the circle's centre line**, and only the right
-  edge curves in to meet it. Curving both edges gives a symmetric cone hanging
-  under the circle, which is a visibly different thing. The tail leaves the
-  circle low on the right, drops about 20% of the diameter below it, and its tip
-  sits a hair right of centre. Total height is 2.40x the circle's radius.
+  The shape was eventually **traced by measurement, not by eye**, and three
+  guesses missed it first. The geometry that matters:
+
+  - The tail's **left edge is a straight vertical drop on the circle's centre
+    line**, from the circle's bottom to the tip.
+  - The **right edge is a straight LINE, not a curve**, running from the circle
+    at about (86, 85) to (55, 119) in viewBox units, a slope of roughly -0.91.
+    Curving it is exactly what makes the tail look fat, and that was the last
+    thing to get fixed.
+  - The tip is a small blunt cap, not a sharp point.
+  - Total height is **2.40x the circle's radius**.
+
+  Spacing under it is measured too: the reference leaves **5.8% of the viewport
+  width** between the tail and the label below. The label's own line-box
+  half-leading supplies nearly all of that, so `.hero-photo` carries
+  `margin-bottom: 0` deliberately and `.hero-eyebrow` has a tightened
+  `line-height`. Adding any margin overshoots immediately; it was 15.5% before,
+  nearly three times his.
 
   The way to check this, rather than squinting: threshold the reference
   screenshot against its flat background and record the left and right extent of

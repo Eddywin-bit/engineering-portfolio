@@ -367,12 +367,16 @@
     /* Phones: a speech-bubble avatar, traced from the reference by measuring
        its silhouette out of the screenshot rather than by eye.
 
-       The geometry that matters, and that two guesses got wrong: the tail's
-       LEFT edge is a straight VERTICAL drop on the circle's centre line, and
-       only the right edge curves in to meet it. Curving both edges makes a
-       symmetric cone hanging under the circle, which is a different shape. The
-       tail leaves the circle at about 8 o'clock-and-a-half on the right, drops
-       ~20% of the diameter below it, and its tip sits a hair right of centre.
+       The geometry, all of it measured off the reference rather than judged
+       by eye, because three attempts by eye were all wrong:
+
+         - the LEFT edge is a straight VERTICAL drop on the circle's centre
+           line, from the circle's bottom to the tip;
+         - the RIGHT edge is a straight LINE, not a curve, running from the
+           circle at roughly (86, 85) to (55, 119) in viewBox units, a slope of
+           about -0.91. Curving it is what makes the tail look fat;
+         - the tip is a small blunt cap, not a sharp point;
+         - total height is 2.40x the circle's radius.
 
        Drawn as an SVG mask rather than with border-radius. Two earlier
        attempts are worth not repeating: a pseudo-element tail has to be
@@ -394,7 +398,11 @@
          large phones. */
       width: clamp(64px, 19vw, 88px);
       aspect-ratio: 100 / 121;
-      margin-bottom: 1.4rem;
+      /* Measured: the reference leaves 5.8% of the viewport width between the
+         tail and the label, and the label's own line-box leading already
+         supplies nearly all of that, so this is zero on purpose. Any margin
+         here pushes the gap straight past his. */
+      margin-bottom: 0;
     }
     .hero-portrait {
       width: 100%;
@@ -407,7 +415,7 @@
       object-fit: cover;
       object-position: 50% 38%;
       display: block;
-      --bubble: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 121'%3E%3Ccircle cx='50' cy='50' r='50' fill='white'/%3E%3Cpath d='M77 92C74 99 67 108 52.5 120.1L50 118.5L50 100Z' fill='white'/%3E%3C/svg%3E");
+      --bubble: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 121'%3E%3Ccircle cx='50' cy='50' r='50' fill='white'/%3E%3Cpath d='M86 85L54.9 119.1Q51.6 120.9 50 118.8L50 100Z' fill='white'/%3E%3C/svg%3E");
       -webkit-mask-image: var(--bubble);
       mask-image: var(--bubble);
       -webkit-mask-size: 100% 100%;
@@ -424,6 +432,10 @@
     .hero-eyebrow {
       font-size: clamp(0.98rem, 4vw, 1.12rem);
       font-weight: 400;
+      /* A single-line label needs no body leading, and the half-leading above
+         it is what sets the gap under the portrait, so this is part of the
+         spacing measurement above rather than a free choice. */
+      line-height: 1.4;
       color: var(--ink-mute);
       margin-bottom: 0.25rem;
     }
