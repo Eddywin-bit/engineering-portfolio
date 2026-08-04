@@ -419,8 +419,24 @@ Outside the repo, and only the owner can do these:
     edges meeting at that corner are each half the box wide, so the entire
     bottom of the circle becomes a wide cone rather than a small tail.
 
+  The shape was eventually **traced by measurement, not by eye**, and two
+  guesses missed it first. The geometry that matters: the tail's **left edge is
+  a straight vertical drop on the circle's centre line**, and only the right
+  edge curves in to meet it. Curving both edges gives a symmetric cone hanging
+  under the circle, which is a visibly different thing. The tail leaves the
+  circle low on the right, drops about 20% of the diameter below it, and its tip
+  sits a hair right of centre. Total height is 2.40x the circle's radius.
+
+  The way to check this, rather than squinting: threshold the reference
+  screenshot against its flat background and record the left and right extent of
+  the **longest run** per row (longest, because the page's hexagon pattern
+  merges into a naive first/last-pixel scan and fakes a bulge). Do the same to a
+  screenshot of the live element with the photo forced to a solid fill, then
+  normalise both by circle radius and diff them. Current agreement is within 1-2
+  units in 50 at every sample.
+
   The mask carries its own `viewBox`, so it scales, but the box must keep the
-  mask's **100:122 ratio** or the tail stretches. The image is pulled up with
+  mask's **100:121 ratio** or the tail stretches. The image is pulled up with
   `object-position: 50% 38%` because the face has to centre in the CIRCLE, not
   in the taller box the tail adds. Desktop drops the mask entirely for a plain
   rounded rectangle, as the reference does, and must undo the ratio too.

@@ -364,9 +364,15 @@
       margin: 0 0 clamp(1.2rem, 3vw, 1.6rem);
     }
     .hero-side { display: block; }
-    /* Phones: a speech-bubble avatar. A full circle with a small tail hanging
-       off the lower right and tapering to a point just below centre, traced
-       from the reference.
+    /* Phones: a speech-bubble avatar, traced from the reference by measuring
+       its silhouette out of the screenshot rather than by eye.
+
+       The geometry that matters, and that two guesses got wrong: the tail's
+       LEFT edge is a straight VERTICAL drop on the circle's centre line, and
+       only the right edge curves in to meet it. Curving both edges makes a
+       symmetric cone hanging under the circle, which is a different shape. The
+       tail leaves the circle at about 8 o'clock-and-a-half on the right, drops
+       ~20% of the diameter below it, and its tip sits a hair right of centre.
 
        Drawn as an SVG mask rather than with border-radius. Two earlier
        attempts are worth not repeating: a pseudo-element tail has to be
@@ -377,13 +383,13 @@
        so the whole bottom of the circle becomes a cone.
 
        The mask carries its own viewBox, so it scales with the element and the
-       box must keep the mask's 100:122 ratio or the tail stretches. The image
+       box must keep the mask's 100:121 ratio or the tail stretches. The image
        is nudged up because the face should centre in the CIRCLE, not in the
        taller box the tail adds. */
     .hero-photo {
       display: block;
       width: 104px;
-      aspect-ratio: 100 / 122;
+      aspect-ratio: 100 / 121;
       margin-bottom: 1.4rem;
     }
     .hero-portrait {
@@ -397,7 +403,7 @@
       object-fit: cover;
       object-position: 50% 38%;
       display: block;
-      --bubble: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 122'%3E%3Ccircle cx='50' cy='50' r='50' fill='white'/%3E%3Cpath d='M80 92C81 108 67 117 50 119C48 112 46 105 46 99Z' fill='white'/%3E%3C/svg%3E");
+      --bubble: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 121'%3E%3Ccircle cx='50' cy='50' r='50' fill='white'/%3E%3Cpath d='M77 92C74 99 67 108 52.5 120.1L50 118.5L50 100Z' fill='white'/%3E%3C/svg%3E");
       -webkit-mask-image: var(--bubble);
       mask-image: var(--bubble);
       -webkit-mask-size: 100% 100%;
