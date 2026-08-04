@@ -25,9 +25,7 @@
   <meta name="twitter:description" content="Reflecting on my time at New Juaben SHS. The hunger for technology in Ghana is undeniable; our job is simply to provide the roadmap." />
   <meta name="twitter:image" content="https://www.edwingyasi.online/images/og/empowering-the-next-gen.jpg" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="preload" href="/fonts/clash-display-var.woff2" as="font" type="font/woff2" crossorigin />
 
   <style>
     :root {
@@ -35,9 +33,12 @@
       --emerald:#0F766E;--emerald-hi:#14867D;--emerald-deep:#0A5952;--emerald-soft:rgba(15,118,110,0.08);--emerald-tint:#E8F2F0;
       --gold:#C89B3C;--gold-soft:rgba(200,155,60,0.12);
       --line:rgba(28,28,28,0.10);--line-soft:rgba(28,28,28,0.06);
-      --font-heading:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;--font-body:'Inter',system-ui,-apple-system,sans-serif;
+      --font-heading:'Clash Display',system-ui,-apple-system,sans-serif;--font-body:'Clash Display',system-ui,-apple-system,sans-serif;
       --max:820px;--radius:16px;--ease:cubic-bezier(0.22,0.61,0.36,1);
     }
+    /* Clash Display has no weight above 700; asking for 800 gets a synthesised
+       fake bold, so the heavy headings below are capped at 700. */
+    @font-face{font-family:'Clash Display';src:url('/fonts/clash-display-var.woff2') format('woff2');font-weight:200 700;font-style:normal;font-display:swap;}
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
     html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
     body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:17px;line-height:1.7;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
@@ -53,7 +54,7 @@
     .cs-header{padding:clamp(2.5rem,6vw,4rem) 0 clamp(1.2rem,3vw,1.8rem);}
     .cs-cat{display:inline-flex;align-items:center;gap:0.5rem;font-size:0.8rem;font-weight:500;color:var(--emerald);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:1.2rem;}
     .cs-cat .pin{width:6px;height:6px;border-radius:50%;background:var(--emerald);}
-    .cs-title{font-family:var(--font-heading);font-weight:800;font-size:clamp(2rem,5.5vw,3.2rem);line-height:1.08;letter-spacing:-0.03em;margin-bottom:1.2rem;}
+    .cs-title{font-family:var(--font-heading);font-weight:700;font-size:clamp(2rem,5.5vw,3.2rem);line-height:1.08;letter-spacing:-0.03em;margin-bottom:1.2rem;}
     .cs-lede{font-size:1.15rem;color:var(--ink-mute);line-height:1.6;max-width:60ch;}
     .cs-hero-img{border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);margin:clamp(2rem,4vw,2.8rem) 0 clamp(2rem,5vw,3rem);background:var(--bg-tint);}
     .cs-hero-img img{width:100%;height:auto;}

@@ -4,7 +4,7 @@
   "links": [
     { "label": "Email", "href": "mailto:gyasiedwin14@gmail.com", "style": "primary", "icon": "arrow-right", "new_tab": false, "download": false },
     { "label": "LinkedIn", "href": "https://www.linkedin.com/in/edwin-gyasi", "style": "ghost", "icon": "arrow-up-right", "new_tab": true, "download": false },
-    { "label": "CV", "href": "resume.pdf", "style": "ghost", "icon": "arrow-up-right", "new_tab": false, "download": true },
+    { "label": "CV", "href": "/Edwin_Gyasi_Resume.pdf", "style": "ghost", "icon": "arrow-up-right", "new_tab": false, "download": true },
     { "label": "Eon Designs", "href": "/designs", "style": "ghost", "icon": "arrow-up-right", "new_tab": true, "download": false }
   ]
 }

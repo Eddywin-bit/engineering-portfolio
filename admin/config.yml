@@ -102,19 +102,49 @@ collections:
                 }
           - { label: Button Label, name: cta_label, widget: string }
           - { label: Button Target, name: cta_href, widget: string, default: '#contact' }
+          - label: Location
+            name: location
+            widget: string
+            required: false
+            hint: Shown beside your name on desktop and in the phone menu.
+          - label: Timezone Label
+            name: timezone
+            widget: string
+            required: false
+            default: 'GMT+0'
+            hint: Printed next to the clock in the phone menu. Just the label.
 
       - name: hero
         label: 3. Hero
         file: content/engineering/hero.json
         description: The first screen visitors see.
         fields:
-          - { label: Headline, name: headline, widget: string }
-          - label: Role Line
-            name: roles
-            widget: list
-            label_singular: Role
-            hint: Shown on one line, separated by dots. Drag to reorder.
-            field: { label: Role, name: role, widget: string }
+          - label: Headline
+            name: headline
+            widget: string
+            hint: >-
+              Your full name. The first two words are set large either side of
+              your photo; anything after them stays readable to Google but is
+              not shown.
+          - label: Portrait Photo
+            name: portrait
+            widget: image
+            required: false
+            hint: >-
+              Upright photo, roughly 3 wide by 4 tall. Sits between your first
+              and last name on desktop and above them on phones. Keep it under
+              1 MB or the panel cannot preview it. Leave empty and the two
+              names simply close up.
+          - label: Label, Left of Name
+            name: eyebrow_left
+            widget: string
+            required: false
+            hint: Small line above your first name, e.g. Geological Engineer.
+          - label: Label, Right of Name
+            name: eyebrow_right
+            widget: string
+            required: false
+            hint: Small line above your surname. Desktop only.
           - { label: Sub-headline, name: subline, widget: text }
           - label: Buttons
             name: buttons
@@ -273,9 +303,12 @@ collections:
         file: content/engineering/experience.json
         fields:
           - { label: Eyebrow, name: eyebrow, widget: string }
-          - { label: Section Title, name: title, widget: string }
+          - label: Section Title
+            name: title
+            widget: string
+            hint: The last word is shown in green, so "Work Experience" reads with "Experience" highlighted.
           - { label: Section Subtitle, name: subtitle, widget: text }
-          - label: Timeline Entries
+          - label: Roles
             name: entries
             widget: list
             label_singular: Role
@@ -284,7 +317,6 @@ collections:
               - { label: Date Range, name: date, widget: string }
               - { label: Role, name: role, widget: string }
               - { label: Organisation, name: org, widget: string }
-              - { label: Description, name: description, widget: text }
 
       - name: journal
         label: 8. Journal Section

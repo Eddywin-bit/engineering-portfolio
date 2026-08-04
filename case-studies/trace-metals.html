@@ -28,9 +28,7 @@
   <meta name="twitter:description" content="Final-year geostatistical research mapping As, Pb, Cd, and Ni contamination across Abuakwa South using Ordinary Kriging and spline interpolation in QGIS and Python." />
   <meta name="twitter:image" content="https://www.edwingyasi.online/og-engineering.png" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="preload" href="/fonts/clash-display-var.woff2" as="font" type="font/woff2" crossorigin />
 
   <style>
     :root {
@@ -52,12 +50,13 @@
       --gold-tint:  #F7EFD9;
       --line:       rgba(28, 28, 28, 0.10);
       --line-soft:  rgba(28, 28, 28, 0.06);
-      --font-heading: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-      --font-body:    'Inter', system-ui, -apple-system, sans-serif;
+      --font-heading:'Clash Display',system-ui,-apple-system,sans-serif;
+      --font-body:'Clash Display',system-ui,-apple-system,sans-serif;
       --max: 820px;
       --radius: 16px;
       --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
     }
+    @font-face{font-family:'Clash Display';src:url('/fonts/clash-display-var.woff2') format('woff2');font-weight:200 700;font-style:normal;font-display:swap;}
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
     body {
@@ -113,7 +112,7 @@
     }
     .cs-cat .pin { width: 6px; height: 6px; border-radius: 50%; background: var(--emerald); }
     .cs-title {
-      font-family: var(--font-heading); font-weight: 800;
+      font-family: var(--font-heading); font-weight:700;
       font-size: clamp(2.2rem, 6vw, 3.4rem); line-height: 1.08;
       letter-spacing: -0.03em; margin-bottom: 1.2rem;
     }

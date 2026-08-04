@@ -1,31 +1,27 @@
 {
   "eyebrow": "Experience",
-  "title": "Work & leadership.",
-  "subtitle": "Internships, roles, and studio work that shaped the path so far.",
+  "title": "Work Experience",
+  "subtitle": "My impact over the years.",
   "entries": [
     {
       "date": "2024 – Present",
       "role": "Public Relations Officer",
-      "org": "AusIMM Tarkwa Student Chapter",
-      "description": "Led communications and member engagement for a 500+ attendee conference. Ran the \"I Will Be Joining\" campaign and supported the launch of a new chapter at UENR. Awarded a Certificate of Appreciation by Ing. Henry Antwi (FAusIMM)."
+      "org": "AusIMM Tarkwa Student Chapter"
     },
     {
       "date": "Summer 2024",
       "role": "Geotechnical Intern",
-      "org": "CSIR Building & Road Research Institute",
-      "description": "Supported geotechnical investigation and laboratory testing routines under senior engineers, across site characterization, soil testing pipelines, and reporting practice."
+      "org": "CSIR Building & Road Research Institute"
     },
     {
       "date": "2023 – Present",
       "role": "Founder & Creative Director",
-      "org": "Eon Designs",
-      "description": "Founded and run a working design studio serving organisational clients across Ghana, including AusIMM Tarkwa, GESS-KNUST, ICGC, and Fragilda. Output spans brand identity, print production, and large-volume automation (500+ programmatically generated certificates)."
+      "org": "Eon Designs"
     },
     {
       "date": "Summer 2023",
       "role": "Construction Materials Intern",
-      "org": "Fragilda Construction Company",
-      "description": "First professional exposure to construction materials workflows on active project sites, including quantity tracking, materials handling, and site operations alongside the technical team."
+      "org": "Fragilda Construction Company"
     }
   ]
 }

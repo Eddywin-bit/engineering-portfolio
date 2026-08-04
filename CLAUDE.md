@@ -350,7 +350,67 @@ Outside the repo, and only the owner can do these:
 
 ## Updates Log
 
+- 2026-08-04: Engineering site rebuilt around **Nikola Radeski's** layout, at the
+  owner's request and from his screenshots. Three changes plus one bug fix.
+
+  **Typeface: Clash Display, self-hosted, everywhere.** Both `--font-heading`
+  and `--font-body` point at it now, replacing Plus Jakarta Sans and Inter, and
+  the Google Fonts `<link>` is gone from `index.html`, the journal template in
+  `build.js`, all three `case-studies/*.html`, and the admin preview sheet.
+  One variable file at `fonts/clash-display-var.woff2` carries the whole range
+  in **18KB**, subset to latin with `pyftsubset --flavor=woff2`.
+
+  **The family stops at 700.** There is no 800 or 900. Every `font-weight:800`
+  in the repo was lowered, because asking for a weight the file does not have
+  gets a synthesised fake bold that looks nothing like the real face.
+
+  **Two navigations, not one.** Desktop gets a floating dark dock pinned to the
+  bottom of the viewport; phones get a dark bar pinned to the top plus a
+  full-screen overlay with a live Ghana clock. Both are always in the DOM and
+  CSS picks one at **900px**. They are different shapes rather than one shape at
+  two sizes, so do not try to merge them. Both are `position:fixed`, so `body`
+  reserves room with `padding-top` on phones and `padding-bottom` on desktop;
+  `--topbar-h` pins the bar's height and the body padding together.
+
+  **The hero name splits around a portrait.** First name left, surname right,
+  photo between them, in caps on desktop and stacked in sentence case on
+  phones. Three things that were got wrong first time and are easy to repeat:
+
+  - **An element cannot be its own container query container.** `100cqw`
+    resolves against the nearest ANCESTOR container, so `container-type` and
+    `font-size:100cqw/...` on the same element silently falls back to the
+    viewport. That is why `.hero-part` (the container) and `.hero-word` (the
+    text) are separate elements. The symptom was a name 20% too big that
+    overflowed its column only at 900px.
+  - **`--ratio: 3.30` is measured, not guessed.** "EDWIN" renders 3.29x its
+    font size in this face at this tracking and "GYASI" 3.10x. Both halves must
+    be the same size, so the divisor is the WIDER word's; below 3.29 the long
+    half runs into the photo. Remeasure with a **Range over `.hero-word`** if
+    the name or tracking changes: the element's own `getBoundingClientRect`
+    reports the column it fills, not the glyphs.
+  - **The two halves share a grid row, they are not two centred columns.** The
+    right column carries an extra location line, so centring two column boxes
+    drops the left name by half that line. `.hero-side` is `display:contents` on
+    desktop and every child is placed by `grid-area`.
+
+  The portrait is a new **optional** CMS field. With none set, `.no-portrait`
+  collapses the middle column and moves the two labels to the outer edges. The
+  photo was still missing when this shipped.
+
+  Also: the hero **roles line was removed** (it repeated the new label directly
+  above it) and **experience descriptions were removed** from both the page and
+  the panel, since the full history is on LinkedIn. The Bodoni wordmark and
+  `fonts/bodoni-moda-900.woff2` are deleted; the note below is history now.
+
+  **Bug fixed on the way past:** the hero Resume button and the Contact CV link
+  both pointed at `resume.pdf`, which does not exist. The file is
+  `Edwin_Gyasi_Resume.pdf`. Both had been 404ing. `cleanUrls` only strips
+  `.html`, so it was never going to rescue that path. The experience section's
+  Download CV pill reads the same value out of Contact, so the path now lives in
+  exactly one place.
+
 - 2026-08-04: The hero name is a **Didone wordmark** now, not a plain heading.
+  **Superseded on the same day by the entry above; kept for the reasoning.**
 
   "Edwin" is set large in **Bodoni Moda Black**, self-hosted at
   `fonts/bodoni-moda-900.woff2`, with "GYASI OWUSU" in letterspaced caps

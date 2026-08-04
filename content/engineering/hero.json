@@ -1,11 +1,8 @@
 {
   "headline": "Edwin Gyasi Owusu.",
-  "roles": [
-    "Geological Engineer",
-    "Mining",
-    "Geotechnical",
-    "Oil & Gas"
-  ],
+  "portrait": "",
+  "eyebrow_left": "Geological Engineer",
+  "eyebrow_right": "Founder, Eon Designs",
   "subline": "Using geology, data, and AI to shape the future of engineering.",
   "buttons": [
     {
@@ -26,7 +23,7 @@
     },
     {
       "label": "Resume",
-      "href": "resume.pdf",
+      "href": "/Edwin_Gyasi_Resume.pdf",
       "style": "ghost",
       "icon": "arrow-up-right",
       "new_tab": true,

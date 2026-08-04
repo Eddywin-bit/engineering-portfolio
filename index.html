@@ -17,11 +17,25 @@
   <meta name="description" content="Edwin Gyasi Owusu, Geological Engineer working across mining, geotechnical engineering, data analytics, and AI. Based in Kumasi, Ghana." />
 <!-- CMS:END e-head -->
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="preload" href="/fonts/clash-display-var.woff2" as="font" type="font/woff2" crossorigin />
 
   <style>
+    /* Clash Display, self-hosted. One variable file carries the whole 200-700
+       range, so every weight on the page costs a single 18KB request and there
+       is no Google Fonts round trip. The family has no weight above 700, so
+       700 is the heaviest the wordmark can go; do not ask for 800 or 900, the
+       browser will synthesise a fake bold that looks nothing like the real
+       face. Note `format('woff2')` alone is enough in every current browser;
+       the older `woff2-variations` string is not needed and is not understood
+       by some parsers, which silently drops the whole @font-face. */
+    @font-face {
+      font-family: 'Clash Display';
+      src: url('/fonts/clash-display-var.woff2') format('woff2');
+      font-weight: 200 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
     :root {
       --bg:         #FAFAF8;
       --bg-elev:    #FFFFFF;
@@ -43,10 +57,19 @@
       --line:       rgba(28, 28, 28, 0.10);
       --line-soft:  rgba(28, 28, 28, 0.06);
 
-      --font-heading: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-      --font-body:    'Inter', system-ui, -apple-system, sans-serif;
+      /* One family for everything, which is what the reference site does.
+         Both names are kept so the many rules that ask for one or the other
+         still say what they mean, and so a second face can be reintroduced
+         for body copy by changing this one line. */
+      --font-heading: 'Clash Display', system-ui, -apple-system, sans-serif;
+      --font-body:    'Clash Display', system-ui, -apple-system, sans-serif;
 
       --max: 1180px;
+      /* Height of the fixed mobile top bar. Set here rather than measured,
+         because body padding-top has to match it exactly and a measured value
+         would only be right after the first paint. .topbar-inner is pinned to
+         it, so the two cannot drift. */
+      --topbar-h: 58px;
       --radius: 16px;
       --radius-sm: 10px;
       --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
@@ -77,121 +100,217 @@
     }
 
     /* =========== NAV =========== */
-    header.nav {
-      position: sticky;
-      top: 0;
-      z-index: 60;
-      background: color-mix(in srgb, var(--bg) 82%, transparent);
-      backdrop-filter: blur(16px) saturate(1.2);
-      -webkit-backdrop-filter: blur(16px) saturate(1.2);
-      border-bottom: 1px solid var(--line-soft);
+    /* Two separate navigations, not one that restyles. Desktop gets a floating
+       dock pinned to the bottom of the viewport; phones get a dark bar pinned
+       to the top plus a full-screen overlay. Both are always in the DOM and
+       swapped with display, because they are different shapes rather than the
+       same shape at two sizes, and trying to morph one into the other means
+       every rule needs an override at the breakpoint.
+
+       --dock-bp is the single switch. Below it the topbar shows, at or above
+       it the dock shows. Keep the two @media queries in agreement: they use
+       the same literal because custom properties are not allowed in a media
+       query condition. */
+
+    /* ---- desktop: floating bottom dock ---- */
+    .dock {
+      display: none;
+      position: fixed;
+      left: 50%;
+      bottom: clamp(16px, 2.2vw, 26px);
+      transform: translateX(-50%);
+      z-index: 80;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 7px 7px 7px 8px;
+      background: #101010;
+      border-radius: 999px;
+      box-shadow: 0 18px 44px rgba(0, 0, 0, 0.30), 0 2px 8px rgba(0, 0, 0, 0.18);
+      /* The dock sits above page content the whole time, so it needs to stay
+         readable over anything that scrolls under it. A solid fill does that
+         more reliably than a blur, which washes out over busy images. */
     }
-    /* Vertical padding only. This element is `class="wrap nav-inner"`, and
-       .wrap supplies the horizontal gutter, so the `padding: 1rem 0`
-       shorthand that used to be here reset that gutter to zero at every
-       width. Above 1180px the max-width centring hands back a margin and
-       hides it, but from 1180px down the bar runs flush to both viewport
-       edges, which is where the logo and the Contact button touching the
-       screen on mobile came from. Use the longhands so the two rules
-       compose instead of fighting, here and in the .scrolled state. */
-    .nav-inner {
+    @media (min-width: 900px) { .dock { display: flex; } }
+
+    .dock-home {
+      display: grid;
+      place-items: center;
+      width: 46px;
+      height: 46px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.10);
+      transition: background 0.25s var(--ease);
+    }
+    .dock-home:hover { background: rgba(255, 255, 255, 0.18); }
+    .dock-home img { height: 22px; width: auto; }
+
+    .dock a.dock-link {
+      padding: 0 1.05rem;
+      line-height: 46px;
+      font-size: 0.95rem;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.86);
+      border-radius: 999px;
+      white-space: nowrap;
+      transition: color 0.2s var(--ease), background 0.2s var(--ease);
+    }
+    .dock a.dock-link:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.08);
+    }
+    .dock-cta {
+      margin-left: 0.35rem;
+      padding: 0 1.5rem;
+      line-height: 46px;
+      border-radius: 999px;
+      background: var(--emerald);
+      color: #fff;
+      font-size: 0.95rem;
+      font-weight: 500;
+      white-space: nowrap;
+      transition: background 0.25s var(--ease);
+    }
+    .dock-cta:hover { background: var(--emerald-hi); }
+
+    /* ---- mobile: dark top bar ---- */
+    .topbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 80;
+      background: #101010;
+    }
+    @media (min-width: 900px) { .topbar { display: none; } }
+    /* Vertical padding only: this element is `class="wrap topbar-inner"` and
+       .wrap supplies the horizontal gutter, so a `padding: Xrem Y` shorthand
+       here would silently reset that gutter to Y at every width. This is the
+       same trap that once ran the old nav flush to both screen edges. */
+    .topbar-inner {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding-top: 1rem;
-      padding-bottom: 1rem;
+      height: var(--topbar-h);
       gap: 1rem;
     }
-    /* Brand: the cube mark, then the name as live text. Written by build.js,
-       so change it there, not in the generated region below.
-
-       The name is deliberately the smaller of the two. It is a label beside
-       the logo, not a wordmark competing with it: 15px against a 30px mark,
-       about half its height. The old rule set 1.05rem/700 here to style a
-       PNG's alt text, and at that size the name outweighs the icon. If this
-       ever looks too small against Plus Jakarta Sans, adjust it, but do not
-       let it creep back up toward the icon's height.
-
-       Deliberately not resized in the .scrolled state: the compressed nav
-       shrinks .nav-inner padding, and growing the mark at the same moment
-       would cancel most of that and read as the logo lurching outward. */
     .brand {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 9px;
       font-family: var(--font-heading);
       letter-spacing: -0.01em;
-      color: var(--ink);
+      color: #fff;
     }
-    .brand-mark {
-      height: 30px;
-      width: auto;
-      display: block;
-    }
+    .brand-mark { height: 26px; width: auto; display: block; }
     .brand span {
-      font-size: 15px;
+      font-size: 17px;
       font-weight: 600;
       line-height: 1;
-      /* The name is a flex item, so wrapping shows up as a doubled height
-         rather than two client rects. Keep it on one line; it still fits
-         beside the mark and the CTA at 320px. */
+      /* A flex item, so wrapping reads as doubled height rather than two
+         client rects. Keep it on one line. */
       white-space: nowrap;
     }
-    .nav-links {
-      display: none;
-      gap: 2rem;
-      font-size: 0.9rem;
-      color: var(--ink-soft);
-    }
-    .nav-links a {
-      position: relative;
-      padding: 0.35rem 0;
-      transition: color 0.2s var(--ease);
-    }
-    .nav-links a:hover { color: var(--emerald); }
-    .nav-links a::after {
-      content: "";
-      position: absolute;
-      left: 0; bottom: -2px;
-      width: 100%; height: 1px;
-      background: var(--emerald);
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform 0.3s var(--ease);
-    }
-    .nav-links a:hover::after { transform: scaleX(1); }
-    @media (min-width: 800px) { .nav-links { display: flex; } }
 
-    .nav-cta {
-      display: inline-flex;
+    .menu-btn {
+      display: flex;
       align-items: center;
-      gap: 0.5rem;
-      padding: 0.6rem 1.1rem;
-      background: var(--ink);
-      color: var(--bg);
-      border-radius: 999px;
-      font-size: 0.85rem;
-      font-weight: 500;
-      transition: all 0.3s var(--ease);
+      gap: 0.6rem;
+      color: #fff;
+      font-size: 1.05rem;
+      font-weight: 400;
+      padding: 0.2rem 0;
     }
-    .nav-cta:hover {
-      background: var(--emerald);
-      transform: translateY(-1px);
+    .menu-ico { display: grid; gap: 5px; width: 22px; }
+    .menu-ico i {
+      display: block;
+      height: 2.5px;
+      background: #fff;
+      border-radius: 2px;
+      transition: transform 0.3s var(--ease), opacity 0.2s var(--ease);
     }
-    .nav-cta svg { width: 14px; height: 14px; }
+
+    /* ---- mobile: full-screen menu ---- */
+    .menu {
+      position: fixed;
+      inset: 0;
+      z-index: 90;
+      background: var(--bg);
+      padding: clamp(1.4rem, 6vw, 2rem);
+      overflow-y: auto;
+      /* Animated rather than toggled with [hidden] so it can fade. It is
+         inert when closed: pointer-events off AND visibility hidden, because
+         opacity alone still leaves the links focusable by keyboard. */
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.3s var(--ease), visibility 0s linear 0.3s;
+    }
+    body.menu-open .menu {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transition: opacity 0.3s var(--ease), visibility 0s;
+    }
+    body.menu-open { overflow: hidden; }
+    @media (min-width: 900px) { .menu { display: none; } }
+
+    .menu-top { display: flex; align-items: flex-start; justify-content: space-between; }
+    .menu-close {
+      font-size: 1.9rem;
+      line-height: 1;
+      color: var(--ink);
+      padding: 0.2rem 0.4rem;
+    }
+    .menu-mark { height: 46px; width: auto; }
+    .menu-place { margin-top: 1rem; font-size: 1.15rem; color: var(--ink-soft); }
+    .menu-time { margin-top: 0.2rem; font-size: 0.95rem; color: var(--ink-faint); }
+    .menu-label {
+      margin-top: 1.8rem;
+      font-size: 0.95rem;
+      color: var(--ink-faint);
+    }
+    .menu-links { display: grid; margin-top: 0.6rem; }
+    .menu-links a {
+      font-size: clamp(1.9rem, 8vw, 2.4rem);
+      font-weight: 400;
+      line-height: 1.45;
+      color: var(--ink-mute);
+      letter-spacing: -0.02em;
+    }
+    .menu-links a:hover, .menu-links a:focus-visible { color: var(--ink); }
+    .menu-foot { margin-top: 2rem; }
+    .menu-foot .menu-label { margin-top: 0; }
+    .menu-foot a {
+      display: block;
+      margin-top: 0.4rem;
+      font-size: clamp(1.05rem, 4.6vw, 1.3rem);
+      color: var(--ink-soft);
+      word-break: break-word;
+    }
+
+    /* Both navigations are position:fixed, so neither takes up flow space and
+       the page has to reserve it. Without this the topbar covers the top of
+       the hero on phones and the dock sits on top of the footer on desktop. */
+    body { padding-top: var(--topbar-h); }
+    @media (min-width: 900px) {
+      body { padding-top: 0; padding-bottom: 104px; }
+    }
 
     /* =========== HERO =========== */
     .hero {
       position: relative;
-      min-height: calc(100vh - 68px);
+      /* The navigations are fixed, so neither eats into the viewport the way
+         the old sticky header did and the hero gets the full height. */
+      min-height: calc(100vh - var(--topbar-h));
       display: flex;
       align-items: center;
-      padding: clamp(4rem, 10vw, 7rem) 0 clamp(4rem, 10vw, 6rem);
+      padding: clamp(2.5rem, 8vw, 5rem) 0 clamp(3rem, 8vw, 5rem);
     }
+    @media (min-width: 900px) { .hero { min-height: 100vh; } }
+    /* Full measure, not 900px: the split name needs the whole column to place
+       the two halves either side of the portrait. */
     .hero-inner {
       position: relative;
       z-index: 2;
-      max-width: 900px;
+      width: 100%;
     }
 
     .hero-tag {
@@ -218,85 +337,149 @@
       50%      { box-shadow: 0 0 0 6px transparent; }
     }
 
-    /* =========== HERO WORDMARK =========== */
-    /* The name is set as a Didone wordmark: the first name large, the rest
-       small beneath it, with the last letter of the first name left as an
-       outline. Sized from the mark's OWN width, not the viewport, so it fills
-       the measure exactly and can never overflow whatever box it sits in.
-       "Edwin" in Bodoni Black measures about 3.16x its font size at this
-       tracking, including the gap before the outlined letter, which is where
-       that divisor comes from. Remeasure it if the name or tracking changes. */
-    @font-face {
-      font-family: 'Bodoni Moda';
-      src: url('/fonts/bodoni-moda-900.woff2') format('woff2');
-      font-weight: 900;
-      font-style: normal;
-      font-display: swap;
-    }
+    /* =========== HERO NAME =========== */
+    /* Two arrangements of the same markup.
 
+       Phones stack it: a small round portrait, a label, then the two halves of
+       the name on their own lines, all flush left, in sentence case.
+
+       Desktop splits it around the portrait: first name left of the photo,
+       surname right of it, both in caps. That layout is the whole point of the
+       design, so the two halves are separate elements rather than one heading
+       that gets broken with a <br>.
+
+       The <h1> still reads as the full name to a screen reader and to Google;
+       the spans carry no meaning of their own. */
     .hero-mark {
-      --ratio: 3.22;
-      --fs: min(calc((100vw - 2 * clamp(1.25rem, 4vw, 2rem)) / var(--ratio)), 200px);
-      position: relative;
-      text-align: center;
-      max-width: calc(200px * 3.22);
-      margin: 0 auto clamp(1.3rem, 3vw, 1.7rem);
-      padding: 1.4rem 0 1rem;
-    }
-    @supports (container-type: inline-size) {
-      .hero-mark { container-type: inline-size; }
-      .hero-mark { --fs: min(calc(100cqw / var(--ratio)), 200px); }
-    }
-
-    .hero-first {
       display: block;
-      font-family: 'Bodoni Moda', Georgia, serif;
-      font-weight: 900;
-      font-size: var(--fs);
-      line-height: 0.9;
+      margin: 0 0 clamp(1.2rem, 3vw, 1.6rem);
+    }
+    .hero-side { display: block; }
+    /* Any part of the name not shown in the mark still belongs to the heading,
+       so it is hidden visually but left in the accessibility tree and in the
+       text Google indexes. Not display:none, which would remove it from both. */
+    .hero-vh {
+      position: absolute;
+      width: 1px; height: 1px;
+      margin: -1px; padding: 0; border: 0;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+    .hero-portrait {
+      width: 92px;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-bottom: 1.3rem;
+    }
+    .hero-eyebrow {
+      font-size: clamp(0.98rem, 4vw, 1.12rem);
+      font-weight: 400;
+      color: var(--ink-mute);
+      margin-bottom: 0.25rem;
+    }
+    /* The right-hand label is desktop only: on phones the two would stack into
+       a confusing double subtitle above the name. */
+    .hero-side.right .hero-eyebrow { display: none; }
+    /* .hero-part is structural only: on desktop it becomes the container that
+       .hero-word measures itself against. The two must stay separate elements,
+       because a container query unit resolves against the nearest ANCESTOR
+       container and never the element's own, so an element that declares
+       itself a container and then uses cqw silently falls back to the
+       viewport. That is exactly the bug this split fixes. */
+    .hero-part { display: block; }
+    .hero-word {
+      display: block;
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: clamp(3.1rem, 15.5vw, 5rem);
+      line-height: 0.98;
       letter-spacing: -0.035em;
       color: var(--ink);
     }
-    /* Transparent fill with a hairline stroke. The stroke is a fraction of the
-       font size so it reads identically on a 320px phone and a desktop.
-       The letter needs clearance: with no fill, a solid neighbour in front of
-       it shows straight through and the stem disappears. */
-    .hero-first .hero-out {
-      color: transparent;
-      -webkit-text-stroke: calc(var(--fs) * 0.007) var(--emerald-deep);
-      margin-left: 0.10em;
-      paint-order: stroke fill;
-    }
-    .hero-last {
-      display: block;
-      margin-top: 0.55rem;
-      font-family: var(--font-heading);
-      font-weight: 600;
-      font-size: clamp(0.72rem, 3.4vw, 0.95rem);
-      letter-spacing: 0.42em;
-      text-transform: uppercase;
-      color: var(--ink);
-      padding-left: 0.42em;
-    }
+    /* Desktop only. On phones the overlay menu already states where he is, and
+       a third line under the name there is one line too many. */
+    .hero-loc { display: none; }
 
+    @media (min-width: 900px) {
+      /* Three explicit rows, label / name / location, so the two halves of the
+         name share row 2 and therefore sit on ONE baseline. Wrapping each half
+         in its own column box cannot do that: the right column carries an extra
+         location line, so centring the two boxes drops the left name lower than
+         the right one by half that line's height.
 
-    /* The mark is centred, so the rest of the hero centres with it. Left
-       aligned text under a centred wordmark reads as a mistake. */
-    .hero .hero-role,
-    .hero .hero-sub { text-align: center; margin-left: auto; margin-right: auto; }
-    .hero .hero-buttons { justify-content: center; }
+         The .hero-side wrappers are display:contents here, which dissolves them
+         and promotes their children to grid items of this grid. The wrappers
+         still matter on phones, where they are the thing that stacks. */
+      .hero-mark {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        grid-template-rows: auto auto auto;
+        column-gap: clamp(1.4rem, 3.4vw, 3rem);
+        align-items: center;
+        margin-bottom: clamp(2rem, 4vw, 3rem);
+      }
+      .hero-side { display: contents; }
 
-    .hero-role {
-      font-family: var(--font-heading);
-      font-weight: 500;
-      font-size: clamp(1.15rem, 2vw, 1.35rem);
-      color: var(--emerald);
-      margin-bottom: clamp(1.6rem, 3vw, 2rem);
-      letter-spacing: -0.005em;
+      .hero-side.left  .hero-eyebrow { grid-area: 1 / 1; text-align: right; }
+      .hero-side.left  .hero-part    { grid-area: 2 / 1; text-align: right; }
+      .hero-portrait                 { grid-area: 1 / 2 / 4 / 3; align-self: center; }
+      .hero-side.right .hero-eyebrow { grid-area: 1 / 3; text-align: right; display: block; }
+      .hero-side.right .hero-part    { grid-area: 2 / 3; text-align: left; }
+      .hero-loc                      { grid-area: 3 / 3; text-align: right; }
+
+      .hero-portrait {
+        width: clamp(215px, 23vw, 285px);
+        aspect-ratio: 3 / 4;
+        border-radius: 20px;
+        margin: 0;
+        box-shadow: 0 24px 60px rgba(28, 28, 28, 0.16);
+      }
+      .hero-loc {
+        display: block;
+        margin-top: 0.9rem;
+        font-weight: 400;
+        font-size: clamp(0.9rem, 1.5vw, 1.05rem);
+        color: var(--ink-mute);
+      }
+      /* Sized from the COLUMN's own width, not the viewport, so each half fills
+         its side exactly however wide the page is and can never spill into the
+         photo. --ratio is the measured width of a five-letter word in this face
+         at this tracking, as a multiple of its font size; remeasure it if the
+         name changes length. min-width:0 is what lets the 1fr column ignore its
+         content when sizing, which a container query unit requires: the column
+         must set the text's width, never the other way round. */
+      .hero-part { min-width: 0; container-type: inline-size; }
+      .hero-word {
+        /* Measured, not guessed: "EDWIN" renders 3.29x its font size in this
+           face at this tracking and "GYASI" 3.10x. Both halves must be the SAME
+           size, so the shared divisor is the WIDER word's, which makes it fill
+           its column and leaves the shorter one a little inside its own. Drop
+           below 3.29 and the long half overflows into the photo. Remeasure with
+           a Range over .hero-word if the name or the tracking changes; the
+           element's own rect reports the column, not the glyphs. */
+        --ratio: 3.30;
+        font-size: min(calc(100cqw / var(--ratio)), 11rem);
+        line-height: 0.86;
+        letter-spacing: -0.045em;
+        text-transform: uppercase;
+      }
+      .hero-eyebrow { margin-bottom: 0.5rem; }
+
+      /* No portrait set yet. The middle column collapses and the two names
+         close up around the centre line instead of leaving a hole where the
+         picture belongs. */
+      /* The labels flip to the OUTER edges here. Against a photo they belong on
+         the inner edges, framing it; with no photo to frame they would just
+         bunch together in the middle of the name. */
+      .hero-mark.no-portrait { grid-template-columns: 1fr 1fr; column-gap: clamp(1rem, 2vw, 1.8rem); }
+      .hero-mark.no-portrait .hero-side.left  .hero-eyebrow { text-align: left; }
+      .hero-mark.no-portrait .hero-side.right .hero-eyebrow { grid-area: 1 / 2; text-align: right; }
+      .hero-mark.no-portrait .hero-side.right .hero-part    { grid-area: 2 / 2; }
+      .hero-mark.no-portrait .hero-loc                      { grid-area: 3 / 2; text-align: right; }
     }
-    /* Keep a multi-word role intact; the line may wrap between roles but
-       never inside one. */
-    .hero-role .role { white-space: nowrap; }
 
     .hero-sub {
       font-size: clamp(1.05rem, 1.8vw, 1.2rem);
@@ -891,64 +1074,80 @@
     }
 
     /* =========== EXPERIENCE (TIMELINE) =========== */
-    .timeline {
-      position: relative;
-      padding-left: 2rem;
+    /* Experience: a plain full-width ledger. Role and dates on one line, the
+       organisation quietly beneath, a hairline between each. No descriptions
+       by design; the long form lives on LinkedIn. */
+    .exp-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1.5rem;
+      margin-bottom: clamp(2rem, 4.5vw, 3rem);
     }
-    .timeline::before {
-      content: "";
-      position: absolute;
-      left: 6px; top: 8px; bottom: 8px;
-      width: 1px;
-      background: var(--line);
+    .exp-actions {
+      display: flex;
+      gap: 0.6rem;
+      flex-shrink: 0;
+      /* Nudged down so the pill optically aligns with the heading's cap
+         height rather than its line box, which sits higher than it looks. */
+      margin-top: 0.5rem;
     }
-    .exp {
-      position: relative;
-      padding-bottom: clamp(2rem, 4vw, 2.6rem);
-    }
-    .exp:last-child { padding-bottom: 0; }
-    .exp::before {
-      content: "";
-      position: absolute;
-      left: -2rem;
-      top: 8px;
-      width: 13px; height: 13px;
-      border-radius: 50%;
-      background: var(--bg);
-      border: 2px solid var(--emerald);
-      transition: all 0.3s var(--ease);
-    }
-    .exp:hover::before {
-      background: var(--emerald);
-      transform: scale(1.2);
-    }
-    .exp-date {
-      font-size: 0.8rem;
-      color: var(--ink-mute);
+    .exp-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.6rem 1.15rem;
+      border-radius: 999px;
+      background: var(--bg-tint);
+      border: 1px solid transparent;
+      color: var(--ink-soft);
+      font-size: 0.88rem;
       font-weight: 500;
-      margin-bottom: 0.35rem;
-      letter-spacing: 0.02em;
+      white-space: nowrap;
+      transition: background 0.25s var(--ease), color 0.25s var(--ease), border-color 0.25s var(--ease);
     }
+    .exp-pill:hover {
+      background: transparent;
+      border-color: var(--emerald);
+      color: var(--emerald);
+    }
+    .timeline { position: relative; }
+    .exp-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1.5rem;
+      padding: clamp(1.5rem, 3vw, 1.9rem) 0;
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .exp-row:first-child { padding-top: 0; }
     .exp-role {
       font-family: var(--font-heading);
-      font-weight: 700;
-      font-size: 1.2rem;
+      font-weight: 600;
+      font-size: clamp(1.05rem, 2vw, 1.3rem);
       color: var(--ink);
-      margin-bottom: 0.2rem;
       letter-spacing: -0.01em;
+      line-height: 1.25;
     }
     .exp-org {
-      font-size: 0.95rem;
-      color: var(--emerald);
-      font-weight: 500;
-      margin-bottom: 0.7rem;
-    }
-    .exp-desc {
+      margin-top: 0.55rem;
+      font-size: 0.92rem;
       color: var(--ink-mute);
-      font-size: 0.95rem;
-      line-height: 1.65;
-      max-width: 60ch;
+      font-weight: 400;
     }
+    .exp-date {
+      font-size: 0.88rem;
+      color: var(--ink-mute);
+      font-weight: 400;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    /* The accent word in a section title. Applied to the last word, so the
+       heading reads as one phrase with a coloured tail, the way the reference
+       sets "Work Experience". */
+    .sec-title .accent { color: var(--emerald); }
+    /* Inside the header flex the subtitle's own bottom margin would push the
+       CV pill out of line, and the row already supplies the gap. */
+    .exp-head .sec-sub { margin-bottom: 0; }
 
     /* =========== CONTACT =========== */
     .contact-card {
@@ -1046,15 +1245,9 @@
         min-height: auto;
         padding: 1.8rem 0 2.2rem;
       }
-      /* The wordmark sizes itself from its container, so it needs no phone
-         override. Only its breathing room is tightened here.
-         */
-      .hero-mark { padding: 0.6rem 0 0.4rem; margin-bottom: 1.1rem; }
-      .hero-role {
-        font-size: 0.94rem;
-        line-height: 1.45;
-        margin-bottom: 1.1rem;
-      }
+      /* The name sizes itself from its container, so it needs no phone
+         override. Only its breathing room is tightened here. */
+      .hero-mark { margin-bottom: 1.1rem; }
       .hero-sub { font-size: 0.94rem; margin-bottom: 1.4rem; }
 
       .sec-title { font-size: 1.45rem; line-height: 1.18; }
@@ -1065,14 +1258,13 @@
       .project-desc { font-size: 0.87rem; }
       .journal-title { font-size: 1rem; }
       .journal-excerpt { font-size: 0.87rem; }
-      .exp-role { font-size: 0.95rem; }
-      .exp-desc { font-size: 0.87rem; }
+      .exp-org { font-size: 0.85rem; }
+      .exp-date { font-size: 0.8rem; }
       .skill-block h3 { font-size: 1.02rem; }
       .skill-note { font-size: 0.87rem; }
       .contact-card h2 { font-size: 1.3rem; line-height: 1.2; }
       .contact-card p { font-size: 0.94rem; }
       .about-body p { font-size: 0.94rem; }
-      .hero-role br { display: none; }
 
       /* Buttons stack full-width and are easy to tap */
       .hero-buttons { flex-direction: column; align-items: stretch; }
@@ -1106,9 +1298,7 @@
       .badge { padding: 0.34rem 0.7rem; font-size: 0.8rem; }
       .badges { gap: 0.4rem; }
       .project-tools span { font-size: 0.68rem; padding: 0.2rem 0.5rem; }
-      .exp { padding-bottom: 1.1rem; }
-      .timeline { padding-left: 1.3rem; }
-      .exp::before { left: -1.3rem; }
+      .exp-row { padding: 1.05rem 0; }
       .foot-inner { padding-block: 0.4rem; }
       .skill-block.certifications h3 { font-size: 1.2rem; }
 
@@ -1121,16 +1311,16 @@
       .foot-inner { flex-direction: column; text-align: center; gap: 1.2rem; }
       .foot-socials { justify-content: center; }
 
-      /* Timeline breathing room */
-      .timeline { padding-left: 1.6rem; }
-      .exp::before { left: -1.6rem; }
+      /* Experience header stacks: the CV pill sits under the heading rather
+         than squeezing it into two or three words per line. */
+      .exp-head { flex-direction: column; gap: 0; }
+      .exp-actions { margin-top: 1.1rem; }
     }
 
     @media (max-width: 380px) {
       /* No .hero h1 override here: the 7.8vw rule above already scales down,
          and a fixed rem value would push the name onto two lines again. */
       .about-stats { grid-template-columns: 1fr; }
-      .nav-cta span, .nav-cta { font-size: 0.75rem; padding: 0.55rem 0.9rem; }
       /* The brand is nowrap, so when it no longer fits it overflows its flex
          space and the CTA paints over the last letters rather than pushing
          it. Both sides shrink here so the full name stays legible at 320px. */
@@ -1141,7 +1331,7 @@
 
     /* Tap targets: ensure links/buttons are comfortably sized on touch */
     @media (hover: none) {
-      .btn, .nav-cta, .eon-link, .project-card { -webkit-tap-highlight-color: transparent; }
+      .btn, .dock-cta, .eon-link, .project-card { -webkit-tap-highlight-color: transparent; }
     }
 
     /* =========== TRANSITION SYSTEM =========== */
@@ -1198,35 +1388,23 @@
       transition-delay: calc(var(--stagger, 0) * 90ms);
     }
 
-    /* Timeline: the rail draws itself downward */
-    .timeline::before {
-      transform: scaleY(0);
-      transform-origin: top;
-      transition: transform 1.6s var(--ease) 0.2s;
-    }
-    .timeline.in::before { transform: scaleY(1); }
-    /* Dots pop in after the rail passes them */
-    .exp::before {
+    /* Experience rows fade up in sequence once the list is in view. The rail
+       and dots this replaced are gone; the rows carry the rhythm now. */
+    .exp-row {
       opacity: 0;
-      transform: scale(0.4);
-      transition: opacity 0.5s var(--ease), transform 0.5s var(--ease), background 0.3s var(--ease);
+      transform: translateY(14px);
+      transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
     }
-    .timeline.in .exp::before { opacity: 1; transform: scale(1); }
-    .timeline.in .exp:nth-child(1)::before { transition-delay: 0.35s; }
-    .timeline.in .exp:nth-child(2)::before { transition-delay: 0.65s; }
-    .timeline.in .exp:nth-child(3)::before { transition-delay: 0.95s; }
-    .timeline.in .exp:nth-child(4)::before { transition-delay: 1.25s; }
-    .timeline.in .exp:hover::before { transform: scale(1.2); }
+    .timeline.in .exp-row { opacity: 1; transform: none; }
+    .timeline.in .exp-row:nth-child(2) { transition-delay: 0.10s; }
+    .timeline.in .exp-row:nth-child(3) { transition-delay: 0.20s; }
+    .timeline.in .exp-row:nth-child(4) { transition-delay: 0.30s; }
+    .timeline.in .exp-row:nth-child(5) { transition-delay: 0.40s; }
 
-    /* Nav: gains elevation once scrolled */
-    header.nav {
-      transition: box-shadow 0.4s var(--ease), background 0.4s var(--ease);
-    }
-    header.nav.scrolled {
-      box-shadow: 0 1px 0 var(--line-soft), 0 8px 24px rgba(28, 28, 28, 0.05);
-    }
-    header.nav.scrolled .nav-inner { padding-top: 0.75rem; padding-bottom: 0.75rem; }
-    .nav-inner { transition: padding 0.4s var(--ease); }
+    /* The open menu button becomes the close button: the two bars cross.
+       Kept as a transform rather than swapping glyphs so it animates. */
+    body.menu-open .menu-ico i:first-child { transform: translateY(3.75px) rotate(45deg); }
+    body.menu-open .menu-ico i:last-child  { transform: translateY(-3.75px) rotate(-45deg); }
 
     /* Eon strip: gold glow drifts slowly */
     .eon-strip::after {
@@ -1251,14 +1429,14 @@
     .skill-block.certifications:hover::before { left: 125%; }
 
     /* Buttons: soft press feedback */
-    .btn:active, .nav-cta:active, .eon-link:active { transform: translateY(0) scale(0.98); }
+    .btn:active, .dock-cta:active, .eon-link:active { transform: translateY(0) scale(0.98); }
 
     /* Stat numbers: slight rise as they count */
     .stat .n { display: inline-block; }
 
     @media (prefers-reduced-motion: reduce) {
       body { animation: none; }
-      .reveal, .tw, .project-visual img, .timeline::before, .exp::before {
+      .reveal, .tw, .project-visual img, .exp-row {
         opacity: 1 !important;
         transform: none !important;
         transition: none !important;
@@ -1276,25 +1454,50 @@
 </head>
 <body>
 
-  <header class="nav">
-    <div class="wrap nav-inner">
-      <!-- CMS:START e-nav -->
+  <!-- CMS:START e-nav -->
+  <header class="topbar">
+    <div class="wrap topbar-inner">
       <a href="#top" class="brand"><img src="/images/logo-mark.png" alt="" width="30" height="36" class="brand-mark" /><span>Edwin Gyasi Owusu</span></a>
-      <nav class="nav-links" aria-label="Primary">
-        <a href="#about">About</a>
-        <a href="#work">Projects</a>
-        <a href="#skills">Skills</a>
-        <a href="#experience">Experience</a>
-        <a href="#journal">Journal</a>
-        <a href="#contact">Contact</a>
-      </nav>
-      <a class="nav-cta" href="#contact">
-        Contact
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-      </a>
-<!-- CMS:END e-nav -->
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-menu" data-menu-open>
+        <span class="menu-ico" aria-hidden="true"><i></i><i></i></span>
+        Menu
+      </button>
     </div>
   </header>
+
+  <nav class="dock" aria-label="Primary">
+    <a class="dock-home" href="#top" aria-label="Back to top"><img src="/images/logo-mark.png" alt="" width="30" height="36" /></a>
+    <a class="dock-link" href="#about">About</a>
+    <a class="dock-link" href="#work">Projects</a>
+    <a class="dock-link" href="#skills">Skills</a>
+    <a class="dock-link" href="#experience">Experience</a>
+    <a class="dock-link" href="#journal">Journal</a>
+    <a class="dock-cta" href="#contact">Contact</a>
+  </nav>
+
+  <div class="menu" id="site-menu">
+    <div class="menu-top">
+      <img src="/images/logo-mark.png" alt="" width="30" height="36" class="menu-mark" />
+      <button class="menu-close" type="button" aria-label="Close menu" data-menu-close>&times;</button>
+    </div>
+    <div class="menu-place">Based in Kumasi, Ghana</div>
+    <div class="menu-time"><span data-clock>--:--</span> &nbsp; GMT+0</div>
+    <div class="menu-label">Main menu</div>
+    <nav class="menu-links" aria-label="Mobile">
+      <a href="#about">About</a>
+      <a href="#work">Projects</a>
+      <a href="#skills">Skills</a>
+      <a href="#experience">Experience</a>
+      <a href="#journal">Journal</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="menu-foot">
+      <div class="menu-label">For contact enquiries</div>
+      <a href="mailto:gyasiedwin14@gmail.com">gyasiedwin14@gmail.com</a>
+      <a href="https://www.linkedin.com/in/edwin-gyasi" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+  </div>
+<!-- CMS:END e-nav -->
 
   <main id="top">
 
@@ -1302,14 +1505,18 @@
     <section class="hero">
       <div class="wrap hero-inner">
         <!-- CMS:START e-hero -->
-        <h1 class="hero-mark reveal" data-d="1">
-          <span class="hero-first">Edwi<span class="hero-out">n</span></span>
-          <span class="hero-last">Gyasi Owusu</span>
+        <h1 class="hero-mark no-portrait reveal" data-d="1">
+          <span class="hero-side left">
+            <span class="hero-eyebrow">Geological Engineer</span>
+            <span class="hero-part"><span class="hero-word">Edwin</span></span>
+          </span>
+          <span class="hero-side right">
+            <span class="hero-eyebrow">Founder, Eon Designs</span>
+            <span class="hero-part"><span class="hero-word">Gyasi</span></span>
+            <span class="hero-vh"> Owusu</span>
+            <span class="hero-loc">Kumasi, Ghana</span>
+          </span>
         </h1>
-
-        <p class="hero-role reveal" data-d="2">
-          <span class="role">Geological Engineer</span> · <span class="role">Mining</span> · <span class="role">Geotechnical</span> · <span class="role">Oil &amp; Gas</span>
-        </p>
 
         <p class="hero-sub reveal" data-d="3">
           Using geology, data, and AI to shape the future of engineering.
@@ -1324,7 +1531,7 @@
             LinkedIn
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
           </a>
-          <a class="btn ghost" href="resume.pdf" target="_blank" rel="noopener" download>
+          <a class="btn ghost" href="/Edwin_Gyasi_Resume.pdf" target="_blank" rel="noopener" download>
             Resume
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
           </a>
@@ -1553,46 +1760,50 @@
     <section class="sec" id="experience">
       <div class="wrap">
         <!-- CMS:START e-experience -->
-        <div class="sec-eyebrow reveal">Experience</div>
-        <h2 class="sec-title reveal" data-d="1">Work &amp; leadership.</h2>
-        <p class="sec-sub reveal" data-d="2">Internships, roles, and studio work that shaped the path so far.</p>
+        <div class="exp-head">
+          <div>
+            <div class="sec-eyebrow reveal">Experience</div>
+            <h2 class="sec-title reveal" data-d="1">Work <span class="accent">Experience</span></h2>
+            <p class="sec-sub reveal" data-d="2">My impact over the years.</p>
+          </div>
+          <div class="exp-actions reveal" data-d="2">
+            <a class="exp-pill" href="/Edwin_Gyasi_Resume.pdf" download>Download CV</a>
+            <a class="exp-pill" href="https://www.linkedin.com/in/edwin-gyasi" target="_blank" rel="noopener">LinkedIn</a>
+          </div>
+        </div>
 
         <div class="timeline">
 
-          <div class="exp reveal">
+          <div class="exp-row">
+            <div class="exp-main">
+              <h3 class="exp-role">Public Relations Officer</h3>
+              <div class="exp-org">AusIMM Tarkwa Student Chapter</div>
+            </div>
             <div class="exp-date">2024 – Present</div>
-            <h3 class="exp-role">Public Relations Officer</h3>
-            <div class="exp-org">AusIMM Tarkwa Student Chapter</div>
-            <p class="exp-desc">
-              Led communications and member engagement for a 500+ attendee conference. Ran the "I Will Be Joining" campaign and supported the launch of a new chapter at UENR. Awarded a Certificate of Appreciation by Ing. Henry Antwi (FAusIMM).
-            </p>
           </div>
 
-          <div class="exp reveal" data-d="1">
+          <div class="exp-row">
+            <div class="exp-main">
+              <h3 class="exp-role">Geotechnical Intern</h3>
+              <div class="exp-org">CSIR Building &amp; Road Research Institute</div>
+            </div>
             <div class="exp-date">Summer 2024</div>
-            <h3 class="exp-role">Geotechnical Intern</h3>
-            <div class="exp-org">CSIR Building &amp; Road Research Institute</div>
-            <p class="exp-desc">
-              Supported geotechnical investigation and laboratory testing routines under senior engineers, across site characterization, soil testing pipelines, and reporting practice.
-            </p>
           </div>
 
-          <div class="exp reveal" data-d="2">
+          <div class="exp-row">
+            <div class="exp-main">
+              <h3 class="exp-role">Founder &amp; Creative Director</h3>
+              <div class="exp-org">Eon Designs</div>
+            </div>
             <div class="exp-date">2023 – Present</div>
-            <h3 class="exp-role">Founder &amp; Creative Director</h3>
-            <div class="exp-org">Eon Designs</div>
-            <p class="exp-desc">
-              Founded and run a working design studio serving organisational clients across Ghana, including AusIMM Tarkwa, GESS-KNUST, ICGC, and Fragilda. Output spans brand identity, print production, and large-volume automation (500+ programmatically generated certificates).
-            </p>
           </div>
 
-          <div class="exp reveal" data-d="3">
+          <div class="exp-row">
+            <div class="exp-main">
+              <h3 class="exp-role">Construction Materials Intern</h3>
+              <div class="exp-org">Fragilda Construction Company</div>
+            </div>
             <div class="exp-date">Summer 2023</div>
-            <h3 class="exp-role">Construction Materials Intern</h3>
-            <div class="exp-org">Fragilda Construction Company</div>
-            <p class="exp-desc">
-              First professional exposure to construction materials workflows on active project sites, including quantity tracking, materials handling, and site operations alongside the technical team.
-            </p>
           </div>
 
         </div>
@@ -1646,7 +1857,7 @@
             LinkedIn
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
           </a>
-            <a class="btn ghost" href="resume.pdf" download>
+            <a class="btn ghost" href="/Edwin_Gyasi_Resume.pdf" download>
             CV
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
           </a>
@@ -1746,17 +1957,47 @@
         stats.forEach(el => cio.observe(el));
       }
 
-      /* ---- 5. Nav elevation on scroll ---- */
-      const nav = document.querySelector('header.nav');
-      let ticking = false;
-      window.addEventListener('scroll', () => {
-        if (ticking) return;
-        ticking = true;
-        requestAnimationFrame(() => {
-          nav.classList.toggle('scrolled', window.scrollY > 24);
-          ticking = false;
+      /* ---- 5. Mobile menu ---- */
+      const menuBtn = document.querySelector('[data-menu-open]');
+      const menu = document.getElementById('site-menu');
+      if (menuBtn && menu) {
+        const setMenu = (open) => {
+          document.body.classList.toggle('menu-open', open);
+          menuBtn.setAttribute('aria-expanded', String(open));
+        };
+        menuBtn.addEventListener('click', () => setMenu(!document.body.classList.contains('menu-open')));
+        const closeBtn = menu.querySelector('[data-menu-close]');
+        if (closeBtn) closeBtn.addEventListener('click', () => setMenu(false));
+        // Every link closes it. The targets are same-page anchors, so without
+        // this the overlay stays up and covers the section it just scrolled to.
+        menu.querySelectorAll('a[href^="#"]').forEach(a =>
+          a.addEventListener('click', () => setMenu(false))
+        );
+        document.addEventListener('keydown', e => {
+          if (e.key === 'Escape') setMenu(false);
         });
-      }, { passive: true });
+        // The dock is a desktop element and the overlay a phone one. Passing
+        // the breakpoint with the menu open would otherwise leave body
+        // overflow:hidden locked on with nothing visible to close.
+        const bp = window.matchMedia('(min-width: 900px)');
+        bp.addEventListener('change', e => { if (e.matches) setMenu(false); });
+      }
+
+      /* ---- 6. Local clock in the menu ---- */
+      // Ghana is UTC+0 year round with no daylight saving, so the offset is a
+      // constant and the time can be read straight off the UTC clock rather
+      // than depending on the visitor's own timezone.
+      const clock = document.querySelector('[data-clock]');
+      if (clock) {
+        const tick = () => {
+          const d = new Date();
+          clock.textContent =
+            String(d.getUTCHours()).padStart(2, '0') + ':' +
+            String(d.getUTCMinutes()).padStart(2, '0');
+        };
+        tick();
+        setInterval(tick, 30000);
+      }
 
     })();
   </script>

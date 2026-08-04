@@ -358,9 +358,12 @@ const JOURNAL_CSS = `
       --emerald:#0F766E;--emerald-hi:#14867D;--emerald-deep:#0A5952;--emerald-soft:rgba(15,118,110,0.08);--emerald-tint:#E8F2F0;
       --gold:#C89B3C;--gold-soft:rgba(200,155,60,0.12);
       --line:rgba(28,28,28,0.10);--line-soft:rgba(28,28,28,0.06);
-      --font-heading:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;--font-body:'Inter',system-ui,-apple-system,sans-serif;
+      --font-heading:'Clash Display',system-ui,-apple-system,sans-serif;--font-body:'Clash Display',system-ui,-apple-system,sans-serif;
       --max:820px;--radius:16px;--ease:cubic-bezier(0.22,0.61,0.36,1);
     }
+    /* Clash Display has no weight above 700; asking for 800 gets a synthesised
+       fake bold, so the heavy headings below are capped at 700. */
+    @font-face{font-family:'Clash Display';src:url('/fonts/clash-display-var.woff2') format('woff2');font-weight:200 700;font-style:normal;font-display:swap;}
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
     html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
     body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:17px;line-height:1.7;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
@@ -376,7 +379,7 @@ const JOURNAL_CSS = `
     .cs-header{padding:clamp(2.5rem,6vw,4rem) 0 clamp(1.2rem,3vw,1.8rem);}
     .cs-cat{display:inline-flex;align-items:center;gap:0.5rem;font-size:0.8rem;font-weight:500;color:var(--emerald);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:1.2rem;}
     .cs-cat .pin{width:6px;height:6px;border-radius:50%;background:var(--emerald);}
-    .cs-title{font-family:var(--font-heading);font-weight:800;font-size:clamp(2rem,5.5vw,3.2rem);line-height:1.08;letter-spacing:-0.03em;margin-bottom:1.2rem;}
+    .cs-title{font-family:var(--font-heading);font-weight:700;font-size:clamp(2rem,5.5vw,3.2rem);line-height:1.08;letter-spacing:-0.03em;margin-bottom:1.2rem;}
     .cs-lede{font-size:1.15rem;color:var(--ink-mute);line-height:1.6;max-width:60ch;}
     .cs-hero-img{border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);margin:clamp(2rem,4vw,2.8rem) 0 clamp(2rem,5vw,3rem);background:var(--bg-tint);}
     .cs-hero-img img{width:100%;height:auto;}
@@ -476,9 +479,7 @@ function buildJournalPages(journal, posts) {
   <meta name="twitter:description" content="${attr(p.excerpt)}" />
   <meta name="twitter:image" content="${attr(ogUrl)}" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="preload" href="/fonts/clash-display-var.woff2" as="font" type="font/woff2" crossorigin />
 
   <style>${JOURNAL_CSS}
   </style>
@@ -570,54 +571,110 @@ function buildEngineering() {
     `  <meta name="description" content="${attr(meta.description)}" />`;
 
   /* ---- nav ---- */
+  // Three navigations from one set of links: a floating dock for desktop, a
+  // dark top bar for phones, and the full-screen overlay that bar opens. All
+  // three are always in the DOM and CSS decides which is visible, so the link
+  // list stays single-sourced from nav.json.
+  //
+  // The cube img is alt="" in every one of them: it is decorative, because an
+  // adjacent span or aria-label already names the link and a screen reader
+  // should not hear the name twice. width/height only need to carry the right
+  // ratio to reserve the row against reflow; images/logo-mark.png is 740x881,
+  // so 30x36 matches within a percent, and CSS sets the rendered height.
+  const navMark = `<img src="/images/logo-mark.png" alt="" width="30" height="36"`;
+  // The overlay's contact block reuses whatever Contact already holds, so the
+  // address exists in one place only. Both are optional: if the panel has no
+  // mailto or no LinkedIn among the contact links, the line is simply not
+  // emitted rather than rendering an empty or broken link.
+  const navContact = (contact.links || []);
+  const navEmail = (navContact.find((l) => /^mailto:/i.test(l.href || '')) || {}).href;
+  const navEmailAddr = navEmail ? navEmail.replace(/^mailto:/i, '') : '';
+  const navLinkedIn = (navContact.find((l) => /linkedin\.com/i.test(l.href || '')) || {}).href;
+  // The Contact link is the dock's CTA pill, so drop it from the inline list
+  // to avoid printing it twice. Matched on href rather than label so renaming
+  // it in the panel does not resurrect the duplicate.
+  const dockLinks = nav.links.filter((l) => l.href !== nav.cta_href);
+
   regions['e-nav'] =
-    // Icon plus live text. The mark is the cube on its own, so the name is
-    // real text again rather than glyphs baked into a PNG, which means
-    // nav.brand is what the visitor reads and not just the accessible name.
-    // The img is therefore alt="" — decorative, because the adjacent span
-    // already names the link and a screen reader should not hear it twice.
-    // width/height reserve the row against reflow and only need to carry the
-    // right ratio; images/logo-mark.png is 740x881, so 30x36 matches it to
-    // within a percent. CSS sets the rendered height.
-    `      <a href="#top" class="brand"><img src="/images/logo-mark.png" alt="" width="30" height="36" class="brand-mark" /><span>${esc(nav.brand)}</span></a>\n` +
-    `      <nav class="nav-links" aria-label="Primary">\n` +
-    nav.links
-      .map((l) => `        <a href="${attr(l.href)}">${esc(l.label)}</a>`)
+    `  <header class="topbar">\n` +
+    `    <div class="wrap topbar-inner">\n` +
+    `      <a href="#top" class="brand">${navMark} class="brand-mark" /><span>${esc(nav.brand)}</span></a>\n` +
+    `      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-menu" data-menu-open>\n` +
+    `        <span class="menu-ico" aria-hidden="true"><i></i><i></i></span>\n` +
+    `        Menu\n` +
+    `      </button>\n` +
+    `    </div>\n` +
+    `  </header>\n\n` +
+    `  <nav class="dock" aria-label="Primary">\n` +
+    `    <a class="dock-home" href="#top" aria-label="Back to top">${navMark} /></a>\n` +
+    dockLinks
+      .map((l) => `    <a class="dock-link" href="${attr(l.href)}">${esc(l.label)}</a>`)
       .join('\n') +
-    `\n      </nav>\n` +
-    `      <a class="nav-cta" href="${attr(nav.cta_href)}">\n` +
-    `        ${esc(nav.cta_label)}\n` +
-    `        ${icon('arrow-right', '2')}\n` +
-    `      </a>`;
+    `\n    <a class="dock-cta" href="${attr(nav.cta_href)}">${esc(nav.cta_label)}</a>\n` +
+    `  </nav>\n\n` +
+    `  <div class="menu" id="site-menu">\n` +
+    `    <div class="menu-top">\n` +
+    `      ${navMark} class="menu-mark" />\n` +
+    `      <button class="menu-close" type="button" aria-label="Close menu" data-menu-close>&times;</button>\n` +
+    `    </div>\n` +
+    `    <div class="menu-place">Based in ${esc(nav.location || 'Kumasi, Ghana')}</div>\n` +
+    `    <div class="menu-time"><span data-clock>--:--</span> &nbsp; ${esc(nav.timezone || 'GMT+0')}</div>\n` +
+    `    <div class="menu-label">Main menu</div>\n` +
+    `    <nav class="menu-links" aria-label="Mobile">\n` +
+    nav.links
+      .map((l) => `      <a href="${attr(l.href)}">${esc(l.label)}</a>`)
+      .join('\n') +
+    `\n    </nav>\n` +
+    `    <div class="menu-foot">\n` +
+    `      <div class="menu-label">For contact enquiries</div>\n` +
+    (navEmailAddr ? `      <a href="${attr(navEmail)}">${esc(navEmailAddr)}</a>\n` : '') +
+    (navLinkedIn ? `      <a href="${attr(navLinkedIn)}" target="_blank" rel="noopener">LinkedIn</a>\n` : '') +
+    `    </div>\n` +
+    `  </div>`;
 
   /* ---- hero ---- */
-  /* Hero wordmark. The headline is split into the first word, set large, and
-     the remainder, set small beneath it. The LAST letter of the first word is
-     left as an outline, which is the one decorative move in the mark.
-     Both are derived from hero.headline rather than stored as separate CMS
-     fields, so editing the name in the panel cannot desynchronise them.
-     The <h1> still reads "Edwin Gyasi Owusu" to a screen reader and to Google:
-     the spans carry no semantics. */
+  /* The name is split into two halves set either side of the portrait: the
+     first word on the left, the second on the right. Any word after those two
+     is kept in the heading but hidden visually, so "Edwin Gyasi Owusu" is
+     still what a screen reader and Google read while the mark itself shows the
+     two names the layout has room for.
+     Both halves come from hero.headline rather than separate CMS fields, so
+     renaming in the panel cannot leave them disagreeing. */
   const headline = String(hero.headline || '').trim().replace(/[.\s]+$/, '');
   const hParts = headline.split(/\s+/);
   const hFirst = hParts.shift() || '';
+  const hSecond = hParts.shift() || '';
   const hRest = hParts.join(' ');
-  const hLead = hFirst.slice(0, -1);
-  const hTail = hFirst.slice(-1);
+
+  // The portrait is optional. With no image the two names close up on a
+  // two-column grid instead of leaving a hole where the picture would be, so
+  // the hero is never broken while waiting for a photo.
+  const portrait = String(hero.portrait || '').trim();
 
   regions['e-hero'] =
-    `        <h1 class="hero-mark reveal" data-d="1">\n` +
-    `          <span class="hero-first">${esc(hLead)}<span class="hero-out">${esc(hTail)}</span></span>\n` +
-    (hRest ? `          <span class="hero-last">${esc(hRest)}</span>\n` : '') +
+    `        <h1 class="hero-mark${portrait ? '' : ' no-portrait'} reveal" data-d="1">\n` +
+    (portrait
+      ? `          <img class="hero-portrait" src="${attr(portrait)}" alt="${attr(headline)}" width="600" height="800" />\n`
+      : '') +
+    // .hero-part is the container query container and .hero-word is what gets
+    // sized from it. They cannot be the same element: container query units
+    // resolve against the nearest ANCESTOR container, never the element's own,
+    // so a self-declared container silently falls back to the viewport.
+    `          <span class="hero-side left">\n` +
+    `            <span class="hero-eyebrow">${esc(hero.eyebrow_left || '')}</span>\n` +
+    `            <span class="hero-part"><span class="hero-word">${esc(hFirst)}</span></span>\n` +
+    `          </span>\n` +
+    `          <span class="hero-side right">\n` +
+    `            <span class="hero-eyebrow">${esc(hero.eyebrow_right || '')}</span>\n` +
+    `            <span class="hero-part"><span class="hero-word">${esc(hSecond)}</span></span>\n` +
+    (hRest ? `            <span class="hero-vh"> ${esc(hRest)}</span>\n` : '') +
+    `            <span class="hero-loc">${esc(nav.location || '')}</span>\n` +
+    `          </span>\n` +
     `        </h1>\n\n` +
-    `        <p class="hero-role reveal" data-d="2">\n` +
-    // Each role is nowrap so a multi-word role cannot split ("Geological /
-    // Engineer" read as two roles on a phone). The separators must therefore
-    // be ORDINARY spaces, not &nbsp;: with both the roles and the separators
-    // unbreakable the line has no break point at all and overflows the
-    // viewport. Breaking between roles is the behaviour we want.
-    `          ${hero.roles.map((r) => `<span class="role">${esc(r)}</span>`).join(' · ')}\n` +
-    `        </p>\n\n` +
+    // The roles line that used to sit here is gone: hero.eyebrow_left already
+    // names the discipline directly above the mark, so the two read as the
+    // same sentence printed twice. The remaining specialisms are covered in
+    // full by the Skills section.
     `        <p class="hero-sub reveal" data-d="3">\n` +
     `          ${esc(hero.subline)}\n` +
     `        </p>\n\n` +
@@ -738,24 +795,49 @@ function buildEngineering() {
     `        <div class="skills-blocks">\n\n${blocks}\n\n        </div>`;
 
   /* ---- experience ---- */
+  // Role and organisation only. The descriptions this used to print were cut
+  // deliberately: the full history belongs on LinkedIn, and the section reads
+  // as a ledger rather than a wall of paragraphs.
   const entries = experience.entries
-    .map((e, i) => {
-      const d = i > 0 ? ` data-d="${i}"` : '';
-      return (
-        `          <div class="exp reveal"${d}>\n` +
+    .map(
+      (e) =>
+        `          <div class="exp-row">\n` +
+        `            <div class="exp-main">\n` +
+        `              <h3 class="exp-role">${esc(e.role)}</h3>\n` +
+        `              <div class="exp-org">${esc(e.org)}</div>\n` +
+        `            </div>\n` +
         `            <div class="exp-date">${esc(e.date)}</div>\n` +
-        `            <h3 class="exp-role">${esc(e.role)}</h3>\n` +
-        `            <div class="exp-org">${esc(e.org)}</div>\n` +
-        `            <p class="exp-desc">\n              ${esc(e.description)}\n            </p>\n` +
         `          </div>`
-      );
-    })
+    )
     .join('\n\n');
 
+  // The last word of the title takes the accent colour, so "Work Experience"
+  // renders with "Experience" in emerald. Split on the last space rather than
+  // storing two fields, so renaming the section in the panel cannot leave the
+  // two halves disagreeing. A single-word title simply gets no accent.
+  const accentTitle = (t) => {
+    const s = String(t || '').trim();
+    const i = s.lastIndexOf(' ');
+    if (i < 0) return esc(s);
+    return `${esc(s.slice(0, i))} <span class="accent">${esc(s.slice(i + 1))}</span>`;
+  };
+
+  // Both pills are optional and both are read from Contact, so the CV path
+  // and the LinkedIn URL live in exactly one place in the whole repo.
+  const cvLink = (navContact.find((l) => /\.pdf($|\?)/i.test(l.href || '')) || {}).href;
+
   regions['e-experience'] =
-    `        <div class="sec-eyebrow reveal">${esc(experience.eyebrow)}</div>\n` +
-    `        <h2 class="sec-title reveal" data-d="1">${esc(experience.title)}</h2>\n` +
-    `        <p class="sec-sub reveal" data-d="2">${esc(experience.subtitle)}</p>\n\n` +
+    `        <div class="exp-head">\n` +
+    `          <div>\n` +
+    `            <div class="sec-eyebrow reveal">${esc(experience.eyebrow)}</div>\n` +
+    `            <h2 class="sec-title reveal" data-d="1">${accentTitle(experience.title)}</h2>\n` +
+    `            <p class="sec-sub reveal" data-d="2">${esc(experience.subtitle)}</p>\n` +
+    `          </div>\n` +
+    `          <div class="exp-actions reveal" data-d="2">\n` +
+    (cvLink ? `            <a class="exp-pill" href="${attr(cvLink)}" download>Download CV</a>\n` : '') +
+    (navLinkedIn ? `            <a class="exp-pill" href="${attr(navLinkedIn)}" target="_blank" rel="noopener">LinkedIn</a>\n` : '') +
+    `          </div>\n` +
+    `        </div>\n\n` +
     `        <div class="timeline">\n\n${entries}\n\n        </div>`;
 
   /* ---- journal ---- */
