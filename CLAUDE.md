@@ -350,8 +350,8 @@ Outside the repo, and only the owner can do these:
 
 ## Updates Log
 
-- 2026-08-05: **Animated hexagonal prism field behind the hero**, on both
-  layouts, fading into the page background.
+- 2026-08-05: **Hexagonal prism field behind the hero**, on both layouts,
+  fading into the page background. **Static, deliberately.**
 
   The reference's background is **not a flat honeycomb**. It is a field of white
   hexagonal PRISMS extruded to different heights, lit from the upper left, with
@@ -371,31 +371,29 @@ Outside the repo, and only the owner can do these:
   neighbours do not touch, because tiled edge to edge they read as one faceted
   surface rather than as separate prisms.
 
-  Motion is a `transform` only, so it runs on the compositor. Total cost is
-  about 3KB of markup and no images, so unlike the reference, which is a heavy
-  render that fails to load on a slow connection and leaves a flat white page,
-  this does not need to be withheld on mobile data.
+  Total cost is about 3KB of markup and no images, so unlike the reference,
+  which is a heavy render that fails to load on a slow connection and leaves a
+  flat white page, this works on mobile data.
 
   Every gradient stop is keyed to `--bg` (#FAFAF8, R=G with B two lower), so the
   blocks read as the page's own white catching light. An earlier set of stops
   was warmer than the page and the whole field looked cream against it.
 
-  **The travel has to be much larger than it looks like it should be.** The
-  first pass used 1.4% of the cell height, which works out at roughly ONE pixel
-  over a fourteen second cycle: the animation was running correctly and was
-  simply invisible. It is 10% now, about 8px on a phone and 30px on a desktop.
-  Measure the travel in pixels, never trust the percentage.
+  One lesson kept from the animation before it was cut: **measure motion travel
+  in pixels, never as a percentage of the element.** 1.4% of a cell's height
+  looked like a sensible number in code and worked out at roughly ONE pixel over
+  a fourteen second cycle, so the animation ran correctly and was invisible.
 
   Contrast is the thing to be careful with and it is far fainter than it looks:
   the reference varies by only 3 to 4 luma out of 255. Measured here at 4.1
   against his 4.0 across the same depth profile. Verify by measuring a strip of
   the render against the reference screenshot, never by eye.
 
-  Note: three separate recordings of the reference were checked for the motion
-  and all three measure completely static, best-fit displacement exactly zero at
+  Note: three separate recordings of the reference were checked for movement and
+  all three measure completely static, best-fit displacement exactly zero at
   every one-second interval, with the background varying LESS than provably
-  still text. The animation here is built from the owner's description of it
-  rather than from a measurement.
+  still text. No usable reference for the motion was ever captured, which is
+  part of why it was dropped.
 
 - 2026-08-04: Engineering site rebuilt around **Nikola Radeski's** layout, at the
   owner's request and from his screenshots. Three changes plus one bug fix.
