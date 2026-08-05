@@ -376,9 +376,19 @@ Outside the repo, and only the owner can do these:
   render that fails to load on a slow connection and leaves a flat white page,
   this does not need to be withheld on mobile data.
 
+  Every gradient stop is keyed to `--bg` (#FAFAF8, R=G with B two lower), so the
+  blocks read as the page's own white catching light. An earlier set of stops
+  was warmer than the page and the whole field looked cream against it.
+
+  **The travel has to be much larger than it looks like it should be.** The
+  first pass used 1.4% of the cell height, which works out at roughly ONE pixel
+  over a fourteen second cycle: the animation was running correctly and was
+  simply invisible. It is 10% now, about 8px on a phone and 30px on a desktop.
+  Measure the travel in pixels, never trust the percentage.
+
   Contrast is the thing to be careful with and it is far fainter than it looks:
-  the reference varies by only 3 to 4 luma out of 255. Measured here at 4.2
-  against his 3.9 across the same depth profile. Verify by measuring a strip of
+  the reference varies by only 3 to 4 luma out of 255. Measured here at 4.1
+  against his 4.0 across the same depth profile. Verify by measuring a strip of
   the render against the reference screenshot, never by eye.
 
   Note: three separate recordings of the reference were checked for the motion
