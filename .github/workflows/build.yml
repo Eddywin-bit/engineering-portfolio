@@ -1,0 +1,69 @@
+# Checks that run on every pull request, so a change written by an agent is
+# verified before you merge it from your phone.
+#
+# Deliberately runs on pull_request only, NOT on push to main. Decap CMS
+# commits content JSON straight to main without rebuilding the HTML, which is
+# normal and correct because Vercel rebuilds on deploy. Running the "build is
+# up to date" check on those commits would fail every time you publish from the
+# admin panel, and a check that cries wolf gets ignored.
+
+name: Build
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      # The one rule in CLAUDE.md with no exceptions. build.js fails loudly if
+      # a CMS marker has gone missing or a content JSON file is malformed, so
+      # this catches the class of mistake that would otherwise reach the site.
+      - name: Site builds
+        run: node build.js
+
+      # admin/config.yml is parsed in the browser by Decap. A YAML error there
+      # does not degrade the panel, it takes the whole thing down, and it has
+      # happened before (a block scalar inside a flow mapping). Cheap to check.
+      - name: Admin config is valid YAML
+        run: npx --yes js-yaml admin/config.yml > /dev/null
+
+      # Generated files must match their sources. If a pull request edits
+      # content/ or build.js without rebuilding, or hand-edits a generated file
+      # such as designs/js/data.js, the working tree changes here and this
+      # fails. The fix is always the same: run node build.js and commit.
+      - name: Generated files are up to date
+        run: |
+          if ! git diff --quiet; then
+            echo "::error::Running node build.js changed files, so the committed output is stale."
+            echo "Run node build.js locally and commit the result."
+            git diff --name-only
+            exit 1
+          fi
+
+      # /vault/ and /ledger/ are separate applications that this repo only
+      # hosts. Nothing here should ever touch them. A human reading
+      # CLAUDE.md knows that; this makes it true whether or not it was read.
+      - name: Protected folders untouched
+        if: github.event_name == 'pull_request'
+        run: |
+          git fetch --no-tags origin "$GITHUB_BASE_REF"
+          changed="$(git diff --name-only FETCH_HEAD...HEAD)"
+          if echo "$changed" | grep -qE '^(vault|ledger)/'; then
+            echo "::error::This pull request changes /vault/ or /ledger/, which are off limits."
+            echo "$changed" | grep -E '^(vault|ledger)/'
+            exit 1
+          fi
+          echo "ok"

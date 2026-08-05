@@ -365,6 +365,37 @@ Outside the repo, and only the owner can do these:
 
 ## Updates Log
 
+- 2026-08-05: **Two GitHub Actions workflows, for the handover to Copilot.**
+  The owner keeps Copilot Pro for a year after Claude ends, and its coding
+  agent works by opening pull requests, which he will review on a phone. These
+  exist so a diff he cannot fully read on a small screen is still checked.
+
+  `.github/workflows/copilot-setup-steps.yml` prepares the agent's environment.
+  The job **must** be named `copilot-setup-steps`; that name is the whole
+  contract. There is almost nothing in it because `build.js` needs only `fs`
+  and `path`, so the repo root has no dependencies to install.
+
+  `.github/workflows/build.yml` runs four checks on every pull request:
+  `node build.js` exits 0, `admin/config.yml` parses as YAML, the generated
+  files match their sources, and nothing under `vault/` or `ledger/` was
+  touched.
+
+  Two decisions worth keeping:
+
+  - It runs on **pull_request only, never on push to main**. Decap commits
+    content JSON to main without rebuilding the HTML, which is correct because
+    Vercel rebuilds on deploy. Running the up-to-date check on those commits
+    would fail on **every CMS publish**, and a check that cries wolf gets
+    ignored, taking the useful checks down with it.
+  - The up-to-date check is `node build.js` followed by `git diff --quiet`,
+    which catches a hand-edited generated file and a forgotten rebuild with the
+    same test.
+
+  All four were verified locally before pushing, including the failure paths:
+  a stale `index.html` is detected, and the folder guard blocks `vault/app.js`
+  while still allowing `content/vault-notes.json`, since the pattern is
+  anchored.
+
 - 2026-08-05: **`sitemap.xml` is generated, and lists all six pages.** It named
   only the homepage before, so the three case studies, the journal post and the
   designs site were discoverable only by crawling. That mattered more than usual

@@ -64,6 +64,14 @@ failure on a live site.
 7. **Do not add a number to a heading that describes a count.** "Three case
    studies" goes stale the moment a project is added. This has happened twice.
 
+Rules 1, 3, 4 and 6 are enforced on every pull request by
+`.github/workflows/build.yml`, which runs `node build.js`, parses
+`admin/config.yml`, confirms the generated files match their sources, and
+fails if anything under `vault/` or `ledger/` changed. If that job goes red,
+the fix is nearly always to run `node build.js` and commit the result. The
+checks run on pull requests only, never on pushes to `main`, because the CMS
+commits content there without rebuilding and Vercel rebuilds on deploy.
+
 ---
 
 ## 3. How content reaches the page

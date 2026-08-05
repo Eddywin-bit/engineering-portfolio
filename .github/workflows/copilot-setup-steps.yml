@@ -1,0 +1,39 @@
+# Environment preparation for the GitHub Copilot coding agent.
+#
+# When you assign work to Copilot, it runs these steps FIRST, then starts on
+# the task with the result already in place. The job has to be called
+# copilot-setup-steps exactly; that name is how Copilot finds it.
+#
+# There is very little to do here, and that is deliberate. build.js requires
+# nothing but Node's own fs and path, so the site has no dependencies to
+# install at the repo root. Vercel builds it the same way.
+#
+# The push/pull_request triggers below only fire when this file itself
+# changes, so you can confirm it still works after editing it without
+# running it on every commit.
+
+name: Copilot setup steps
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/copilot-setup-steps.yml
+  pull_request:
+    paths:
+      - .github/workflows/copilot-setup-steps.yml
+
+jobs:
+  copilot-setup-steps:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Confirm the site builds
+        run: node build.js
