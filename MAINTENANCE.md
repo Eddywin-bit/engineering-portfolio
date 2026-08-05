@@ -193,12 +193,12 @@ character, the CMS login fails.
 **In Vercel, under Domains:** `edwingyasi.online` and `www.edwingyasi.online`.
 The `www` version is the real one; the bare domain redirects to it.
 
-**If you ever change domain**, the site is mostly ready for it. Setting a
-`SITE_URL` environment variable in Vercel moves every generated link with no
-code change. A handful of files still need editing by hand, and they are listed
-at the end of `.github/copilot-instructions.md`. Keep the old domain registered
-and redirecting for at least a year, because that redirect is what carries your
-Google ranking across.
+**If you ever change domain**, follow `MIGRATION.md`. It is written so you can
+do it yourself without any AI. In short: buy the domain, add it in Vercel,
+update the OAuth callback URL, then set one environment variable, `SITE_URL`,
+and redeploy. That single variable moves every link on both sites. Keep the old
+domain registered and redirecting for at least a year, because that redirect is
+what carries your Google ranking across.
 
 ---
 

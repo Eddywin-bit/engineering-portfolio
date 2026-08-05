@@ -263,9 +263,15 @@ www host anywhere an absolute URL is required.
 
 ### Changing the domain
 
-`build.js` has a single `SITE` constant, and setting the `SITE_URL` environment
-variable in Vercel overrides it with no code change. These are **not** generated
-and still need editing by hand: `admin/config.yml` (`base_url`, `site_url`,
-`display_url`), `admin/index.html`, the three `case-studies/*.html`,
-`robots.txt`, `sitemap.xml`, and the "Visit edwingyasi.online" label in
-`content/engineering/projects.json`.
+**Setting `SITE_URL` in Vercel moves everything.** `buildDomainFiles()` in
+`build.js` rewrites `robots.txt`, `sitemap.xml`, the three `case-studies/*.html`,
+`admin/index.html` and the three domain keys in `admin/config.yml`; the rest is
+generated from `SITE` already. It finds the previous origin by reading
+`sitemap.xml` before rewriting it, then swaps that exact string, which is what
+keeps external links untouched.
+
+The only thing left by hand is display text: the "Visit edwingyasi.online" label
+in `content/engineering/projects.json`, which is CMS content.
+
+Full runbook, including DNS, the OAuth callback and Search Console, is in
+`MIGRATION.md`.

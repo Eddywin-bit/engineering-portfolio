@@ -1165,14 +1165,87 @@ function buildDesignsData({ meta, works, vault, journal }) {
 }
 
 /* ============================================================
+   Domain-dependent files
+
+   Everything the SITE constant can reach is regenerated here, so changing
+   domain is one environment variable in Vercel (SITE_URL) rather than a hunt
+   through six files. That matters because the owner has to be able to do the
+   migration himself, without an agent.
+
+   Three things are rewritten in place rather than generated from scratch,
+   because they are hand-maintained otherwise: the absolute URLs in the three
+   static case-study pages, and base_url / site_url / display_url in
+   admin/config.yml. Only those exact keys are touched; everything else in
+   those files is left byte for byte alone. The rewrite is idempotent.
+   ============================================================ */
+function buildDomainFiles() {
+  let touched = 0;
+
+  /* The origin this repo was last built with. Read from sitemap.xml because
+     that file is only ever rewritten below, so it still holds the OLD value at
+     this point in the run, unlike index.html which buildEngineering has already
+     regenerated from the new SITE. Swapping a known origin is what keeps
+     external links (LinkedIn, GitHub) untouched: a pattern loose enough to
+     catch every self URL would catch those too. */
+  const mapPath = path.join(ROOT, 'sitemap.xml');
+  let oldOrigin = null;
+  if (fs.existsSync(mapPath)) {
+    const m = fs.readFileSync(mapPath, 'utf8').match(/<loc>(https?:\/\/[^/<]+)/);
+    if (m) oldOrigin = m[1];
+  }
+  const swap = (text) =>
+    oldOrigin && oldOrigin !== SITE ? text.split(oldOrigin).join(SITE) : text;
+
+  const rewrite = (file, fn) => {
+    const fp = path.join(ROOT, file);
+    if (!fs.existsSync(fp)) return;
+    const before = fs.readFileSync(fp, 'utf8');
+    const after = fn(before);
+    if (after !== before) { fs.writeFileSync(fp, after); touched++; }
+  };
+
+  /* robots.txt — only the Sitemap: line carries the domain */
+  rewrite('robots.txt', (t) => t.replace(/^Sitemap:.*$/m, `Sitemap: ${SITE}/sitemap.xml`));
+
+  /* sitemap.xml — the one <loc>. lastmod is deliberately left alone: it claims
+     when the CONTENT changed, and restamping it on every deploy tells crawlers
+     something untrue. */
+  rewrite('sitemap.xml', (t) => t.replace(/<loc>[^<]*<\/loc>/, `<loc>${SITE}/</loc>`));
+
+  /* The three static case studies, and the admin panel's brand link and the
+     URL shown in its login preview. Every self-referencing absolute URL in
+     these is swapped wholesale, which covers canonical, og:url and the share
+     images at the site root that a path-based pattern misses. */
+  const csDir = path.join(ROOT, 'case-studies');
+  if (fs.existsSync(csDir)) {
+    for (const f of fs.readdirSync(csDir).filter((x) => x.endsWith('.html'))) {
+      rewrite(path.join('case-studies', f), swap);
+    }
+  }
+  rewrite(path.join('admin', 'index.html'), swap);
+
+  /* admin/config.yml — three keys only. Decap reads this in the browser, so it
+     cannot be generated from JSON like the rest of the content; it is patched
+     in place. Everything else in the file is left byte for byte alone. */
+  rewrite(path.join('admin', 'config.yml'), (t) => t
+    .replace(/^(\s*base_url:\s*).*$/m, `$1${SITE}`)
+    .replace(/^(site_url:\s*).*$/m, `$1${SITE}`)
+    .replace(/^(display_url:\s*).*$/m, `$1${SITE}`));
+
+  return touched;
+}
+
+/* ============================================================
    Run
    ============================================================ */
 
 try {
   const e = buildEngineering();
   const d = buildDesigns();
+  const t = buildDomainFiles();
   console.log(`build: engineering site — ${e} regions rendered`);
   console.log(`build: eon designs site — ${d} regions rendered + data.js`);
+  console.log(`build: site is ${SITE}${t ? ` — ${t} domain-dependent file(s) updated` : ''}`);
   console.log('build: ok');
 } catch (err) {
   console.error('\nBUILD FAILED\n' + err.message + '\n');
