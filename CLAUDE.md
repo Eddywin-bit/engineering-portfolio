@@ -350,6 +350,43 @@ Outside the repo, and only the owner can do these:
 
 ## Updates Log
 
+- 2026-08-05: **Animated hexagonal prism field behind the hero**, on both
+  layouts, fading into the page background.
+
+  The reference's background is **not a flat honeycomb**. It is a field of white
+  hexagonal PRISMS extruded to different heights, lit from the upper left, with
+  visible side walls and shadow gaps between blocks, and they slowly rise and
+  sink. A first attempt drew flat regular hexagons with a gradient and was
+  rejected outright; the form was wrong, not the tuning.
+
+  How to see it, because at 1.5% contrast it is nearly invisible in a
+  screenshot: average about 24 video frames together to kill compression noise,
+  then autocontrast the result. The shape becomes obvious immediately.
+
+  Built as ~35 absolutely positioned elements, each a hexagon `clip-path` with a
+  hard-stopped gradient standing in for the lit top face and the shaded side
+  wall. Three per-cell variables do the work: `--f` moves the top-face edge, so
+  blocks look like they stand at different heights; `--o` is a fixed vertical
+  offset; `--k` is the animation amplitude. Cells are scaled below 1 so
+  neighbours do not touch, because tiled edge to edge they read as one faceted
+  surface rather than as separate prisms.
+
+  Motion is a `transform` only, so it runs on the compositor. Total cost is
+  about 3KB of markup and no images, so unlike the reference, which is a heavy
+  render that fails to load on a slow connection and leaves a flat white page,
+  this does not need to be withheld on mobile data.
+
+  Contrast is the thing to be careful with and it is far fainter than it looks:
+  the reference varies by only 3 to 4 luma out of 255. Measured here at 4.2
+  against his 3.9 across the same depth profile. Verify by measuring a strip of
+  the render against the reference screenshot, never by eye.
+
+  Note: three separate recordings of the reference were checked for the motion
+  and all three measure completely static, best-fit displacement exactly zero at
+  every one-second interval, with the background varying LESS than provably
+  still text. The animation here is built from the owner's description of it
+  rather than from a measurement.
+
 - 2026-08-04: Engineering site rebuilt around **Nikola Radeski's** layout, at the
   owner's request and from his screenshots. Three changes plus one bug fix.
 

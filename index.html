@@ -302,6 +302,68 @@
       body { padding-top: 0; padding-bottom: 104px; }
     }
 
+    /* =========== HEX FIELD =========== */
+    /* The reference's hero sits on a field of white hexagonal PRISMS, extruded
+       to different heights and lit from the upper left, that slowly rise and
+       sink. It is a rendered image on his site, which is why it is heavy enough
+       to fail to load on a slow connection and leave a flat white page.
+
+       This is built instead: each cell is one element carrying a hexagon
+       clip-path, with a hard-stopped gradient standing in for the lit top face
+       and the two shaded side faces. Rising and sinking is a transform, so it
+       runs on the compositor and costs nothing to animate.
+
+       The whole thing weighs about 3KB of markup and no images, so unlike the
+       reference it does not need to be withheld on a slow connection.
+
+       Contrast is the thing to be careful with: measured off the reference, the
+       pattern varies by only 3 to 4 luma out of 255, about 1.5%. Anything
+       stronger stops reading as texture. Verify by measuring, not by eye. */
+    .hexfield {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+      /* A mask rather than a white gradient painted on top, so it cannot leave
+         a seam against --bg and survives a change of background colour. The
+         reference goes completely flat about a third of the way down. */
+      -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 8%, transparent 47%);
+      mask-image: linear-gradient(to bottom, #000 0%, #000 8%, transparent 47%);
+    }
+    .hexfield i {
+      position: absolute;
+      left: var(--l);
+      top: var(--t);
+      width: 20vw;
+      /* pointy-top hexagon: height is width * 2/sqrt(3) */
+      height: 23.09vw;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      /* The hard stop at --f is the prism's top edge: above it is the lit top
+         face, below it the side wall in shadow. Varying --f per cell is what
+         makes the blocks look like they stand at different heights. */
+      background: linear-gradient(163deg,
+        #ffffff 0%, #fcfbf8 var(--f),
+        #f0eee7 calc(var(--f) + 0.5%), #e6e3da 100%);
+      /* Scaled below 1 so neighbours do not touch. The reference's blocks are
+         separated by shadow gaps; tiled edge to edge they read as one faceted
+         surface instead of as separate prisms. --o is a fixed height offset per
+         cell, which is the other half of that. */
+      transform: translateY(calc(var(--o) + var(--k) * 1.4%)) scale(0.94);
+      animation: hexrise var(--s) ease-in-out var(--d) infinite alternate;
+      will-change: transform;
+    }
+    /* Rising and sinking. The scale change is what sells the extrusion: a taller
+       prism shows more of its side wall, so the cell grows slightly as it
+       lifts. Keep both, a translate on its own reads as sliding. */
+    @keyframes hexrise {
+      from { transform: translateY(calc(var(--o) + var(--k) *  1.4%)) scale(0.928); }
+      to   { transform: translateY(calc(var(--o) - var(--k) * 1.4%)) scale(0.952); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hexfield i { animation: none; }
+    }
+
     /* =========== HERO =========== */
     .hero {
       position: relative;
@@ -1623,6 +1685,43 @@
 
     <!-- ============ HERO ============ -->
     <section class="hero">
+      <div class="hexfield" aria-hidden="true">
+        <i style="--l:-10.0vw;--t:-12.0vw;--o:-2.17vw;--d:-8.32s;--s:13.69s;--k:0.94;--f:54.6%"></i>
+        <i style="--l:10.0vw;--t:-12.0vw;--o:-1.6vw;--d:-3.81s;--s:11.18s;--k:0.48;--f:50.4%"></i>
+        <i style="--l:30.0vw;--t:-12.0vw;--o:-2.15vw;--d:-1.99s;--s:10.73s;--k:0.41;--f:57.9%"></i>
+        <i style="--l:50.0vw;--t:-12.0vw;--o:-0.73vw;--d:-3.79s;--s:11.08s;--k:0.84;--f:39.6%"></i>
+        <i style="--l:70.0vw;--t:-12.0vw;--o:0.63vw;--d:-7.05s;--s:11.53s;--k:0.79;--f:65.2%"></i>
+        <i style="--l:90.0vw;--t:-12.0vw;--o:0.37vw;--d:-3.27s;--s:12.56s;--k:0.62;--f:56.5%"></i>
+        <i style="--l:110.0vw;--t:-12.0vw;--o:1.13vw;--d:-2.83s;--s:8.51s;--k:0.68;--f:54.5%"></i>
+        <i style="--l:0.0vw;--t:5.3vw;--o:-1.67vw;--d:-4.03s;--s:11.85s;--k:0.51;--f:47.1%"></i>
+        <i style="--l:20.0vw;--t:5.3vw;--o:-2.09vw;--d:-7.34s;--s:9.17s;--k:0.47;--f:39.1%"></i>
+        <i style="--l:40.0vw;--t:5.3vw;--o:-0.88vw;--d:-2.48s;--s:11.44s;--k:0.89;--f:48.4%"></i>
+        <i style="--l:60.0vw;--t:5.3vw;--o:0.25vw;--d:-2.6s;--s:9.83s;--k:0.87;--f:45.2%"></i>
+        <i style="--l:80.0vw;--t:5.3vw;--o:1.71vw;--d:-0.96s;--s:12.7s;--k:0.82;--f:44.7%"></i>
+        <i style="--l:100.0vw;--t:5.3vw;--o:2.32vw;--d:-4.91s;--s:13.51s;--k:0.76;--f:42.7%"></i>
+        <i style="--l:120.0vw;--t:5.3vw;--o:-2.48vw;--d:-8.78s;--s:8.34s;--k:0.65;--f:60.7%"></i>
+        <i style="--l:-10.0vw;--t:22.6vw;--o:2.33vw;--d:-6.18s;--s:13.84s;--k:0.88;--f:53.1%"></i>
+        <i style="--l:10.0vw;--t:22.6vw;--o:2.47vw;--d:-8.89s;--s:12.49s;--k:0.61;--f:48.6%"></i>
+        <i style="--l:30.0vw;--t:22.6vw;--o:-1.58vw;--d:-1.74s;--s:8.46s;--k:0.68;--f:64.1%"></i>
+        <i style="--l:50.0vw;--t:22.6vw;--o:0.15vw;--d:-8.55s;--s:9.3s;--k:0.46;--f:42.8%"></i>
+        <i style="--l:70.0vw;--t:22.6vw;--o:-0.41vw;--d:-4.89s;--s:12.88s;--k:0.55;--f:63.2%"></i>
+        <i style="--l:90.0vw;--t:22.6vw;--o:1.63vw;--d:-4.0s;--s:10.06s;--k:0.94;--f:63.1%"></i>
+        <i style="--l:110.0vw;--t:22.6vw;--o:1.72vw;--d:-6.19s;--s:10.48s;--k:0.82;--f:55.9%"></i>
+        <i style="--l:0.0vw;--t:40.0vw;--o:1.41vw;--d:-2.15s;--s:9.77s;--k:0.65;--f:53.6%"></i>
+        <i style="--l:20.0vw;--t:40.0vw;--o:0.68vw;--d:-4.95s;--s:12.96s;--k:0.47;--f:47.3%"></i>
+        <i style="--l:40.0vw;--t:40.0vw;--o:2.35vw;--d:-5.03s;--s:13.01s;--k:0.55;--f:40.2%"></i>
+        <i style="--l:60.0vw;--t:40.0vw;--o:0.32vw;--d:-5.06s;--s:11.25s;--k:0.54;--f:51.2%"></i>
+        <i style="--l:80.0vw;--t:40.0vw;--o:-0.64vw;--d:-4.05s;--s:12.31s;--k:0.4;--f:60.0%"></i>
+        <i style="--l:100.0vw;--t:40.0vw;--o:0.94vw;--d:-1.28s;--s:13.2s;--k:0.52;--f:42.8%"></i>
+        <i style="--l:120.0vw;--t:40.0vw;--o:1.04vw;--d:-4.04s;--s:10.54s;--k:0.45;--f:51.4%"></i>
+        <i style="--l:-10.0vw;--t:57.3vw;--o:0.14vw;--d:-6.2s;--s:11.23s;--k:0.73;--f:46.3%"></i>
+        <i style="--l:10.0vw;--t:57.3vw;--o:1.89vw;--d:-8.09s;--s:8.52s;--k:0.93;--f:51.9%"></i>
+        <i style="--l:30.0vw;--t:57.3vw;--o:-1.08vw;--d:-6.99s;--s:12.04s;--k:0.76;--f:47.0%"></i>
+        <i style="--l:50.0vw;--t:57.3vw;--o:-0.83vw;--d:-3.14s;--s:9.81s;--k:0.98;--f:48.9%"></i>
+        <i style="--l:70.0vw;--t:57.3vw;--o:0.28vw;--d:-3.78s;--s:12.9s;--k:0.69;--f:45.2%"></i>
+        <i style="--l:90.0vw;--t:57.3vw;--o:-1.23vw;--d:-2.5s;--s:8.53s;--k:0.53;--f:61.9%"></i>
+        <i style="--l:110.0vw;--t:57.3vw;--o:-1.97vw;--d:-4.52s;--s:8.66s;--k:0.68;--f:53.8%"></i>
+      </div>
       <div class="wrap hero-inner">
         <!-- CMS:START e-hero -->
         <h1 class="hero-mark reveal" data-d="1">
