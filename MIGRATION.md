@@ -182,6 +182,11 @@ record on `@` and `www`, then add only what Vercel's Domains page shows. Do not
 keep the old ones alongside the new; two sets of records for one host means the
 site loads from a different place on each request.
 
+**Search Console says "Could not find your site."** That is not about the
+verification file. It means the address you typed as the property never
+answered, so check the spelling first: `edwingyasi.me` has a **g** in it. The
+file method works on this site as-is, clean URLs and all.
+
 **The CMS will not log in.** Almost always the OAuth callback URL in step 3.
 It must be exactly `https://edwingyasi.me/api/callback`: no `www`, `https` not
 `http`, no trailing slash.

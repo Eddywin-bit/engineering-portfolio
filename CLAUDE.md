@@ -389,7 +389,14 @@ Outside the repo, and only the owner can do these:
   Google Search Console verification is the **file** method,
   `google5e961fde5173da87.html` at the repo root, which the new domain serves
   automatically. There is no verification `<meta>` tag on any page, and none is
-  needed while that file is present.
+  needed while that file is present. Confirmed on `.me`: `cleanUrls` does
+  **not** break it, even though it 308s `/x.html` to `/x`.
+
+  Both failures seen during the move were **typos in a URL**, not faults. The
+  admin 404 was the address pasted twice into the bar; Search Console's "Could
+  not find your site" was a property created as `edwinyasi.me`, missing the g.
+  That message means the host never answered, so check the spelling resolves
+  before suspecting the file, the build or the redirect config.
 
 - 2026-08-05: **Hexagonal prism field behind the hero**, on both layouts,
   fading into the page background. **Static, deliberately.**
