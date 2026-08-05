@@ -1,0 +1,244 @@
+# Running your site — Edwin's manual
+
+This is written for you, not for a developer and not for an AI. It covers both
+sites: the engineering portfolio at **edwingyasi.online** and the Eon Designs
+portfolio at **edwingyasi.online/designs**.
+
+Everything you need for day to day work is in section 2. You should not need to
+touch code for anything in it.
+
+> **Ignore `Site Manual - Edwin Gyasi Portfolio.html` in the repository.** It was
+> written before the CMS existed and tells you to edit HTML by hand and deploy
+> with git commands. Following it now would break the site. It is safe to delete.
+
+---
+
+## 1. The thirty-second version
+
+- Your site is **static files**. There is no database and no server that can go
+  down. It does not depend on Claude, or on any AI, or on any subscription.
+- You edit content at **[www.edwingyasi.online/admin](https://www.edwingyasi.online/admin)**.
+- When you click **Publish**, the panel saves to GitHub. Vercel notices, rebuilds
+  the site, and puts it live. This takes about a minute.
+- Nothing you can do in the admin panel can permanently break the site. Every
+  change is a saved version you can go back to.
+
+---
+
+## 2. Editing content
+
+Go to **[www.edwingyasi.online/admin](https://www.edwingyasi.online/admin)** and
+sign in with GitHub. You will see three groups in the sidebar.
+
+### Engineering Site
+
+| Entry | What it controls |
+|---|---|
+| 1. Page Title & SEO | Browser tab title, and the description Google shows |
+| 2. Navigation Bar | Your name, the menu links, the Contact button, your location |
+| 3. Hero | Your name, portrait photo, the two labels beside it, the tagline, the buttons |
+| 4. About | The heading, the paragraphs, the four statistics |
+| 5. Projects & Case Studies | The project cards |
+| 6. Skills & Certifications | Skill blocks and badges |
+| 7. Experience | Your roles: title, organisation, dates |
+| 8. Journal Section | Only the heading above the articles |
+| 9. Contact | Email, LinkedIn, CV link, the Eon Designs link |
+| 10. Footer | Footer text and social links |
+
+### Journal Posts
+
+Your articles, one entry each. This is the only place with real **New Post** and
+**Delete entry** buttons, so adding and removing articles works properly here.
+
+### Eon Designs Site
+
+| Entry | What it controls |
+|---|---|
+| 1. Page Title, SEO & Logo | Tab title, description, logo |
+| 2. Navigation Bar | Menu links |
+| 3. Hero | The opening screen |
+| 4. Selected Works | Your featured design projects |
+| 5. The Vault | The archive grid |
+| 6. About | About text and image |
+| 7. Journal | Design essays |
+| 8. Contact & Footer | Contact details and footer |
+
+### The one thing to remember
+
+**Changes are not live until you click Publish.** The button sometimes still
+reads "Published" from your previous save, which makes it look finished when it
+is not. If a change has not appeared on the site after a couple of minutes, go
+back and check that you actually published it.
+
+---
+
+## 3. Common jobs
+
+### Add a journal article
+Journal Posts → **New Post**. Fill in title, date, cover image, excerpt and body.
+Publish. The article page is created automatically at `/journal/your-title`, and
+it appears on the home page. You do not create the page yourself.
+
+### Delete a journal article
+Open it → **Delete entry**. It is removed from the site and its page is deleted
+on the next build.
+
+### Add a project
+Engineering Site → 5. Projects & Case Studies → add an item to the list.
+
+The **Link** field is optional. Leave it empty if the case study page does not
+exist yet, and the card will still display correctly without a dead link. Only
+one project should be set to the wide card.
+
+### Change your CV
+Contact → the CV link points at `/Edwin_Gyasi_Resume.pdf`. To replace the file
+itself you need to upload a new PDF to the repository, which is a code-side job.
+The simplest path is to keep the same filename so nothing else has to change.
+
+### Change your photo
+Hero → Portrait Photo. Upload an upright picture, roughly 3 wide by 4 tall.
+
+### Images: the rules that matter
+- **Keep uploads under 1 MB.** Larger files work on the live site but show as a
+  broken thumbnail in the panel, because of a GitHub limit. Not your fault and
+  not a bug.
+- **Cover images should be JPG or PNG, not WEBP.** WhatsApp and most link
+  previews refuse to display WEBP, so a WEBP cover falls back to a generic card
+  when someone shares your article.
+- Engineering images go to `/images/`, Eon Designs images to `/designs/images/`.
+  The panel handles this for you.
+
+---
+
+## 4. Checking a change went live
+
+1. Publish in the panel.
+2. Wait about a minute.
+3. Open the site and **hard refresh**: `Ctrl + Shift + R` on Windows.
+
+If it still has not changed, open **vercel.com**, find the project, and look at
+the most recent deployment. Green means it worked. Red means the build failed
+and **your old site is still live**, which is the safe outcome but means your
+change is not showing. Click into the failed build to see the error, or ask
+Copilot to look at it.
+
+---
+
+## 5. What never to touch
+
+You will not hit these through the admin panel. They matter if you or an AI is
+editing files directly.
+
+- **`/vault/` and `/ledger/`** — separate projects that happen to live in the
+  same repository.
+- **Anything between `<!-- CMS:START -->` and `<!-- CMS:END -->`** in the HTML
+  files. Those blocks are regenerated on every deploy, so edits there vanish.
+- **`designs/js/data.js`** and **everything in `/journal/`** — generated files.
+- **`vercel.json`** — its format is strict. A stray comment breaks every future
+  deploy.
+
+---
+
+## 6. Using GitHub Copilot for code changes
+
+You have Copilot Pro. For anything the CMS cannot do — layout, colours, new
+sections, bug fixes — it can work on this repository the way Claude Code has.
+
+**Set-up:** open the project folder in VS Code with the Copilot extension signed
+in. That is all. Copilot automatically reads `.github/copilot-instructions.md`
+in this repository, which contains every rule and every trap we have hit,
+so it starts with the same knowledge rather than from nothing.
+
+**How to get good results:**
+
+- Use **Agent mode** in Copilot Chat for changes that touch more than one file.
+- Ask for **one specific thing at a time**. "Make the experience dates grey and
+  smaller" works far better than "improve the experience section".
+- Tell it to **run `node build.js` and confirm it exits 0** before it finishes.
+  This is in its instructions, but say it anyway.
+- Ask it to **show you a screenshot or describe what changed** before pushing.
+- After it pushes, **check the Vercel deploy is green**.
+
+**Things to be wary of:**
+
+- It is weaker at "make this look like this screenshot" than at concrete,
+  described changes. Describe what you want in words.
+- If it says something is done, check the live site yourself. Trust the site,
+  not the summary.
+- If it breaks something, see section 8. Nothing is unrecoverable.
+
+You can also use Copilot on github.com by opening an issue describing what you
+want and assigning it to Copilot. It will work in the background and open a pull
+request for you to review before anything goes live, which is the safest way to
+make a change you are unsure about.
+
+---
+
+## 7. Things that exist outside the repository
+
+**These cannot be recovered from the code.** If they are lost, the CMS login or
+the domain stops working with no way to rebuild them from what is in GitHub.
+Keep a record somewhere safe.
+
+**In your Vercel project settings, under Environment Variables:**
+
+| Name | What it is |
+|---|---|
+| `GITHUB_OAUTH_CLIENT_ID` | Identifies the login app |
+| `GITHUB_OAUTH_CLIENT_SECRET` | Its password. Never goes in the code |
+| `ALLOWED_GITHUB_LOGIN` | Your GitHub username. Locks the panel to you alone |
+
+**In your GitHub account, under Settings → Developer settings → OAuth Apps:**
+
+There is an app whose **Authorization callback URL must be exactly**
+`https://www.edwingyasi.online/api/callback`. If this is wrong by even one
+character, the CMS login fails.
+
+**In Vercel, under Domains:** `edwingyasi.online` and `www.edwingyasi.online`.
+The `www` version is the real one; the bare domain redirects to it.
+
+**If you ever change domain**, the site is mostly ready for it. Setting a
+`SITE_URL` environment variable in Vercel moves every generated link with no
+code change. A handful of files still need editing by hand, and they are listed
+at the end of `.github/copilot-instructions.md`. Keep the old domain registered
+and redirecting for at least a year, because that redirect is what carries your
+Google ranking across.
+
+---
+
+## 8. When something goes wrong
+
+**The site looks broken after a change.**
+Every version is saved. In GitHub, open the repository, click **Commits**, find
+the last one that was fine, and revert the ones after it. Or ask Copilot: "revert
+the last commit and push". The site returns to its previous state in about a
+minute.
+
+**The admin panel will not load.**
+Usually `admin/config.yml` has a formatting error. The most common cause is a
+multi-line hint written on one line. Revert the last change to that file.
+
+**Cannot log in to the panel.**
+Check the three Vercel environment variables in section 7, and check the OAuth
+callback URL is exactly right.
+
+**A change published but is not showing.**
+Check the Vercel deployment is green, then hard refresh. If the deploy is red,
+the build failed and the old site is still live.
+
+**An article was deleted but is still on the site.**
+Confirm you clicked Publish. Check the repository: if the file is still in
+`content/engineering/journal/`, the deletion never reached GitHub.
+
+---
+
+## 9. What this site costs to keep running
+
+- **Vercel** — free tier, comfortably within limits for a portfolio.
+- **Domain** — annual renewal to your registrar.
+- **GitHub** — free.
+- **Fonts, images, everything else** — self-hosted in the repository. No
+  third-party service to pay or to fail.
+
+No AI subscription is needed to keep the site online, to edit its content, or to
+publish. That was deliberate.

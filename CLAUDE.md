@@ -1,5 +1,12 @@
 # Engineering Site & Eon Designs Portfolio
 
+> **Handover note, 2026-08-05.** The working ruleset now lives in
+> `.github/copilot-instructions.md`, which GitHub Copilot loads automatically,
+> with a short pointer at `AGENTS.md` for other tools. `MAINTENANCE.md` is the
+> plain-English guide written for the owner rather than for a developer.
+> **This file is kept as the dated history of why decisions were made.** Read it
+> before overturning one; most were made after something broke.
+
 This repo hosts `edwingyasi.online` (the engineering portfolio) plus subfolders for design portfolio, Prompt Vault, and My Ledger. Currently building the new Eon Designs portfolio inside `/eon/`.
 
 ## Owner
