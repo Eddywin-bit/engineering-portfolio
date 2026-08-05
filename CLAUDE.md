@@ -28,25 +28,42 @@ Edwin Gyasi Owusu (CEO Gyasi). Final-year Geological Engineering student at KNUS
 
 ## Current Build
 
-All work happens inside `/eon/`. Full spec is in `EON_PORTFOLIO_BRIEF.md` at repo root.
+**The EON v2 rebuild was never started.** There is no `/eon/` directory in this
+repository and there never has been. The plan below it, the brief in
+`EON_PORTFOLIO_BRIEF.md`, and the `/eon/`-specific stack and commands further
+down this file all describe a project that was scoped and then shelved. They are
+kept because the brief is still what the owner wants if it is ever picked up.
 
-Do NOT reference, copy, or replicate anything from `/designs/`. That folder is the old site. The new build is completely fresh.
+**`/designs/` is a live production site**, at `edwingyasi.me/designs`, edited
+through the CMS and changed as recently as 2026-08-05. An earlier version of this
+section called it "the old site" and said not to reference it. That was written
+while EON v2 looked imminent and is now actively misleading: treating the live
+designs site as disposable is a way to break something visitors use.
+
+So: current work is the engineering site at `/` and the Eon Designs site at
+`/designs/`, both CMS-managed. If EON v2 is ever revived, scaffold `/eon/` first
+and the rules below become relevant again.
 
 ## Tech Stack
 
-- HTML / CSS / vanilla JavaScript (no framework)
-- Cloudinary CDN for images (cloud name: `dytejwgxj`)
-- Images currently at `../designs/Assets/` — referenced via relative path from `/eon/`
-- Vercel hosting (auto-deploys from main branch)
-- Vercel serverless function at `/eon/api/chat.js` for AI chat
-- `@anthropic-ai/sdk` for Claude integration in the chat endpoint
-- Lenis for smooth scroll (lerp: 0.08, smoothWheel: true on Windows)
+What is actually deployed:
+
+- HTML / CSS / vanilla JavaScript, no framework, no build step beyond `build.js`
+- `build.js` needs only Node's `fs` and `path`; the repo root has no dependencies
+- Tailwind via CDN on `/designs/` only; the engineering site is hand-written CSS
+- Clash Display, self-hosted at `fonts/clash-display-var.woff2`
+- Vercel hosting, auto-deploys from `main`, build command `node build.js`
+
+Planned for EON v2 and therefore **not present in this repository**: Cloudinary,
+`/eon/api/chat.js`, `@anthropic-ai/sdk`, Lenis smooth scroll.
 
 ## Commands
 
-- Local dev: `cd eon && vercel dev` or `cd eon && npx serve .`
-- Install deps: `cd eon && npm install`
-- Deploy: push to main, Vercel auto-deploys
+- Build: `node build.js` — required before every push, must exit 0
+- Local preview: `npx serve .` **from the repo root**, which handles clean URLs
+  and is required by the `<base>` tag on `/designs/`
+- Local CMS: `npx decap-server`, then open `/admin`
+- Deploy: push to `main`, Vercel auto-deploys
 
 ## Hard Rules
 
@@ -55,8 +72,9 @@ Do NOT reference, copy, or replicate anything from `/designs/`. That folder is t
 - NEVER hand-edit content inside a `<!-- CMS:START -->` / `<!-- CMS:END -->` block. `build.js` overwrites it. Edit the JSON in `/content/` instead.
 - NEVER hand-edit `designs/js/data.js`. It is generated from `/content/designs/*.json`.
 - ALWAYS run `node build.js` and confirm it exits 0 before pushing
-- For the EON v2 build specifically, work inside `/eon/`
-- Do NOT copy visual structure or layout from `/designs/index.html` into `/eon/`
+- If EON v2 is ever revived: work inside `/eon/`, and do not copy visual
+  structure or layout from `/designs/index.html` into it. Dormant, see
+  Current Build.
 
 ## Standing Habit
 
@@ -364,6 +382,27 @@ Outside the repo, and only the owner can do these:
   Address**.
 
 ## Updates Log
+
+- 2026-08-05: **The EON v2 sections at the top of this file were stale, and one
+  of them was dangerous.** Found by the Copilot coding agent on its first run,
+  asked to look for problems and report without fixing. Worth recording that the
+  handover tooling earned its keep on day one.
+
+  This file opened by saying all work happens inside `/eon/`, which does not
+  exist and never has, and that `/designs/` is "the old site" that must not be
+  referenced. The second claim was written while the rebuild looked imminent. It
+  is now the opposite of true: `/designs/` is live at `edwingyasi.me/designs`,
+  CMS-managed, and was edited the same day. An agent reading that instruction
+  literally could treat a production site as disposable.
+
+  Current Build now states plainly that the rebuild was never started, Tech
+  Stack separates what is deployed from what was only ever planned, Commands
+  describe the real ones rather than `cd eon && vercel dev`, and the two
+  `/eon/` hard rules are marked dormant. `EON_PORTFOLIO_BRIEF.md` is kept,
+  since it is still what the owner wants if the project is revived.
+
+  General lesson: a plan written in the present tense rots into a false
+  instruction. Date it or scope it when it is written.
 
 - 2026-08-05: **Two GitHub Actions workflows, for the handover to Copilot.**
   The owner keeps Copilot Pro for a year after Claude ends, and its coding
