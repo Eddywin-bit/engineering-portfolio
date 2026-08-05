@@ -7,10 +7,6 @@ portfolio at **edwingyasi.online/designs**.
 Everything you need for day to day work is in section 2. You should not need to
 touch code for anything in it.
 
-> **Ignore `Site Manual - Edwin Gyasi Portfolio.html` in the repository.** It was
-> written before the CMS existed and tells you to edit HTML by hand and deploy
-> with git commands. Following it now would break the site. It is safe to delete.
-
 ---
 
 ## 1. The thirty-second version
