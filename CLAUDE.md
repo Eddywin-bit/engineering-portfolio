@@ -365,6 +365,35 @@ Outside the repo, and only the owner can do these:
 
 ## Updates Log
 
+- 2026-08-05: **`sitemap.xml` is generated, and lists all six pages.** It named
+  only the homepage before, so the three case studies, the journal post and the
+  designs site were discoverable only by crawling. That mattered more than usual
+  the week the domain changed, since Google was rediscovering the whole site on
+  a name it had never crawled.
+
+  Built inside `buildDomainFiles()`, from the files that actually exist, so a
+  journal post added in the panel is listed the moment it deploys and a deleted
+  one drops out. Four decisions in it are deliberate:
+
+  - It is generated **after** `oldOrigin` is read from the previous
+    `sitemap.xml`. That read is what lets the domain swap find the old origin,
+    so generating earlier would silently break every other domain-dependent
+    file. Verified by moving the site to a throwaway domain and back.
+  - URLs are the **clean** form, no `.html`, because `cleanUrls` 308-redirects
+    the other one and a sitemap must not list a redirect.
+  - `lastmod` is emitted only where it is **true**: a journal post's own CMS
+    date, or a value already in the file. Never today's date. Stamping every URL
+    on every deploy claims all six pages changed, and a crawler that catches the
+    field lying stops trusting it.
+  - `changefreq` and `priority` are **gone**. Google says it ignores both.
+
+  `/admin` is excluded on purpose, it is `noindex`, as are `/vault/` and
+  `/ledger/`.
+
+  Worth being clear about what this does and does not do: it is **discovery, not
+  ranking**. No page moves up because it is listed. It only stops Google having
+  to find the inner pages by following links from the homepage.
+
 - 2026-08-05: **`/designs` without the trailing slash loaded as a stripped
   page**, and now does not. Reported as "the page doesn't load fully".
 

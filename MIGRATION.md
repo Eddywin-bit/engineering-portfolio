@@ -152,7 +152,9 @@ This is the part that protects your search ranking. Do not skip it.
 3. In Search Console, on the **old** property, use **Settings → Change of
    Address** and point it at the new one. This tells Google the move is
    deliberate and permanent.
-4. Submit `https://edwingyasi.me/sitemap.xml` under **Sitemaps**.
+4. Submit `https://edwingyasi.me/sitemap.xml` under **Sitemaps**. It lists every
+   page, and rebuilds itself, so a journal post added in the CMS appears there
+   with no action from you.
 
 Expect a few weeks for Google to fully switch over. Traffic usually dips
 slightly and recovers. That is normal and not a sign anything is broken.
@@ -205,7 +207,7 @@ For reference, `buildDomainFiles()` in `build.js` rewrites:
 | File | What changes |
 |---|---|
 | `robots.txt` | the `Sitemap:` line |
-| `sitemap.xml` | the `<loc>` (`lastmod` is deliberately left alone) |
+| `sitemap.xml` | regenerated in full: homepage, `/designs/`, the case studies and every journal post |
 | `case-studies/*.html` × 3 | canonical, `og:url`, `og:image`, `twitter:image` |
 | `admin/index.html` | the brand link |
 | `admin/config.yml` | `base_url`, `site_url`, `display_url` |

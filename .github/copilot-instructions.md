@@ -266,7 +266,8 @@ canonical, so treat any doc that says otherwise as out of date.
 ### Changing the domain
 
 **Setting `SITE_URL` in Vercel moves everything.** `buildDomainFiles()` in
-`build.js` rewrites `robots.txt`, `sitemap.xml`, the three `case-studies/*.html`,
+`build.js` regenerates `sitemap.xml` outright and rewrites `robots.txt`,
+the three `case-studies/*.html`,
 `admin/index.html` and the three domain keys in `admin/config.yml`; the rest is
 generated from `SITE` already. It finds the previous origin by reading
 `sitemap.xml` before rewriting it, then swaps that exact string, which is what

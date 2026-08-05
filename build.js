@@ -1232,19 +1232,73 @@ function buildDomainFiles() {
     if (after !== before) { fs.writeFileSync(fp, after); touched++; }
   };
 
+  const csDir = path.join(ROOT, 'case-studies');
+
   /* robots.txt — only the Sitemap: line carries the domain */
   rewrite('robots.txt', (t) => t.replace(/^Sitemap:.*$/m, `Sitemap: ${SITE}/sitemap.xml`));
 
-  /* sitemap.xml — the one <loc>. lastmod is deliberately left alone: it claims
-     when the CONTENT changed, and restamping it on every deploy tells crawlers
-     something untrue. */
-  rewrite('sitemap.xml', (t) => t.replace(/<loc>[^<]*<\/loc>/, `<loc>${SITE}/</loc>`));
+  /* sitemap.xml — generated in full from the pages that actually exist, so a
+     new journal post or case study is listed the moment it is built and a
+     deleted one disappears. It must be generated AFTER oldOrigin is read above,
+     since that read is what makes this file the record of the previous domain.
+
+     URLs are the CLEAN form, no .html, because cleanUrls 308-redirects the
+     other one and a sitemap should never list a redirect.
+
+     lastmod is emitted only where it is true: a journal post's own date, or a
+     value already in the file from a previous run. It is never stamped with
+     today's date, because that would claim on every deploy that every page had
+     just changed, and a crawler that catches a sitemap lying about this starts
+     ignoring the field entirely.
+
+     changefreq and priority are deliberately absent. Google states plainly that
+     it ignores both, so they are noise that has to be kept accurate for nothing.
+
+     /admin is excluded on purpose (it carries X-Robots-Tag: noindex), as are
+     /vault/ and /ledger/, which are separate apps. */
+  const prevMod = new Map();
+  if (fs.existsSync(mapPath)) {
+    const prev = fs.readFileSync(mapPath, 'utf8');
+    for (const m of prev.matchAll(/<loc>([^<]*)<\/loc>(?:\s*<lastmod>([^<]*)<\/lastmod>)?/g)) {
+      try { prevMod.set(new URL(m[1]).pathname, (m[2] || '').trim() || null); } catch { /* skip */ }
+    }
+  }
+
+  const pages = [{ path: '/' }, { path: '/designs/' }];
+
+  if (fs.existsSync(csDir)) {
+    for (const f of fs.readdirSync(csDir).filter((x) => x.endsWith('.html')).sort()) {
+      pages.push({ path: `/case-studies/${f.replace(/\.html$/, '')}` });
+    }
+  }
+
+  /* Posts are already sorted newest first by loadJournalPosts. Their date is a
+     real editorial date from the CMS, so it is the one lastmod worth trusting. */
+  for (const p of loadJournalPosts()) {
+    const d = String(p.date || '').slice(0, 10);
+    pages.push({
+      path: `/journal/${p.slug}`,
+      lastmod: /^\d{4}-\d{2}-\d{2}$/.test(d) ? d : null,
+    });
+  }
+
+  const sitemap =
+    '<?xml version="1.0" encoding="UTF-8"?>\n' +
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
+    pages.map((p) => {
+      const mod = p.lastmod || prevMod.get(p.path) || null;
+      return `  <url>\n    <loc>${SITE}${p.path}</loc>\n` +
+             (mod ? `    <lastmod>${mod}</lastmod>\n` : '') +
+             '  </url>\n';
+    }).join('') +
+    '</urlset>\n';
+
+  rewrite('sitemap.xml', () => sitemap);
 
   /* The three static case studies, and the admin panel's brand link and the
      URL shown in its login preview. Every self-referencing absolute URL in
      these is swapped wholesale, which covers canonical, og:url and the share
      images at the site root that a path-based pattern misses. */
-  const csDir = path.join(ROOT, 'case-studies');
   if (fs.existsSync(csDir)) {
     for (const f of fs.readdirSync(csDir).filter((x) => x.endsWith('.html'))) {
       rewrite(path.join('case-studies', f), swap);
