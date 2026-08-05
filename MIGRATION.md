@@ -165,6 +165,18 @@ email signature, your Instagram bio, any business cards.
 records are wrong. Check Vercel's Domains page for the exact records expected.
 The old domain keeps working throughout, so you are never offline.
 
+**The new domain resolves, but to the wrong host.** The name works and yet
+Vercel still says the domain is invalid. That means records exist but point
+somewhere other than Vercel. The tell is the IP address: `185.199.108.153` and
+its three neighbours ending `.153` are **GitHub Pages**, not Vercel. Vercel's
+addresses are in the `216.198.79.x` and `64.29.17.x` ranges. Compare against
+`edwingyasi.online`, which is already correct.
+
+The fix is the same either way: in Advanced DNS delete every `A` and `CNAME`
+record on `@` and `www`, then add only what Vercel's Domains page shows. Do not
+keep the old ones alongside the new; two sets of records for one host means the
+site loads from a different place on each request.
+
 **The CMS will not log in.** Almost always the OAuth callback URL in step 3.
 It must be exactly `https://edwingyasi.me/api/callback`: no `www`, `https` not
 `http`, no trailing slash.
