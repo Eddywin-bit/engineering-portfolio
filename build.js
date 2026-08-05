@@ -566,9 +566,32 @@ function buildEngineering() {
   const regions = {};
 
   /* ---- head ---- */
+  /* The homepage had no canonical and no share card at all, while every
+     journal post and case study had both. Two consequences: sharing the site
+     root gave a bare link with no preview, and Google had nothing telling it
+     which of the apex, www and old-domain variants was authoritative. Both are
+     generated from SITE, so they follow a domain change automatically.
+
+     og:image is the pre-rendered 1200x630 card at the repo root. Its dimensions
+     are declared because they are known and fixed; never declare them for an
+     arbitrary CMS upload, which would tell the scraper the wrong shape. */
   regions['e-head'] =
     `  <title>${esc(meta.title)}</title>\n` +
-    `  <meta name="description" content="${attr(meta.description)}" />`;
+    `  <meta name="description" content="${attr(meta.description)}" />\n\n` +
+    `  <link rel="canonical" href="${attr(SITE)}/" />\n\n` +
+    `  <meta property="og:type" content="website" />\n` +
+    `  <meta property="og:site_name" content="Edwin Gyasi Owusu" />\n` +
+    `  <meta property="og:url" content="${attr(SITE)}/" />\n` +
+    `  <meta property="og:title" content="${attr(meta.title)}" />\n` +
+    `  <meta property="og:description" content="${attr(meta.description)}" />\n` +
+    `  <meta property="og:image" content="${attr(SITE)}/og-engineering.png" />\n` +
+    `  <meta property="og:image:width" content="1200" />\n` +
+    `  <meta property="og:image:height" content="630" />\n` +
+    `  <meta property="og:image:alt" content="${attr(meta.title)}" />\n\n` +
+    `  <meta name="twitter:card" content="summary_large_image" />\n` +
+    `  <meta name="twitter:title" content="${attr(meta.title)}" />\n` +
+    `  <meta name="twitter:description" content="${attr(meta.description)}" />\n` +
+    `  <meta name="twitter:image" content="${attr(SITE)}/og-engineering.png" />`;
 
   /* ---- nav ---- */
   // Three navigations from one set of links: a floating dock for desktop, a
@@ -931,6 +954,9 @@ function buildDesigns() {
   /* ---- head ---- */
   regions['d-head'] =
     `    <title>${esc(meta.title)}</title>\n\n` +
+    // Was missing entirely. Without it the designs page competes with itself
+    // across the apex, www and old-domain variants.
+    `    <link rel="canonical" href="${attr(abs(meta.og_url))}">\n\n` +
     `    <!-- SOCIAL SHARE PREVIEW (The "Link Card") -->\n` +
     `    <meta property="og:type" content="website">\n` +
     `    <meta property="og:url" content="${attr(abs(meta.og_url))}">\n` +
