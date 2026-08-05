@@ -3,6 +3,21 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--
+      Every asset on this page is referenced RELATIVELY (Assets/logo.webp,
+      js/app.js, and every image path in js/data.js), so the address the
+      browser resolves them against decides whether they load at all.
+
+      Reached as /designs/ the base is /designs/ and they resolve correctly.
+      Reached as /designs, with no trailing slash, the base is / and every one
+      of them 404s: the page renders its text and layout but arrives with no
+      logo, no portrait, no artwork and no scripts.
+
+      This <base> pins the resolution so BOTH addresses work. Keep it before
+      any element with a URL, and note it means a local server must be run
+      from the REPO ROOT, not from inside designs/.
+    -->
+    <base href="/designs/" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/svg+xml" href="/icon.svg" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />

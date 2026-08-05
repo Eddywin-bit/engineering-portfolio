@@ -4,6 +4,6 @@
   "socials": [
     { "icon": "mail", "href": "mailto:gyasiedwin14@gmail.com", "label": "Email", "new_tab": false },
     { "icon": "linkedin", "href": "https://www.linkedin.com/in/edwin-gyasi", "label": "LinkedIn", "new_tab": true },
-    { "icon": "globe", "href": "/designs", "label": "Eon Designs", "new_tab": true }
+    { "icon": "globe", "href": "/designs/", "label": "Eon Designs", "new_tab": true }
   ]
 }

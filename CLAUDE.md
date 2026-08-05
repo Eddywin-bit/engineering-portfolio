@@ -365,6 +365,31 @@ Outside the repo, and only the owner can do these:
 
 ## Updates Log
 
+- 2026-08-05: **`/designs` without the trailing slash loaded as a stripped
+  page**, and now does not. Reported as "the page doesn't load fully".
+
+  Every asset on that page is referenced **relatively**: `Assets/logo.webp` and
+  `js/app.js` in the markup, and every artwork path inside `js/data.js`. At
+  `/designs/` the browser resolves them against `/designs/` and they load. At
+  `/designs` it resolves them against `/`, so all of them 404 at the site root.
+  The text and layout still render, which is what makes it read as a page that
+  half-loaded rather than as a broken link.
+
+  Two fixes, because they close different holes. The two links that sent him
+  there, in `content/engineering/contact.json` and `footer.json`, said
+  `/designs`; both are `/designs/` now. And `designs/index.html` carries a
+  **`<base href="/designs/">`**, so the bare address works too, which matters
+  for anything already shared or typed by hand.
+
+  Consequence to remember: with a `<base>`, a local server must be run from the
+  **repo root**, not from inside `designs/`. `cleanUrls` is not involved here
+  and changing it would not have helped.
+
+  Verified in Chromium against a local server: `/designs` and `/designs/` now
+  issue an identical set of seven requests, all resolving under `/designs/`.
+  Two images report empty and are meant to, the lightbox and the blog modal,
+  which are filled at runtime.
+
 - 2026-08-05: **The site moved to `edwingyasi.me`.** The apex is canonical and
   `www.edwingyasi.me` redirects to it, which is the **reverse** of the old
   `.online` arrangement. `edwingyasi.online` stays registered and redirecting,
