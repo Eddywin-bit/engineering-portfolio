@@ -27,19 +27,59 @@ you will lose ranking you spent a year earning. Order matters here.
 Buy `edwingyasi.me` from any registrar. **Keep `edwingyasi.online` registered
 and paid for.** Do not let it lapse. See step 7 for why.
 
+## Step 1b — Turn auto-renew ON
+
+Namecheap → Domain List → `edwingyasi.me` → the **AUTO-RENEW** toggle.
+
+It is off by default and yours is currently off. Once this domain is your main
+address, letting it lapse takes the whole site down and puts the name back on
+the open market for anyone to buy. Turn it on, and check the card on file is
+valid. Do the same for `edwingyasi.online`, which you are keeping as a redirect.
+
 ## Step 2 — Add it to Vercel
 
 Vercel → your project → **Settings → Domains → Add**.
 
-Add both `edwingyasi.me` and `www.edwingyasi.me`. Vercel will show you the DNS
-records to create at your registrar. Create them exactly as shown.
+Add both `edwingyasi.me` and `www.edwingyasi.me`.
 
-Set **`www.edwingyasi.me` as the primary**, and let the bare `edwingyasi.me`
-redirect to it. This matches how the site works today and matters for the CMS
-login, which breaks if the OAuth popup travels through a redirect.
+Set **`edwingyasi.me` (the bare domain) as the primary**, and let
+`www.edwingyasi.me` redirect to it. Note this is the opposite of the old
+`.online` setup, where www was primary. It matters for the CMS login: the
+OAuth popup must go to the host that does *not* redirect, and the build sets
+that host from the same value.
 
-Wait until Vercel shows both as valid. DNS can take anywhere from minutes to a
-few hours.
+Vercel then shows you the DNS records to create. Create them exactly as shown.
+
+### Doing that in Namecheap
+
+Namecheap → Domain List → `edwingyasi.me` → **Manage** → the **Advanced DNS**
+tab. Not the Domain tab you were on; Advanced DNS is where records live.
+
+**First delete the two records Namecheap creates by default.** A new domain
+ships with a `CNAME` for `www` pointing at `parkingpage.namecheap.com` and a
+`URL Redirect Record` for `@`. Leave either in place and it fights the records
+you are about to add, and the site loads intermittently or not at all. This is
+the most common way this goes wrong.
+
+Then add what Vercel showed you. It will be shaped like this, but **use
+Vercel's values, not these**, because they change:
+
+| Type | Host | Value |
+|---|---|---|
+| A Record | `@` | the IP address Vercel shows |
+| CNAME Record | `www` | the target Vercel shows |
+
+`@` means the bare domain. TTL can stay on Automatic.
+
+Do **not** use Namecheap's own "Redirect Domain" feature to point www at the
+apex. Vercel already does that once both domains are added, and both trying at
+once causes a redirect loop.
+
+Your nameservers are already on **Namecheap BasicDNS**, which is correct. Do
+not change them.
+
+Wait until Vercel shows both domains as valid. DNS usually takes minutes, but
+can take a few hours.
 
 ## Step 3 — Update the GitHub OAuth app
 
@@ -48,7 +88,7 @@ GitHub → **Settings → Developer settings → OAuth Apps** → your app.
 Change the **Authorization callback URL** to exactly:
 
 ```
-https://www.edwingyasi.me/api/callback
+https://edwingyasi.me/api/callback
 ```
 
 One character wrong and the CMS login fails with an unhelpful error. Copy and
@@ -60,14 +100,14 @@ Vercel → **Settings → Environment Variables** → add:
 
 | Name | Value |
 |---|---|
-| `SITE_URL` | `https://www.edwingyasi.me` |
+| `SITE_URL` | `https://edwingyasi.me` |
 
 Then **Deployments → the latest one → Redeploy**.
 
 That is the whole code-side migration. When the build finishes it will print:
 
 ```
-build: site is https://www.edwingyasi.me — 7 domain-dependent file(s) updated
+build: site is https://edwingyasi.me — 7 domain-dependent file(s) updated
 ```
 
 If it still says `.online`, the variable was not saved or you redeployed an old
@@ -75,8 +115,9 @@ build. Check the variable, then redeploy again.
 
 ## Step 5 — Check it worked
 
-1. Open `https://www.edwingyasi.me` — the site should load.
-2. Open `https://www.edwingyasi.me/admin` and sign in. If login fails, step 3
+1. Open `https://edwingyasi.me` — the site should load, and
+   `https://www.edwingyasi.me` should redirect to it.
+2. Open `https://edwingyasi.me/admin` and sign in. If login fails, step 3
    is wrong.
 3. View the page source and search for `canonical`. It should say `.me`.
 4. Paste a journal article link into a WhatsApp chat with yourself. The preview
@@ -100,13 +141,13 @@ This is the part that protects your search ranking. Do not skip it.
    That redirect is what carries your existing Google ranking across. Google's
    own guidance is to keep it for **at least a year**. Letting it expire throws
    away everything the site has earned in search.
-2. **Google Search Console** → add `www.edwingyasi.me` as a new property and
+2. **Google Search Console** → add `edwingyasi.me` as a new property and
    verify it. Your verification file, `google5e961fde5173da87.html`, is already
    in the repository and will be served from the new domain automatically.
 3. In Search Console, on the **old** property, use **Settings → Change of
    Address** and point it at the new one. This tells Google the move is
    deliberate and permanent.
-4. Submit `https://www.edwingyasi.me/sitemap.xml` under **Sitemaps**.
+4. Submit `https://edwingyasi.me/sitemap.xml` under **Sitemaps**.
 
 Expect a few weeks for Google to fully switch over. Traffic usually dips
 slightly and recovers. That is normal and not a sign anything is broken.
@@ -125,8 +166,8 @@ records are wrong. Check Vercel's Domains page for the exact records expected.
 The old domain keeps working throughout, so you are never offline.
 
 **The CMS will not log in.** Almost always the OAuth callback URL in step 3.
-It must be exactly `https://www.edwingyasi.me/api/callback`, with `www`, with
-`https`, no trailing slash.
+It must be exactly `https://edwingyasi.me/api/callback`: no `www`, `https` not
+`http`, no trailing slash.
 
 **You want to undo the whole thing.** Delete the `SITE_URL` variable in Vercel
 and redeploy. Everything reverts to `.online`. Nothing in the code changed, so
