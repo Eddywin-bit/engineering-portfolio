@@ -5,4 +5,4 @@ Disallow: /ledger/
 Disallow: /admin/
 Disallow: /api/
 
-Sitemap: https://www.edwingyasi.online/sitemap.xml
+Sitemap: https://edwingyasi.me/sitemap.xml

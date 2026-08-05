@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Static content build for edwingyasi.online
+ * Static content build for edwingyasi.me
  * -------------------------------------------------------------
  * Reads the JSON files Decap CMS writes into /content and injects
  * rendered HTML into the marked regions of:
@@ -40,14 +40,16 @@ const json = (...p) => JSON.parse(read(...p));
    the real address, and pointing them at a host that redirects
    wastes the redirect.
 
-   Not covered by this constant, so they still need editing by
-   hand on a domain move:
-     admin/config.yml   base_url, site_url, display_url
-     case-studies/*.html canonical + og: tags (static pages)
-     robots.txt, sitemap.xml
-     admin/index.html   the brand bar link
+   The static files that are not generated from this constant
+   (robots.txt, sitemap.xml, case-studies/*.html, admin/index.html,
+   admin/config.yml) are rewritten to match by buildDomainFiles()
+   below, so nothing needs editing by hand.
+
+   The apex is canonical, deliberately. www.edwingyasi.me redirects
+   to it, and edwingyasi.online redirects here as well to carry the
+   old search ranking across.
    ============================================================ */
-const SITE = (process.env.SITE_URL || 'https://www.edwingyasi.online').replace(/\/+$/, '');
+const SITE = (process.env.SITE_URL || 'https://edwingyasi.me').replace(/\/+$/, '');
 
 /** Make a site path absolute. Leaves full URLs untouched. */
 const abs = (p) => {

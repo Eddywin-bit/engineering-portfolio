@@ -7,7 +7,7 @@
 > **This file is kept as the dated history of why decisions were made.** Read it
 > before overturning one; most were made after something broke.
 
-This repo hosts `edwingyasi.online` (the engineering portfolio) plus subfolders for design portfolio, Prompt Vault, and My Ledger. Currently building the new Eon Designs portfolio inside `/eon/`.
+This repo hosts `edwingyasi.me` (the engineering portfolio) plus subfolders for design portfolio, Prompt Vault, and My Ledger. Currently building the new Eon Designs portfolio inside `/eon/`.
 
 ## Owner
 
@@ -15,14 +15,14 @@ Edwin Gyasi Owusu (CEO Gyasi). Final-year Geological Engineering student at KNUS
 
 ## Folder Structure
 
-- `/` — Engineering portfolio (live at edwingyasi.online) — content is CMS-managed, see Decap CMS below
+- `/` — Engineering portfolio (live at edwingyasi.me) — content is CMS-managed, see Decap CMS below
 - `/admin/` — Decap CMS admin panel (`index.html` + `config.yml`)
 - `/content/` — CMS content source of truth (JSON), `engineering/` and `designs/`
 - `/api/` — Vercel serverless functions: GitHub OAuth provider for the CMS
 - `/images/` — CMS uploads for the engineering site
 - `build.js` — injects `/content` JSON into the HTML at deploy time
 - `/eon/` — Eon Designs portfolio v2 (not yet scaffolded as of 2026-07-30)
-- `/designs/` — Eon Designs site, live at edwingyasi.online/designs — CMS-managed
+- `/designs/` — Eon Designs site, live at edwingyasi.me/designs — CMS-managed
 - `/vault/` — Prompt Vault PWA — DO NOT TOUCH
 - `/ledger/` — My Ledger — DO NOT TOUCH
 
@@ -91,12 +91,14 @@ For all frontend work, use the Claude Chrome extension to visually verify change
 
 Both live sites are edited from one panel. No code editing required.
 
-**Admin panel:** https://www.edwingyasi.online/admin
+**Admin panel:** https://edwingyasi.me/admin
 **Config:** `/admin/config.yml` — **Loader/theme:** `/admin/index.html`
 
-The canonical host is `www.edwingyasi.online`. The apex 307-redirects to it.
-Use the www host anywhere an absolute URL is required, including the GitHub
-OAuth callback and `base_url` in config.yml.
+The canonical host is the apex, `edwingyasi.me`. `www.edwingyasi.me` redirects
+to it, and both `.online` hosts redirect here as well. Use the apex anywhere an
+absolute URL is required, including the GitHub OAuth callback and `base_url` in
+config.yml. Note this is the reverse of the old `.online` setup, where www was
+canonical.
 
 `admin/index.html` must keep its `<link rel="cms-config-url" href="/admin/config.yml">`.
 Vercel serves the page at both `/admin` and `/admin/`, and without that absolute
@@ -142,7 +144,7 @@ Vercel has no Git Gateway, so `/api/auth.js` and `/api/callback.js` in this repo
 act as the GitHub OAuth provider. Same domain, no Netlify or Cloudflare Worker.
 
 GitHub OAuth App callback URL must be exactly:
-`https://www.edwingyasi.online/api/callback`
+`https://edwingyasi.me/api/callback`
 
 Required Vercel environment variables:
 - `GITHUB_OAUTH_CLIENT_ID`
@@ -324,26 +326,32 @@ the upstream fix, so it has not been written. Left deliberately broken.
 
 `build.js` has a single `SITE` constant near the top, and everything it
 generates (canonical links, og:/twitter: tags on the journal pages and the
-designs site) is built from it. Setting the `SITE_URL` environment variable in
-Vercel overrides it with **no code change at all**. Verified by running
-`SITE_URL=https://edwingyasi.me node build.js` and confirming every generated
-absolute URL moved, then reverting.
+designs site) is built from it. It reads `process.env.SITE_URL` first, so
+setting that variable in Vercel overrides the constant with **no code change at
+all** — which is how to trial a domain before committing to it. The constant
+itself is `https://edwingyasi.me` as of 2026-08-05.
 
 Same-site links in `/content` are stored **root-relative** (`/designs`,
 `/og-designs.png`) precisely so they survive a domain move untouched.
 `abs()` in `build.js` absolutises them at build time where a full URL is
 required, which is only ever og:/twitter: and canonical.
 
-These are NOT generated and still need editing by hand:
+The five files that are not generated from `SITE` are rewritten to match it by
+`buildDomainFiles()`, so **nothing in that list needs hand-editing any more**:
+`robots.txt`, `sitemap.xml`, the three `case-studies/*.html`, the
+`admin/index.html` brand link, and `base_url`/`site_url`/`display_url` in
+`admin/config.yml`. It works by reading the previous origin out of `sitemap.xml`
+and swapping that exact string, which is why external links (LinkedIn, GitHub)
+are safe: a pattern loose enough to catch every URL of the site's would catch
+theirs too.
+
+Two pieces of **display text** are still by hand, because they are words on the
+page rather than links:
 
 | File | What |
 |---|---|
-| `admin/config.yml` | `base_url`, `site_url`, `display_url` |
-| `admin/index.html` | brand-bar link, and the URL shown in the login preview |
-| `case-studies/*.html` | canonical + og:/twitter: on all three, they are static |
-| `robots.txt` | the `Sitemap:` line |
-| `sitemap.xml` | the one `<loc>` |
-| `content/engineering/projects.json` | the Eon strip label reads "Visit edwingyasi.online" — display text, so it is CMS content |
+| `content/engineering/projects.json` | the Eon strip `link_label`, "Visit edwingyasi.me" — CMS content, editable in the panel |
+| `admin/index.html` | the URL inside the fake Google result in the SEO preview |
 
 Outside the repo, and only the owner can do these:
 
@@ -356,6 +364,32 @@ Outside the repo, and only the owner can do these:
   Address**.
 
 ## Updates Log
+
+- 2026-08-05: **The site moved to `edwingyasi.me`.** The apex is canonical and
+  `www.edwingyasi.me` redirects to it, which is the **reverse** of the old
+  `.online` arrangement. `edwingyasi.online` stays registered and redirecting,
+  because that 301 is what carries the existing Google ranking; Google's
+  guidance is a year minimum, so do not let it lapse.
+
+  The whole code-side move was one line: the `SITE` fallback in `build.js`.
+  `buildDomainFiles()` propagated it to `robots.txt`, `sitemap.xml`, the three
+  case studies, the admin brand link and the three domain keys in
+  `admin/config.yml`, and everything else generates from `SITE` already. Two
+  strings needed hand-editing because they are display text, not links: the
+  `link_label` in `content/engineering/projects.json` and the URL inside the
+  fake Google result in the admin SEO preview.
+
+  DNS is worth remembering because it went wrong once. The records first pointed
+  at **GitHub Pages** (`185.199.108-111.153`) rather than Vercel
+  (`216.198.79.x`, `64.29.17.x`), so the name resolved while Vercel still called
+  the domain invalid. Nothing in this repo caused it; there is no `CNAME` file
+  and no Pages workflow. **Identify a misdirected domain by its IP range**, not
+  by whether it resolves.
+
+  Google Search Console verification is the **file** method,
+  `google5e961fde5173da87.html` at the repo root, which the new domain serves
+  automatically. There is no verification `<meta>` tag on any page, and none is
+  needed while that file is present.
 
 - 2026-08-05: **Hexagonal prism field behind the hero**, on both layouts,
   fading into the page background. **Static, deliberately.**

@@ -19,7 +19,7 @@ backend:
   #
   # Must be the canonical host. The apex 307-redirects to www, and sending an
   # OAuth popup through a redirect is a good way to lose the state cookie.
-  base_url: https://www.edwingyasi.online
+  base_url: https://edwingyasi.me
   auth_endpoint: api/auth
   commit_messages:
     create: 'CMS: create {{collection}} "{{slug}}"'
@@ -34,8 +34,8 @@ local_backend: true
 # Commit straight to main so a save triggers a Vercel deploy immediately.
 publish_mode: simple
 
-site_url: https://www.edwingyasi.online
-display_url: https://www.edwingyasi.online
+site_url: https://edwingyasi.me
+display_url: https://edwingyasi.me
 
 # The login screen's centre graphic. This is not optional in practice: when
 # logo_url is unset Decap falls back to its own 300px pink wordmark, so the

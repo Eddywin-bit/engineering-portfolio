@@ -18,9 +18,9 @@
     Without this, Decap resolves the bare string "config.yml" against the
     document base URL. Vercel serves this page at BOTH /admin and /admin/,
     and on the no-trailing-slash variant the base is /admin, so "config.yml"
-    resolves to /config.yml at the site root and 404s. Visiting
-    edwingyasi.online/admin redirects to www.edwingyasi.online/admin with no
-    trailing slash, so that was the path everyone actually hit.
+    resolves to /config.yml at the site root and 404s. The canonical host is
+    the apex, edwingyasi.me, and www redirects to it, so /admin with no
+    trailing slash is the path everyone actually hits.
 
     A leading slash pins it to /admin/config.yml regardless of trailing slash,
     and still works on any host: apex, www, or a *.vercel.app preview.
@@ -1163,7 +1163,7 @@
     <span class="ega-brand__rule"></span>
     <span class="ega-brand__meta">Content Studio</span>
     <span class="ega-brand__spacer"></span>
-    <a class="ega-brand__link" href="https://www.edwingyasi.online" target="_blank" rel="noopener">
+    <a class="ega-brand__link" href="https://edwingyasi.me" target="_blank" rel="noopener">
       View site
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -1515,7 +1515,7 @@
           h('hr', { className: 'sec-rule' }),
           h('p', { className: 'sec-eyebrow' }, 'Search result'),
           h('div', { className: 'serp' },
-            h('p', { className: 'url' }, 'www.edwingyasi.online'),
+            h('p', { className: 'url' }, 'edwingyasi.me'),
             h('p', { className: 't' }, d.title || 'Untitled page'),
             h('p', { className: 'd' }, em(d.description, 'No description set. Search engines will pick their own snippet.'))
           )

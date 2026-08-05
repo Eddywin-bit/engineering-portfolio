@@ -1,8 +1,8 @@
 # Running your site — Edwin's manual
 
 This is written for you, not for a developer and not for an AI. It covers both
-sites: the engineering portfolio at **edwingyasi.online** and the Eon Designs
-portfolio at **edwingyasi.online/designs**.
+sites: the engineering portfolio at **edwingyasi.me** and the Eon Designs
+portfolio at **edwingyasi.me/designs**.
 
 Everything you need for day to day work is in section 2. You should not need to
 touch code for anything in it.
@@ -13,7 +13,7 @@ touch code for anything in it.
 
 - Your site is **static files**. There is no database and no server that can go
   down. It does not depend on Claude, or on any AI, or on any subscription.
-- You edit content at **[www.edwingyasi.online/admin](https://www.edwingyasi.online/admin)**.
+- You edit content at **[edwingyasi.me/admin](https://edwingyasi.me/admin)**.
 - When you click **Publish**, the panel saves to GitHub. Vercel notices, rebuilds
   the site, and puts it live. This takes about a minute.
 - Nothing you can do in the admin panel can permanently break the site. Every
@@ -23,7 +23,7 @@ touch code for anything in it.
 
 ## 2. Editing content
 
-Go to **[www.edwingyasi.online/admin](https://www.edwingyasi.online/admin)** and
+Go to **[edwingyasi.me/admin](https://edwingyasi.me/admin)** and
 sign in with GitHub. You will see three groups in the sidebar.
 
 ### Engineering Site
@@ -187,16 +187,18 @@ Keep a record somewhere safe.
 **In your GitHub account, under Settings → Developer settings → OAuth Apps:**
 
 There is an app whose **Authorization callback URL must be exactly**
-`https://www.edwingyasi.online/api/callback`. If this is wrong by even one
+`https://edwingyasi.me/api/callback`. If this is wrong by even one
 character, the CMS login fails.
 
-**In Vercel, under Domains:** `edwingyasi.online` and `www.edwingyasi.online`.
-The `www` version is the real one; the bare domain redirects to it.
+**In Vercel, under Domains:** `edwingyasi.me` (primary) and `www.edwingyasi.me`,
+plus `edwingyasi.online` and `www.edwingyasi.online` kept as redirects.
+The bare `edwingyasi.me` is the real one; everything else redirects to it.
 
 **If you ever change domain**, follow `MIGRATION.md`. It is written so you can
 do it yourself without any AI. In short: buy the domain, add it in Vercel,
 update the OAuth callback URL, then set one environment variable, `SITE_URL`,
-and redeploy. That single variable moves every link on both sites. Keep the old
+and redeploy. That single variable moves every link on both sites, and deleting
+it again puts everything back, so it is safe to try. Keep the old
 domain registered and redirecting for at least a year, because that redirect is
 what carries your Google ranking across.
 

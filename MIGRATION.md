@@ -96,22 +96,25 @@ paste it.
 
 ## Step 4 — Flip the switch
 
-Vercel → **Settings → Environment Variables** → add:
+**Already done for `edwingyasi.me`.** The domain is written once, at the top of
+`build.js`:
 
-| Name | Value |
-|---|---|
-| `SITE_URL` | `https://edwingyasi.me` |
-
-Then **Deployments → the latest one → Redeploy**.
-
-That is the whole code-side migration. When the build finishes it will print:
-
-```
-build: site is https://edwingyasi.me — 7 domain-dependent file(s) updated
+```js
+const SITE = (process.env.SITE_URL || 'https://edwingyasi.me').replace(/\/+$/, '');
 ```
 
-If it still says `.online`, the variable was not saved or you redeployed an old
-build. Check the variable, then redeploy again.
+Every deployment builds from that, so there is nothing to set in Vercel. The
+build prints the live value on every run:
+
+```
+build: site is https://edwingyasi.me
+```
+
+**If you move again later**, you have two ways to do it. Either edit that one
+line and push, or set an environment variable in Vercel — **Settings →
+Environment Variables**, name `SITE_URL`, value the new origin with no trailing
+slash — then **Deployments → the latest one → Redeploy**. The variable wins over
+the line in the file, so it is the way to test a domain before committing to it.
 
 ## Step 5 — Check it worked
 
@@ -125,13 +128,15 @@ build. Check the variable, then redeploy again.
 
 ## Step 6 — Two bits of visible text
 
-These are words on the page, not links, so no build can change them for you.
+These are words on the page, not links, so no build changes them for you. Both
+were updated by hand for the `.me` move; if you move again, they are the two to
+remember.
 
-- **"Visit edwingyasi.online"** on your projects section. Edit it in the CMS:
-  **Engineering Site → 5. Projects & Case Studies**, find the Eon Designs entry,
-  change the label. One minute.
-- The fake Google preview inside the admin panel's SEO editor still shows the
-  old domain. Cosmetic, only you ever see it, harmless.
+- **The "Visit edwingyasi.me" label** on your projects section. It lives in the
+  CMS: **Engineering Site → 5. Projects & Case Studies**, the Eon Designs entry,
+  the link label field. One minute.
+- **The fake Google preview** inside the admin panel's SEO editor, which is
+  hardcoded in `admin/index.html`. Cosmetic, only you ever see it.
 
 ## Step 7 — Tell Google, and keep the old domain
 
@@ -181,9 +186,10 @@ site loads from a different place on each request.
 It must be exactly `https://edwingyasi.me/api/callback`: no `www`, `https` not
 `http`, no trailing slash.
 
-**You want to undo the whole thing.** Delete the `SITE_URL` variable in Vercel
-and redeploy. Everything reverts to `.online`. Nothing in the code changed, so
-there is nothing to revert in GitHub.
+**You want to undo the whole thing.** Set `SITE_URL` in Vercel to
+`https://www.edwingyasi.online` and redeploy. That overrides the line in
+`build.js` without touching any code, and every generated URL goes back. It
+takes about two minutes and needs no GitHub access.
 
 ---
 

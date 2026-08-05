@@ -1,4 +1,4 @@
-# Copilot instructions — edwingyasi.online
+# Copilot instructions — edwingyasi.me
 
 Repository rules and hard-won traps for this project. Read this before changing
 anything. Most of the rules below exist because breaking them has already broken
@@ -22,8 +22,8 @@ Two separate static sites, one repository, one deployment.
 
 | Path | What it is | Live at |
 |---|---|---|
-| `/` | Engineering portfolio | `www.edwingyasi.online` |
-| `/designs/` | Eon Designs portfolio | `www.edwingyasi.online/designs` |
+| `/` | Engineering portfolio | `edwingyasi.me` |
+| `/designs/` | Eon Designs portfolio | `edwingyasi.me/designs` |
 | `/admin/` | Decap CMS panel that edits **both** | `/admin` |
 | `/api/` | GitHub OAuth endpoints for the CMS | serverless |
 | `/content/` | The content source of truth, JSON | not served |
@@ -255,11 +255,13 @@ with no way to reconstruct them from the code.
   `GITHUB_OAUTH_CLIENT_SECRET`, `ALLOWED_GITHUB_LOGIN`. Without these the CMS
   login fails.
 - **GitHub OAuth App callback URL**, which must be exactly
-  `https://www.edwingyasi.online/api/callback`.
+  `https://edwingyasi.me/api/callback`.
 - **Domain and DNS** configured in Vercel.
 
-The canonical host is `www.edwingyasi.online`; the apex redirects to it. Use the
-www host anywhere an absolute URL is required.
+The canonical host is the apex, `edwingyasi.me`; `www.edwingyasi.me` and both
+`.online` hosts redirect to it. Use the apex anywhere an absolute URL is
+required. This is the reverse of the old `.online` setup, where www was
+canonical, so treat any doc that says otherwise as out of date.
 
 ### Changing the domain
 
@@ -270,8 +272,13 @@ generated from `SITE` already. It finds the previous origin by reading
 `sitemap.xml` before rewriting it, then swaps that exact string, which is what
 keeps external links untouched.
 
-The only thing left by hand is display text: the "Visit edwingyasi.online" label
-in `content/engineering/projects.json`, which is CMS content.
+Left by hand, both display text rather than links: the "Visit edwingyasi.me"
+label in `content/engineering/projects.json`, which is CMS content, and the URL
+inside the fake Google result in `admin/index.html`'s SEO preview.
+
+`SITE` in `build.js` reads `SITE_URL` first and falls back to the committed
+default, `https://edwingyasi.me`. Editing that line and pushing works as well as
+setting the variable; the variable wins, so use it to trial a domain.
 
 Full runbook, including DNS, the OAuth callback and Search Console, is in
 `MIGRATION.md`.
