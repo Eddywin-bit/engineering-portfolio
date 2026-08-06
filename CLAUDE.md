@@ -71,6 +71,8 @@ Planned for EON v2 and therefore **not present in this repository**: Cloudinary,
 - NEVER commit `ANTHROPIC_API_KEY`, `GITHUB_OAUTH_CLIENT_SECRET`, or any secret
 - NEVER hand-edit content inside a `<!-- CMS:START -->` / `<!-- CMS:END -->` block. `build.js` overwrites it. Edit the JSON in `/content/` instead.
 - NEVER hand-edit `designs/js/data.js`. It is generated from `/content/designs/*.json`.
+- NEVER hand-edit anything in `/journal/` or `/case-studies/`. Both directories
+  are regenerated on every build and stale files are deleted.
 - ALWAYS run `node build.js` and confirm it exits 0 before pushing
 - If EON v2 is ever revived: work inside `/eon/`, and do not copy visual
   structure or layout from `/designs/index.html` into it. Dormant, see
@@ -147,7 +149,9 @@ The build is idempotent, and it fails loudly if a marker goes missing.
 | **Eon Designs Site** | `content/designs/` | `designs/index.html` + `designs/js/data.js` |
 
 Engineering entries: Page Title & SEO, Navigation, Hero, About, Projects &
-Case Studies, Skills & Certifications, Experience, Contact, Footer.
+Case Studies, Skills & Certifications, Experience, Contact, Footer, plus two
+folder collections, Journal Posts and Case Studies, which each generate a real
+page per entry.
 
 Eon Designs entries: Page Title/SEO/Logo, Navigation, Hero, Selected Works,
 The Vault, About, Journal, Contact & Footer.
@@ -382,6 +386,47 @@ Outside the repo, and only the owner can do these:
   Address**.
 
 ## Updates Log
+
+- 2026-08-05: **Case studies are a CMS folder collection now**, not three
+  hand-written HTML pages. The owner can publish one from the panel, which
+  matters because his coding-agent access is finite and a page that needs code
+  is a page that stops being written.
+
+  `content/engineering/case-studies/*.json` renders to `case-studies/<slug>.html`
+  through `buildCaseStudyPages()`, exactly as journal posts already worked. The
+  body is a small markdown subset in `csBody()`: `##` headings, `>` callouts
+  with an optional `**bold**` label line, `- ` bullets, `tools: a, b, c` for the
+  chip row, and image groups.
+
+  **Image groups pick their own layout rather than needing new syntax.** Every
+  image carrying its own `*caption*` line gives the framed screenshot row
+  (`.shots`, three across); none of them carrying one gives the plain gallery
+  (`.gallery`, two across). That is precisely how the three original pages were
+  marked up, so the rule was derived from the content rather than invented.
+
+  **The chip row is a body block, not a field.** It was a field first, appended
+  after the body, and that silently moved it: on all three pages it sits in the
+  middle, before the closing section. A trailing field cannot express position.
+
+  Three things worth keeping from the migration:
+
+  - The one-off script read `case-studies/*.html`, which is also where the
+    generator writes. On its second run it parsed **its own output** and
+    reordered the body. Any migration that writes into the directory it reads
+    must read from a copy taken beforehand.
+  - Ampersands were double-escaped. The originals carried a raw `&` in Unsplash
+    query strings; the script stored that as `&amp;` and `attr()` escaped it
+    again to `&amp;amp;`, breaking the URLs. Content stores decoded text, and
+    escaping happens once, on output.
+  - `buildCaseStudyPages()` runs **before** `buildDomainFiles()`, because the
+    sitemap enumerates the files in `case-studies/`. Their entry in the
+    domain-swap loop is gone, since they are generated from `SITE` now.
+
+  Verified by regenerating all three from the new JSON and diffing against the
+  originals: tag sequence, visible text and every URL identical on all three.
+  Then rendered in Chromium at 390 and 1440 with no overflow and no console
+  errors. The two remote Unsplash heroes do not load in the sandbox, which is
+  the network policy, not the page.
 
 - 2026-08-05: **The EON v2 sections at the top of this file were stale, and one
   of them was dangerous.** Found by the Copilot coding agent on its first run,

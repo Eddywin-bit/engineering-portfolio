@@ -1,0 +1,30 @@
+{
+  "title": "Geotechnical Site Characterization from Field & Lab Testing",
+  "share_title": "Geotechnical Site Characterization",
+  "category": "Geotechnical Engineering · CSIR-BRRI",
+  "lede": "A three-month hands-on geotechnical internship at Ghana's Building and Road Research Institute, spanning field investigation, laboratory soil testing, and the geotechnical report for a proposed building.",
+  "description": "Hands-on geotechnical investigation at CSIR-BRRI: Standard Penetration Tests, laboratory soil testing, and a geotechnical report for a proposed building.",
+  "meta": [
+    {
+      "k": "Role",
+      "v": "Geotechnical Intern"
+    },
+    {
+      "k": "Organization",
+      "v": "CSIR-BRRI, Kumasi"
+    },
+    {
+      "k": "Duration",
+      "v": "Three months"
+    },
+    {
+      "k": "Focus",
+      "v": "Field & laboratory"
+    }
+  ],
+  "hero_image": "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1600&q=80&auto=format&fit=crop",
+  "hero_alt": "Geotechnical site investigation and drilling",
+  "body": "## The context\n\nBefore a building can be designed, the ground beneath it has to be understood. Site characterization is the discipline of turning boreholes and soil samples into a clear picture of subsurface strength and behavior, so that engineers can recommend the right foundation with confidence.\n\nThis project covers a three-month internship at the **Council for Scientific and Industrial Research, Building and Road Research Institute (CSIR-BRRI)**, Ghana's leading built-environment research institution, working across both the field and the laboratory.\n\n## Field investigation\n\nThe fieldwork centered on subsurface investigation using the **Standard Penetration Test (SPT)**, the workhorse method for assessing in-situ soil strength.\n\n- Participated in **Standard Penetration Tests** to obtain N-values describing soil resistance at depth.\n- Collected both disturbed and undisturbed soil samples for laboratory analysis.\n- Built a working understanding of how field measurements translate into subsurface strength profiles.\n\n> **Why SPT matters**\n> The N-value from a Standard Penetration Test feeds directly into foundation design, correlating with soil density, bearing capacity, and settlement behavior. It is one of the most widely used in-situ tests in geotechnical practice.\n\n## Laboratory testing\n\nAlongside the field program, the laboratory work characterized the physical and mechanical properties of the sampled soils.\n\n- **Sieve analysis**, particle size distribution and soil classification.\n- **Compaction (Proctor) tests**, determining optimum moisture content and maximum dry density.\n- **Triaxial testing**, measuring shear strength parameters of the soil.\n\n![Laboratory soil testing](https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80&auto=format&fit=crop)\n![Engineering analysis and reporting](https://images.unsplash.com/photo-1516216628859-9bccecab13ca?w=800&q=80&auto=format&fit=crop)\n\n## The deliverable\n\nThe field and laboratory results came together in a **geotechnical investigation report for a proposed storey building**, the kind of document that directly informs a real construction decision. Contributing to it meant seeing the full arc: from a blow count in the field, through classification and strength testing in the lab, to foundation-relevant recommendations on paper.\n\n## Tools & methods\n\ntools: Standard Penetration Test, Sieve Analysis, Proctor Compaction, Triaxial Testing, Soil Classification, Geotechnical Reporting\n\n## The takeaway\n\nThis internship is where geotechnical theory became tactile. Running the tests, handling the samples, and contributing to a live report gave me a grounded sense of how subsurface data actually supports engineering decisions, the exact intersection of field, lab, and analysis that mining and geotechnical roles depend on.",
+  "foot_text": "Want to talk geotechnical work or site investigation?",
+  "foot_cta": "Get in touch"
+}

@@ -1,0 +1,30 @@
+{
+  "title": "Spatial Distribution of Trace Metals in Soil",
+  "share_title": "Spatial Distribution of Trace Metals in Soil",
+  "category": "Geostatistics · Final-Year Research",
+  "lede": "A geostatistical investigation mapping arsenic, lead, cadmium, and nickel across the Abuakwa South Municipal area, using Ordinary Kriging and spline interpolation to turn scattered soil samples into continuous contamination surfaces.",
+  "description": "Final-year geostatistical research mapping As, Pb, Cd, and Ni contamination across Abuakwa South using Ordinary Kriging and spline interpolation in QGIS and Python.",
+  "meta": [
+    {
+      "k": "Role",
+      "v": "Lead Researcher"
+    },
+    {
+      "k": "Context",
+      "v": "Final-Year Project, KNUST"
+    },
+    {
+      "k": "Location",
+      "v": "Abuakwa South, Ghana"
+    },
+    {
+      "k": "Status",
+      "v": "Ongoing"
+    }
+  ],
+  "hero_image": "https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?w=1600&q=80&auto=format&fit=crop",
+  "hero_alt": "Contour map visualization of spatial data",
+  "body": "## The problem\n\nSoil contamination from trace metals is a real concern in areas touched by small-scale mining and shifting land use. But contamination is invisible between sample points: you can measure a handful of locations in a lab, yet a decision-maker needs to understand the whole area, including the ground nobody sampled.\n\nThis project asks a focused question: given a limited set of soil samples across Abuakwa South, **how do you responsibly estimate contamination everywhere else**, and how confident can you be in those estimates?\n\n## Approach\n\nThe work targets four trace metals of environmental concern: **arsenic (As), lead (Pb), cadmium (Cd), and nickel (Ni)**. The core of the method is geostatistical interpolation, comparing two techniques rather than trusting one blindly.\n\n- **Ordinary Kriging**, a geostatistical method that predicts values at unsampled locations by weighting nearby samples according to a modeled spatial correlation structure (the variogram). Crucially, it also returns a prediction variance, so you know where you are confident and where you are guessing.\n- **Spline interpolation**, a smoother, curve-fitting approach used as a comparison, to see where each method agrees and where they diverge.\n\nThe comparison matters. Naive methods can smear a sharp contamination plume into a soft blur. Kriging, by honoring spatial autocorrelation and the sample values at their true locations, preserves structure that smoothing methods lose.\n\n> **Why kriging over naive methods**\n> It accounts for spatial autocorrelation, returns a prediction variance so uncertainty is explicit, and honors the measured values at their exact locations, revealing patterns that inverse-distance and spline methods tend to smooth away.\n\n## Tools & workflow\n\nThe pipeline runs end to end: sample data preparation, coordinate reference alignment for a Ghanaian study area, variogram modeling, interpolation, and cartographic output. It combines the desktop GIS environment with scripted analysis.\n\ntools: QGIS, Python, Ordinary Kriging, Spline Interpolation, Variogram Modeling, Environmental Geochemistry\n\n![Soil sampling and analysis](https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80&auto=format&fit=crop)\n![Topographic and spatial mapping](https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=800&q=80&auto=format&fit=crop)\n\n## What the maps show\n\nThe interpolated surfaces turn point measurements into readable contamination maps, one per metal, alongside their uncertainty. The value is interpretive: hot spots are not random. They track the underlying geology, the land use, and the small-scale mining footprint of the area.\n\nFramed this way, the maps become a screening tool. They highlight where contamination is likely elevated, which supports prioritizing further sampling and remediation attention rather than treating the whole area uniformly.\n\n## Why it matters\n\nEnvironmental data in Ghana is often underused. A methodology like this is repeatable, transparent, and grounded in open tools, which means the same workflow can be applied to other districts and other contaminants. The project is as much about demonstrating a defensible spatial method as it is about this one study area.\n\n*This research is ongoing. Full methodology, maps, and interpretation will be published in due course.*",
+  "foot_text": "Want the technical detail or the maps as they finalize?",
+  "foot_cta": "Get in touch"
+}

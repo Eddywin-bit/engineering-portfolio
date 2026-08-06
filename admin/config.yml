@@ -436,6 +436,98 @@ collections:
           Two or more images in a row become a side-by-side grid.
           An italic line straight after them becomes the caption.
 
+  # A FOLDER collection, like Journal Posts above and for the same reason:
+  # one file per case study means a real "New Case Study" button, a real
+  # "Delete entry" button, and a filename that is the slug and therefore
+  # the URL. These were three hand-written HTML pages until 2026-08-05.
+  #
+  # If you rename a file, the page's address changes with it, so update
+  # the matching card under "5. Projects & Case Studies" too.
+  - name: case_studies
+    label: Case Studies
+    label_singular: Case Study
+    folder: content/engineering/case-studies
+    extension: json
+    format: json
+    create: true
+    delete: true
+    slug: '{{slug}}'
+    summary: '{{title}}'
+    sortable_fields: [order, title]
+    description: >-
+      One entry per case study. Use "New Case Study" to add one. Its page is
+      built automatically at /case-studies/<file-name>. After adding one,
+      add a matching card under "5. Projects & Case Studies" so it appears
+      on the home page, and set that card's Link to
+      case-studies/<file-name>.
+    fields:
+      - { label: Title, name: title, widget: string, hint: The big heading at the top of the page. }
+      - label: Category
+        name: category
+        widget: string
+        hint: The small green line above the title, for example "Data Analytics" or "Environmental Geochemistry".
+      - label: Intro line
+        name: lede
+        widget: text
+        hint: One or two sentences under the title, saying what the work is in plain language.
+      - label: Search & share description
+        name: description
+        widget: text
+        hint: >-
+          What Google shows under the title, and what appears when the link is
+          shared. Around 150 to 160 characters.
+      - label: Share title
+        name: share_title
+        widget: string
+        required: false
+        hint: Optional. A shorter title for Google and share cards. Leave blank to use the title above.
+      - label: Facts strip
+        name: meta
+        widget: list
+        required: false
+        max: 4
+        label_singular: Fact
+        summary: '{{k}}: {{v}}'
+        hint: The boxed row under the title. Up to four. Keep the values short.
+        fields:
+          - { label: Label, name: k, widget: string, hint: 'For example: Role, Tools, Data, Status.' }
+          - { label: Value, name: v, widget: string }
+      - label: Hero Image
+        name: hero_image
+        widget: image
+        required: false
+        hint: >-
+          The wide picture under the facts strip. Save it as JPG or PNG, not
+          WEBP, and keep it under 1 MB. It is also used as the share picture,
+          so around 1200x630 works best. WEBP files do not show when the link
+          is shared on WhatsApp or LinkedIn, and files over 1 MB look broken
+          here in the panel even though they publish fine.
+      - { label: Hero image description, name: hero_alt, widget: string, required: false, hint: 'For screen readers and for when the image fails to load.' }
+      - label: Body
+        name: body
+        widget: markdown
+        hint: >-
+          Use ## for a section heading. Start a line with > to make a green
+          callout box, and put **bold text** on its first line to give the box
+          a label. Write "tools: Python, QGIS, SQL" on its own line for the
+          rounded chip row. Images placed together become a grid; give every
+          one of them an italic caption line instead and they become framed
+          screenshots, three across.
+      - { label: Closing question, name: foot_text, widget: string, required: false, hint: 'The line above the button at the bottom. Leave blank for a sensible default.' }
+      - { label: Button text, name: foot_cta, widget: string, required: false, hint: 'Defaults to "Get in touch". The button always links to the contact section.' }
+      - label: Order
+        name: order
+        widget: number
+        required: false
+        value_type: int
+        hint: Lower numbers first. Only affects the sitemap, not the home page.
+      - label: Published
+        name: enabled
+        widget: boolean
+        required: false
+        default: true
+        hint: Turn off to remove the page from the site without deleting this entry.
+
   ####################################################################
   # EON DESIGNS SITE  (edwingyasi.online/designs)
   ####################################################################

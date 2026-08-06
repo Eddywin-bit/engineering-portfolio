@@ -1303,6 +1303,39 @@
         '.post-preview-body p{color:var(--ink-soft);margin:0 0 1rem;line-height:1.7}',
         '.post-preview-body h3{font-family:var(--fh);font-weight:700;font-size:1.2rem;margin:1.6rem 0 .7rem;color:var(--ink)}',
 
+        /* case study page, mirroring the component CSS in case-studies/*.html */
+        '.cs-cat{display:inline-flex;align-items:center;gap:.5rem;font-size:.8rem;font-weight:500;',
+        'color:var(--emerald);letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.2rem}',
+        '.cs-cat .pin{width:6px;height:6px;border-radius:50%;background:var(--emerald)}',
+        '.cs-title{font-family:var(--fh);font-weight:600;font-size:2rem;line-height:1.08;',
+        'letter-spacing:-.03em;margin:0 0 1.2rem;color:var(--ink)}',
+        '.cs-lede{font-size:1.08rem;color:var(--ink-mute);line-height:1.6}',
+        '.cs-meta{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);',
+        'border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin:1.6rem 0}',
+        '.cs-meta .cell{background:#fff;padding:1rem 1.1rem}',
+        '.cs-meta .k{font-size:.72rem;font-weight:500;color:var(--ink-mute);letter-spacing:.08em;',
+        'text-transform:uppercase;margin-bottom:.35rem}',
+        '.cs-meta .v{font-family:var(--fh);font-weight:600;font-size:.95rem;color:var(--ink);line-height:1.3}',
+        '.cs-hero{aspect-ratio:16/8;background:var(--bg-tint);border-radius:var(--radius);',
+        'overflow:hidden;border:1px solid var(--line);margin-bottom:1.6rem;display:flex;',
+        'align-items:center;justify-content:center;color:var(--ink-faint);font-size:.85rem}',
+        '.cs-hero img{width:100%;height:100%;object-fit:cover}',
+        '.cs-body h2{font-family:var(--fh);font-weight:600;font-size:1.35rem;letter-spacing:-.02em;',
+        'margin:1.8rem 0 .8rem;color:var(--ink)}',
+        '.cs-body p{color:var(--ink-soft);margin:0 0 1rem;line-height:1.7}',
+        '.cs-body ul{list-style:none;margin:0 0 1.2rem;padding:0}',
+        '.cs-body ul li{position:relative;padding-left:1.6rem;margin-bottom:.6rem;color:var(--ink-soft)}',
+        '.cs-body ul li:before{content:"";position:absolute;left:0;top:.65em;width:6px;height:6px;',
+        'border-radius:50%;background:var(--emerald)}',
+        '.cs-callout{background:var(--emerald-tint);border:1px solid rgba(15,118,110,.15);',
+        'border-radius:var(--radius);padding:1.3rem;margin:1.4rem 0;color:var(--emerald-deep)}',
+        '.cs-callout .lbl{font-size:.75rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;',
+        'color:var(--emerald);margin-bottom:.4rem}',
+        '.cs-callout p{color:var(--emerald-deep);margin:0}',
+        '.cs-tools{display:flex;flex-wrap:wrap;gap:.5rem;margin:1rem 0}',
+        '.cs-tools span{font-size:.82rem;font-weight:500;padding:.35rem .8rem;background:var(--bg-tint);',
+        'border-radius:999px;color:var(--ink-soft);border:1px solid var(--line-soft)}',
+
         /* dark eon strip, exactly as it appears on the live page */
         '.eon-strip{margin-top:1.4rem;background:var(--ink);color:var(--bg);border-radius:var(--radius);padding:1.7rem}',
         '.eon-strip .sec-eyebrow{color:var(--gold)}',
@@ -1692,6 +1725,64 @@
         );
       };
 
+      /* One case study. A folder collection previews a single entry, so this
+         renders the page the way it will actually read, using the same class
+         names and the same small markdown subset that csBody() in build.js
+         understands. If that renderer gains a block type, mirror it here. */
+      E.case_studies = function (d, props) {
+        var hero = media(props, d.hero_image);
+        var blocks = String(d.body || '').split(/\n\s*\n/)
+          .map(function (b) { return b.trim(); })
+          .filter(Boolean);
+        return h('div', {},
+          h('p', { className: 'cs-cat' }, h('span', { className: 'pin' }), d.category || 'Category'),
+          h('h1', { className: 'cs-title' }, em(d.title, 'Untitled case study')),
+          d.lede ? h('p', { className: 'cs-lede' }, d.lede) : null,
+          list(d.meta).length
+            ? h('div', { className: 'cs-meta' }, list(d.meta).map(function (m) {
+                return h('div', { className: 'cell', key: key() },
+                  h('div', { className: 'k' }, m.k || ''),
+                  h('div', { className: 'v' }, m.v || '')
+                );
+              }))
+            : null,
+          h('div', { className: 'cs-hero' },
+            hero ? h('img', { src: hero, alt: d.hero_alt || '' }) : 'No hero image'
+          ),
+          h('div', { className: 'cs-body' }, blocks.map(function (b) {
+            var lines = b.split('\n').map(function (l) { return l.trim(); }).filter(Boolean);
+            if (/^##\s+/.test(b)) {
+              return h('h2', { key: key() }, b.replace(/^##\s+/, ''));
+            }
+            if (lines.every(function (l) { return l.charAt(0) === '>'; })) {
+              var inner = lines.map(function (l) { return l.replace(/^>\s?/, ''); });
+              var lbl = '';
+              if (/^\*\*(.+)\*\*$/.test(inner[0])) {
+                lbl = inner.shift().replace(/^\*\*|\*\*$/g, '');
+              }
+              return h('div', { className: 'cs-callout', key: key() },
+                lbl ? h('div', { className: 'lbl' }, lbl) : null,
+                h('p', {}, inner.join(' '))
+              );
+            }
+            if (lines.every(function (l) { return /^[-*]\s+/.test(l); })) {
+              return h('ul', { key: key() }, lines.map(function (l) {
+                return h('li', { key: key() }, l.replace(/^[-*]\s+/, ''));
+              }));
+            }
+            if (/^tools:/i.test(b)) {
+              return h('div', { className: 'cs-tools', key: key() },
+                b.replace(/^tools:/i, '').split(',').map(function (t) {
+                  t = t.trim();
+                  return t ? h('span', { key: key() }, t) : null;
+                }));
+            }
+            if (/^!\[/.test(b)) return null; /* images render on the page itself */
+            return h('p', { key: key() }, b.replace(/\n/g, ' '));
+          }))
+        );
+      };
+
       E.contact = function (d) {
         return h('div', {},
           h('h1', { className: 'sec-title' }, em(d.title, 'Contact')),
@@ -1945,6 +2036,7 @@
         'meta', 'nav', 'hero', 'about', 'projects', 'skills',
         'experience', 'contact', 'footer', 'works', 'vault', 'journal',
         'journal_posts',
+        'case_studies',
         'engineering', 'designs',
       ].forEach(function (name) {
         try { CMS.registerPreviewTemplate(name, Preview); } catch (e) {}

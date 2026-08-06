@@ -12,8 +12,6 @@
   <link rel="icon" type="image/svg+xml" href="/icon.svg" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
-  <!-- Link preview card. og:image must be a JPEG or PNG around 1200x630:
-       WhatsApp and most scrapers will not render WebP. -->
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="Edwin Gyasi Owusu" />
   <meta property="og:url" content="https://edwingyasi.me/case-studies/geotechnical" />
@@ -97,6 +95,12 @@
     .foot-inner .b{font-family:var(--font-heading);font-weight:600;}
     .foot-inner .n{color:var(--ink-mute);font-size:0.85rem;}
     @media (max-width:600px){.cs-foot{flex-direction:column;align-items:flex-start;}}
+    .shots{display:grid;grid-template-columns:repeat(2,1fr);gap:1.1rem;margin:2rem 0;}
+    @media (min-width:640px){.shots{grid-template-columns:repeat(3,1fr);}}
+    .shots figure{margin:0;}
+    .shots .frame{border-radius:22px;background:#1C1C1C;padding:6px;box-shadow:0 14px 34px rgba(28,28,28,.16);}
+    .shots .frame img{width:100%;display:block;border-radius:17px;}
+    .shots figcaption{font-size:0.82rem;color:var(--ink-mute);text-align:center;margin-top:0.6rem;}
   </style>
 </head>
 <body>
@@ -127,14 +131,13 @@
       </div>
 
       <div class="cs-hero-img">
-        <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1600&q=80&auto=format&fit=crop" alt="Geotechnical site investigation and drilling" loading="lazy" />
+        <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1600&amp;q=80&amp;auto=format&amp;fit=crop" alt="Geotechnical site investigation and drilling" loading="lazy" />
       </div>
 
       <div class="cs-body">
         <h2>The context</h2>
         <p>Before a building can be designed, the ground beneath it has to be understood. Site characterization is the discipline of turning boreholes and soil samples into a clear picture of subsurface strength and behavior, so that engineers can recommend the right foundation with confidence.</p>
         <p>This project covers a three-month internship at the <strong>Council for Scientific and Industrial Research, Building and Road Research Institute (CSIR-BRRI)</strong>, Ghana's leading built-environment research institution, working across both the field and the laboratory.</p>
-
         <h2>Field investigation</h2>
         <p>The fieldwork centered on subsurface investigation using the <strong>Standard Penetration Test (SPT)</strong>, the workhorse method for assessing in-situ soil strength.</p>
         <ul>
@@ -142,12 +145,10 @@
           <li>Collected both disturbed and undisturbed soil samples for laboratory analysis.</li>
           <li>Built a working understanding of how field measurements translate into subsurface strength profiles.</li>
         </ul>
-
         <div class="callout">
           <div class="lbl">Why SPT matters</div>
           <p>The N-value from a Standard Penetration Test feeds directly into foundation design, correlating with soil density, bearing capacity, and settlement behavior. It is one of the most widely used in-situ tests in geotechnical practice.</p>
         </div>
-
         <h2>Laboratory testing</h2>
         <p>Alongside the field program, the laboratory work characterized the physical and mechanical properties of the sampled soils.</p>
         <ul>
@@ -155,15 +156,12 @@
           <li><strong>Compaction (Proctor) tests</strong>, determining optimum moisture content and maximum dry density.</li>
           <li><strong>Triaxial testing</strong>, measuring shear strength parameters of the soil.</li>
         </ul>
-
         <div class="gallery">
-          <figure><img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80&auto=format&fit=crop" alt="Laboratory soil testing" loading="lazy" /></figure>
-          <figure><img src="https://images.unsplash.com/photo-1516216628859-9bccecab13ca?w=800&q=80&auto=format&fit=crop" alt="Engineering analysis and reporting" loading="lazy" /></figure>
+          <figure><img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&amp;q=80&amp;auto=format&amp;fit=crop" alt="Laboratory soil testing" loading="lazy" /></figure>
+          <figure><img src="https://images.unsplash.com/photo-1516216628859-9bccecab13ca?w=800&amp;q=80&amp;auto=format&amp;fit=crop" alt="Engineering analysis and reporting" loading="lazy" /></figure>
         </div>
-
         <h2>The deliverable</h2>
         <p>The field and laboratory results came together in a <strong>geotechnical investigation report for a proposed storey building</strong>, the kind of document that directly informs a real construction decision. Contributing to it meant seeing the full arc: from a blow count in the field, through classification and strength testing in the lab, to foundation-relevant recommendations on paper.</p>
-
         <h2>Tools &amp; methods</h2>
         <div class="tools">
           <span>Standard Penetration Test</span>
@@ -173,7 +171,6 @@
           <span>Soil Classification</span>
           <span>Geotechnical Reporting</span>
         </div>
-
         <h2>The takeaway</h2>
         <p>This internship is where geotechnical theory became tactile. Running the tests, handling the samples, and contributing to a live report gave me a grounded sense of how subsurface data actually supports engineering decisions, the exact intersection of field, lab, and analysis that mining and geotechnical roles depend on.</p>
       </div>

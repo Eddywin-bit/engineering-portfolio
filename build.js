@@ -1193,6 +1193,345 @@ function buildDesignsData({ meta, works, vault, journal }) {
 }
 
 /* ============================================================
+   Case study pages
+
+   One JSON file per case study in content/engineering/case-studies/,
+   rendered here into case-studies/<slug>.html. The filename is the
+   slug and therefore the URL, so renaming a file changes its link and
+   the project card in content/engineering/projects.json has to follow.
+
+   These were three hand-written HTML pages until 2026-08-05. They are
+   generated now so the owner can publish a case study from the CMS
+   panel without touching code, the same way journal posts already work.
+
+   DO NOT HAND-EDIT anything in case-studies/. The directory is
+   rewritten on every build and stale files are deleted.
+   ============================================================ */
+
+const CASE_STUDY_CSS = `
+    :root {
+      --bg:#FAFAF8;--bg-elev:#FFFFFF;--bg-tint:#F3F1EB;--ink:#1C1C1C;--ink-soft:#3D3D3D;--ink-mute:#666666;--ink-faint:#A8A8A8;
+      --emerald:#0F766E;--emerald-hi:#14867D;--emerald-deep:#0A5952;--emerald-soft:rgba(15,118,110,0.08);--emerald-tint:#E8F2F0;
+      --gold:#C89B3C;--gold-deep:#A17F30;--gold-soft:rgba(200,155,60,0.12);--gold-tint:#F7EFD9;
+      --line:rgba(28,28,28,0.10);--line-soft:rgba(28,28,28,0.06);
+      --font-heading:'Clash Display',system-ui,-apple-system,sans-serif;--font-body:'Clash Display',system-ui,-apple-system,sans-serif;
+      --max:820px;--radius:16px;--ease:cubic-bezier(0.22,0.61,0.36,1);
+    }
+    @font-face{font-family:'Clash Display';src:url('/fonts/clash-display-var.woff2') format('woff2');font-weight:200 700;font-style:normal;font-display:swap;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+    body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:17px;line-height:1.7;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
+    a{color:inherit;text-decoration:none;}img{max-width:100%;display:block;}::selection{background:var(--emerald);color:#fff;}
+    .wrap{max-width:var(--max);margin:0 auto;padding:0 clamp(1.25rem,4vw,2rem);}
+    header.nav{position:sticky;top:0;z-index:60;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(16px) saturate(1.2);-webkit-backdrop-filter:blur(16px) saturate(1.2);border-bottom:1px solid var(--line-soft);}
+    .nav-inner{max-width:1180px;margin:0 auto;padding:1rem clamp(1.25rem,4vw,2rem);display:flex;align-items:center;justify-content:space-between;}
+    /* Matches the homepage nav: the cube mark, then the name as live text,
+       the name deliberately smaller than the mark so it reads as a label
+       beside the logo rather than a wordmark competing with it. src is
+       root-absolute because this page sits one level down; a relative path
+       would resolve inside /case-studies/. */
+    .brand{display:flex;align-items:center;gap:10px;font-family:var(--font-heading);font-weight:500;letter-spacing:-0.01em;}
+    .brand-mark{height:30px;width:auto;display:block;}
+    .brand span{font-size:15px;font-weight:500;line-height:1;}
+    .back{display:inline-flex;align-items:center;gap:0.5rem;font-size:0.9rem;color:var(--ink-soft);transition:color 0.2s var(--ease);}
+    .back:hover{color:var(--emerald);}.back svg{width:16px;height:16px;}
+    .cs-header{padding:clamp(2.5rem,6vw,4rem) 0 clamp(1.5rem,3vw,2rem);}
+    .cs-cat{display:inline-flex;align-items:center;gap:0.5rem;font-size:0.8rem;font-weight:500;color:var(--emerald);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:1.2rem;}
+    .cs-cat .pin{width:6px;height:6px;border-radius:50%;background:var(--emerald);}
+    .cs-title{font-family:var(--font-heading);font-weight:600;font-size:clamp(2.2rem,6vw,3.4rem);line-height:1.08;letter-spacing:-0.03em;margin-bottom:1.2rem;}
+    .cs-lede{font-size:1.15rem;color:var(--ink-mute);line-height:1.6;max-width:60ch;}
+    .cs-meta{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin:clamp(2rem,4vw,3rem) 0;}
+    @media (min-width:640px){.cs-meta{grid-template-columns:repeat(4,1fr);}}
+    .cs-meta .cell{background:var(--bg-elev);padding:1.2rem 1.3rem;}
+    .cs-meta .k{font-size:0.72rem;font-weight:500;color:var(--ink-mute);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:0.4rem;}
+    .cs-meta .v{font-family:var(--font-heading);font-weight:600;font-size:0.98rem;color:var(--ink);line-height:1.3;}
+    .cs-hero-img{border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);margin-bottom:clamp(2rem,5vw,3.5rem);aspect-ratio:16/8;background:var(--bg-tint);}
+    .cs-hero-img img{width:100%;height:100%;object-fit:cover;}
+    .cs-body{padding-bottom:clamp(3rem,8vw,5rem);}
+    .cs-body h2{font-family:var(--font-heading);font-weight:600;font-size:clamp(1.5rem,3.5vw,2rem);letter-spacing:-0.02em;margin:clamp(2.4rem,5vw,3.2rem) 0 1rem;}
+    .cs-body h2:first-child{margin-top:0;}
+    .cs-body p{color:var(--ink-soft);margin-bottom:1.2rem;max-width:68ch;}
+    .cs-body p strong{color:var(--ink);font-weight:600;}
+    .cs-body ul{list-style:none;margin:0 0 1.4rem;padding:0;max-width:68ch;}
+    .cs-body ul li{position:relative;padding-left:1.6rem;margin-bottom:0.7rem;color:var(--ink-soft);}
+    .cs-body ul li::before{content:"";position:absolute;left:0;top:0.65em;width:6px;height:6px;border-radius:50%;background:var(--emerald);}
+    .cs-body ul li strong{color:var(--ink);font-weight:600;}
+    .callout{background:var(--emerald-tint);border:1px solid rgba(15,118,110,0.15);border-radius:var(--radius);padding:clamp(1.4rem,3vw,1.8rem);margin:2rem 0;color:var(--emerald-deep);}
+    .callout .lbl{font-size:0.75rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--emerald);margin-bottom:0.5rem;}
+    .callout p{color:var(--emerald-deep);margin:0;}
+    .tools{display:flex;flex-wrap:wrap;gap:0.5rem;margin:1.4rem 0 0;}
+    .tools span{font-size:0.82rem;font-weight:500;padding:0.4rem 0.85rem;background:var(--bg-tint);border-radius:999px;color:var(--ink-soft);border:1px solid var(--line-soft);}
+    .gallery{display:grid;grid-template-columns:1fr;gap:1rem;margin:2rem 0;}
+    @media (min-width:640px){.gallery{grid-template-columns:1fr 1fr;}}
+    .gallery figure{border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);background:var(--bg-tint);aspect-ratio:4/3;}
+    .gallery img{width:100%;height:100%;object-fit:cover;}
+    .cs-foot{border-top:1px solid var(--line);padding:clamp(2rem,5vw,3rem) 0;display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:space-between;}
+    .cs-foot p{color:var(--ink-mute);font-size:0.95rem;}
+    .btn{display:inline-flex;align-items:center;gap:0.5rem;padding:0.9rem 1.5rem;border-radius:999px;font-family:var(--font-body);font-weight:500;font-size:0.95rem;background:var(--emerald);color:#fff;border:1px solid var(--emerald);transition:all 0.3s var(--ease);}
+    .btn:hover{background:var(--emerald-hi);transform:translateY(-2px);box-shadow:0 8px 24px rgba(15,118,110,0.25);}
+    .btn svg{width:15px;height:15px;}
+    footer{border-top:1px solid var(--line-soft);padding:2rem 0 2.5rem;}
+    .foot-inner{max-width:1180px;margin:0 auto;padding:0 clamp(1.25rem,4vw,2rem);display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+    .foot-inner .b{font-family:var(--font-heading);font-weight:600;}
+    .foot-inner .n{color:var(--ink-mute);font-size:0.85rem;}
+    @media (max-width:600px){.cs-foot{flex-direction:column;align-items:flex-start;}}
+    .shots{display:grid;grid-template-columns:repeat(2,1fr);gap:1.1rem;margin:2rem 0;}
+    @media (min-width:640px){.shots{grid-template-columns:repeat(3,1fr);}}
+    .shots figure{margin:0;}
+    .shots .frame{border-radius:22px;background:#1C1C1C;padding:6px;box-shadow:0 14px 34px rgba(28,28,28,.16);}
+    .shots .frame img{width:100%;display:block;border-radius:17px;}
+    .shots figcaption{font-size:0.82rem;color:var(--ink-mute);text-align:center;margin-top:0.6rem;}`;
+
+/* The body is markdown, deliberately a small subset, because it is typed
+   into a CMS textarea by someone who does not write code:
+
+     ## Heading            -> <h2>
+     blank-line paragraphs -> <p>, with **bold**, *italic*, [text](url)
+     - item                -> <ul><li>
+     > **Label**           -> the emerald callout box, label optional
+     > body text
+     tools: React, GIS    -> the rounded chip row
+     ![alt](/images/x.png) -> image group
+
+   The chip row is a body block rather than a separate field so that it sits
+   where it is written. On all three original pages it appears in the middle,
+   before the closing section, and a field appended after the body could not
+   reproduce that.
+
+   Image groups pick their own layout, which avoids inventing syntax for
+   it. Give EVERY image its own *caption* line and you get the framed
+   screenshot row (.shots, three across, dark phone frames). Give none of
+   them a caption and you get the plain gallery (.gallery, two across).
+   That is exactly how the three original pages were marked up. */
+
+const CS_IMG = /^!\[([^\]]*)\]\(([^)\s]+)\)$/;
+const CS_CAP = /^\*([^*].*)\*$/;
+
+function csBody(src) {
+  const blocks = String(src || '').trim().split(/\n\s*\n/);
+  const out = [];
+
+  for (const raw of blocks) {
+    const block = raw.trim();
+    if (!block) continue;
+    const lines = block.split('\n').map((l) => l.trim()).filter(Boolean);
+
+    if (/^##\s+/.test(block)) {
+      out.push(`        <h2>${ejInline(block.replace(/^##\s+/, ''))}</h2>`);
+      continue;
+    }
+
+    if (lines.every((l) => l.startsWith('>'))) {
+      const inner = lines.map((l) => l.replace(/^>\s?/, ''));
+      let lbl = '';
+      if (/^\*\*(.+)\*\*$/.test(inner[0])) {
+        lbl = inner.shift().replace(/^\*\*|\*\*$/g, '');
+      }
+      const lblHtml = lbl ? `\n          <div class="lbl">${esc(lbl)}</div>` : '';
+      out.push(
+        `        <div class="callout">${lblHtml}\n` +
+        `          <p>${ejInline(inner.join(' '))}</p>\n` +
+        `        </div>`
+      );
+      continue;
+    }
+
+    if (lines.every((l) => /^[-*]\s+/.test(l))) {
+      const items = lines
+        .map((l) => `<li>${ejInline(l.replace(/^[-*]\s+/, ''))}</li>`)
+        .join('\n          ');
+      out.push(`        <ul>\n          ${items}\n        </ul>`);
+      continue;
+    }
+
+    if (/^tools:/i.test(block)) {
+      const chips = block.replace(/^tools:/i, '').split(',')
+        .map((t) => t.trim()).filter(Boolean)
+        .map((t) => `          <span>${esc(t)}</span>`)
+        .join('\n');
+      if (chips) {
+        out.push(`        <div class="tools">\n${chips}\n        </div>`);
+        continue;
+      }
+    }
+
+    if (lines.some((l) => CS_IMG.test(l)) &&
+        lines.every((l) => CS_IMG.test(l) || CS_CAP.test(l))) {
+      const figs = [];
+      for (let i = 0; i < lines.length; i++) {
+        const m = lines[i].match(CS_IMG);
+        if (!m) continue;
+        const capM = (lines[i + 1] || '').match(CS_CAP);
+        figs.push({ alt: m[1], src: m[2], cap: capM ? capM[1] : '' });
+        if (capM) i++;
+      }
+      const framed = figs.every((f) => f.cap);
+      if (framed) {
+        const cells = figs.map((f) =>
+          `          <figure>\n` +
+          `            <div class="frame"><img src="${attr(f.src)}" alt="${attr(f.alt)}" loading="lazy" /></div>\n` +
+          `            <figcaption>${esc(f.cap)}</figcaption>\n` +
+          `          </figure>`
+        ).join('\n');
+        out.push(`        <div class="shots">\n${cells}\n        </div>`);
+      } else {
+        const cells = figs.map((f) =>
+          `          <figure><img src="${attr(f.src)}" alt="${attr(f.alt)}" loading="lazy" /></figure>`
+        ).join('\n');
+        out.push(`        <div class="gallery">\n${cells}\n        </div>`);
+      }
+      continue;
+    }
+
+    out.push(`        <p>${ejInline(block.replace(/\n/g, ' '))}</p>`);
+  }
+
+  return out.join('\n');
+}
+
+/* One file per case study, filename is the slug. Sorted by an optional
+   numeric `order` then by slug, so the sitemap is deterministic. */
+function loadCaseStudies() {
+  const dir = path.join(ROOT, 'content', 'engineering', 'case-studies');
+  if (!fs.existsSync(dir)) return [];
+  return fs.readdirSync(dir)
+    .filter((f) => f.endsWith('.json'))
+    .map((f) => {
+      const c = JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8'));
+      return { ...c, slug: f.replace(/\.json$/, '') };
+    })
+    .filter((c) => c.enabled !== false)
+    .sort((a, b) =>
+      (a.order ?? 99) - (b.order ?? 99) || a.slug.localeCompare(b.slug));
+}
+
+function buildCaseStudyPages(items) {
+  const dir = path.join(ROOT, 'case-studies');
+  fs.mkdirSync(dir, { recursive: true });
+
+  const wanted = new Set(items.map((c) => c.slug + '.html'));
+  for (const f of fs.readdirSync(dir)) {
+    if (f.endsWith('.html') && !wanted.has(f)) fs.unlinkSync(path.join(dir, f));
+  }
+
+  for (const c of items) {
+    const url = `${SITE}/case-studies/${c.slug}`;
+    const shareTitle = c.share_title || c.title;
+    const desc = c.description || c.lede || '';
+
+    /* Same rule as the journal: a pre-rendered card wins, then the hero if
+       it is already JPEG or PNG, then the site card. WebP is skipped because
+       WhatsApp and most scrapers will not render it. */
+    const hero = c.hero_image || '';
+    const ogFile = `images/og/${c.slug}.jpg`;
+    const ogPath = fs.existsSync(path.join(ROOT, ogFile))
+      ? '/' + ogFile
+      : /\.(jpe?g|png)$/i.test(hero)
+        ? hero
+        : '/og-engineering.png';
+    const ogUrl = abs(ogPath);
+    const ogSized = ogPath.startsWith('/images/og/') || ogPath === '/og-engineering.png';
+    const ogDims = ogSized
+      ? `\n  <meta property="og:image:width" content="1200" />` +
+        `\n  <meta property="og:image:height" content="630" />`
+      : '';
+
+    const metaCells = (c.meta || []).map((m) =>
+      `        <div class="cell"><div class="k">${esc(m.k)}</div><div class="v">${esc(m.v)}</div></div>`
+    ).join('\n');
+    const metaBlock = metaCells
+      ? `      <div class="cs-meta">\n${metaCells}\n      </div>\n\n`
+      : '';
+
+    const heroBlock = hero
+      ? `      <div class="cs-hero-img">\n` +
+        `        <img src="${attr(hero)}" alt="${attr(c.hero_alt || shareTitle)}" loading="lazy" />\n` +
+        `      </div>\n\n`
+      : '';
+
+    const html =
+`<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${esc(shareTitle)}, Edwin Gyasi Owusu</title>
+  <meta name="description" content="${attr(desc)}" />
+
+  <link rel="canonical" href="${attr(url)}" />
+
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Edwin Gyasi Owusu" />
+  <meta property="og:url" content="${attr(url)}" />
+  <meta property="og:title" content="${attr(shareTitle)}" />
+  <meta property="og:description" content="${attr(desc)}" />
+  <meta property="og:image" content="${attr(ogUrl)}" />${ogDims}
+  <meta property="og:image:alt" content="${attr(shareTitle)}" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="${attr(shareTitle)}" />
+  <meta name="twitter:description" content="${attr(desc)}" />
+  <meta name="twitter:image" content="${attr(ogUrl)}" />
+
+  <link rel="preload" href="/fonts/clash-display-var.woff2" as="font" type="font/woff2" crossorigin />
+
+  <style>${CASE_STUDY_CSS}
+  </style>
+</head>
+<body>
+
+  <header class="nav">
+    <div class="nav-inner">
+      <a href="/" class="brand"><img src="/images/logo-mark.png" alt="" width="30" height="36" class="brand-mark" /><span>Edwin Gyasi Owusu</span></a>
+      <a href="/#work" class="back">
+        ${icon('arrow-left', '2')}
+        All Projects
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap">
+      <div class="cs-header">
+        <div class="cs-cat"><span class="pin"></span> ${esc(c.category || '')}</div>
+        <h1 class="cs-title">${esc(c.title)}</h1>
+        <p class="cs-lede">${ejInline(c.lede || '')}</p>
+      </div>
+
+${metaBlock}${heroBlock}      <div class="cs-body">
+${csBody(c.body)}
+      </div>
+
+      <div class="cs-foot">
+        <p>${esc(c.foot_text || 'Interested in this work?')}</p>
+        <a class="btn" href="/#contact">
+          ${esc(c.foot_cta || 'Get in touch')}
+          ${icon('arrow-right', '2.2')}
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="foot-inner">
+      <span class="b">Edwin Gyasi Owusu</span>
+      <span class="n">© 2026 · Kumasi, Ghana</span>
+    </div>
+  </footer>
+
+</body>
+</html>
+`;
+    fs.writeFileSync(path.join(dir, c.slug + '.html'), html);
+  }
+
+  return items.length;
+}
+
+/* ============================================================
    Domain-dependent files
 
    Everything the SITE constant can reach is regenerated here, so changing
@@ -1295,15 +1634,13 @@ function buildDomainFiles() {
 
   rewrite('sitemap.xml', () => sitemap);
 
-  /* The three static case studies, and the admin panel's brand link and the
-     URL shown in its login preview. Every self-referencing absolute URL in
-     these is swapped wholesale, which covers canonical, og:url and the share
-     images at the site root that a path-based pattern misses. */
-  if (fs.existsSync(csDir)) {
-    for (const f of fs.readdirSync(csDir).filter((x) => x.endsWith('.html'))) {
-      rewrite(path.join('case-studies', f), swap);
-    }
-  }
+  /* The admin panel's brand link and the URL shown in its login preview.
+     Every self-referencing absolute URL is swapped wholesale, which covers the
+     share images at the site root that a path-based pattern would miss.
+
+     case-studies/*.html used to be swapped here too. They are generated from
+     SITE by buildCaseStudyPages now, which runs first, so there is nothing
+     left in them to swap. */
   rewrite(path.join('admin', 'index.html'), swap);
 
   /* admin/config.yml — three keys only. Decap reads this in the browser, so it
@@ -1324,9 +1661,13 @@ function buildDomainFiles() {
 try {
   const e = buildEngineering();
   const d = buildDesigns();
+  /* Before buildDomainFiles, because the sitemap enumerates the files in
+     case-studies/ and they have to exist by then. */
+  const c = buildCaseStudyPages(loadCaseStudies());
   const t = buildDomainFiles();
   console.log(`build: engineering site — ${e} regions rendered`);
   console.log(`build: eon designs site — ${d} regions rendered + data.js`);
+  console.log(`build: case studies — ${c} page(s)`);
   console.log(`build: site is ${SITE}${t ? ` — ${t} domain-dependent file(s) updated` : ''}`);
   console.log('build: ok');
 } catch (err) {

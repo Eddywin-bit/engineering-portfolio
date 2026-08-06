@@ -28,7 +28,7 @@ Two separate static sites, one repository, one deployment.
 | `/api/` | GitHub OAuth endpoints for the CMS | serverless |
 | `/content/` | The content source of truth, JSON | not served |
 | `/journal/` | Generated article pages | `/journal/<slug>` |
-| `/case-studies/` | Three hand-written case study pages | `/case-studies/<slug>` |
+| `/case-studies/` | Generated case study pages | `/case-studies/<slug>` |
 | `/vault/`, `/ledger/` | Unrelated apps | **do not touch** |
 
 Plain HTML, CSS and vanilla JavaScript. No framework, no bundler, no build step
@@ -56,8 +56,10 @@ failure on a live site.
    change the generator in `build.js`.
 4. **Never hand-edit `designs/js/data.js`.** It is generated from
    `content/designs/*.json`.
-5. **Never hand-edit anything in `/journal/`.** The whole directory is rewritten
-   on every build, and stale files are deleted.
+5. **Never hand-edit anything in `/journal/` or `/case-studies/`.** Both
+   directories are rewritten on every build and stale files are deleted. The
+   case studies were hand-written HTML until 2026-08-05; they are generated
+   from `content/engineering/case-studies/*.json` now.
 6. **Always run `node build.js` and confirm it exits 0 before pushing.** It
    fails loudly if a CMS marker has gone missing, which is the main way this
    repo breaks.
@@ -79,6 +81,7 @@ commits content there without rebuilding and Vercel rebuilds on deploy.
 ```
 content/engineering/*.json  ──►  build.js  ──►  index.html            (10 regions)
 content/engineering/journal/*.json ──► build.js ──► journal/<slug>.html
+content/engineering/case-studies/*.json ──► build.js ──► case-studies/<slug>.html
 content/designs/*.json      ──►  build.js  ──►  designs/index.html    (12 regions)
                                            └──►  designs/js/data.js
 ```
@@ -100,6 +103,14 @@ the preview renderers. Collections:
   experience, journal (heading only), contact, footer
 - **journal_posts** — a *folder* collection, one file per post in
   `content/engineering/journal/`
+- **case_studies** — a *folder* collection, one file per case study in
+  `content/engineering/case-studies/`. The body is a small markdown subset
+  rendered by `csBody()` in `build.js`: `##` headings, `>` callouts with an
+  optional `**bold**` label line, `- ` bullets, a `tools: a, b, c` line for the
+  chip row, and image groups. An image group where every image has its own
+  `*caption*` line renders as framed screenshots, three across; one where none
+  do renders as the plain two-across gallery. Extend that renderer and the
+  preview in `admin/index.html` together.
 - **designs** — 8 files: meta, nav, hero, works, vault, about, journal, contact
 
 `publish_mode: simple`, so nothing reaches GitHub until **Publish** is clicked.

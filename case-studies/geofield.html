@@ -12,8 +12,6 @@
   <link rel="icon" type="image/svg+xml" href="/icon.svg" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
-  <!-- Link preview card. og:image must be a JPEG or PNG around 1200x630:
-       WhatsApp and most scrapers will not render WebP. -->
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="Edwin Gyasi Owusu" />
   <meta property="og:url" content="https://edwingyasi.me/case-studies/geofield" />
@@ -133,19 +131,17 @@
       </div>
 
       <div class="cs-hero-img">
-        <img src="../images/geofield/hero.png" alt="GeoField app showing the Locate screen and the offline geological map of Ghana" loading="lazy" />
+        <img src="/images/geofield/hero.png" alt="GeoField app showing the Locate screen and the offline geological map of Ghana" loading="lazy" />
       </div>
 
       <div class="cs-body">
         <h2>The problem</h2>
         <p>Field geology in Ghana runs into a practical wall. The geological map of the country exists, but in the field it lives on a paper sheet, a lecturer's memory, or a PDF on a laptop back at the hostel. Standing on an outcrop three hours from Kumasi, a student often cannot answer the most basic question: <strong>which unit is this?</strong></p>
         <p>Mobile data makes it worse. Coverage in the field is unreliable and expensive, so any tool that needs a connection to answer that question is the wrong tool. The constraint was clear from the start: <strong>it has to work with the phone in airplane mode.</strong></p>
-
         <div class="callout">
           <div class="lbl">The core constraint</div>
           <p>Identification had to be fully offline. Not "offline-tolerant", not cached after first use, but correct on a phone that has never had signal at that location.</p>
         </div>
-
         <h2>What it does</h2>
         <p>GeoField is built around three jobs, each mapped to a screen a student can reach in one tap.</p>
         <ul>
@@ -153,36 +149,31 @@
           <li><strong>Map.</strong> A full geological map of Ghana with an offline basemap, so you can see unit boundaries and where you sit relative to them.</li>
           <li><strong>Log.</strong> Structured field notes that capture unit, coordinates, GPS accuracy and timestamp automatically, then attach a photo, a voice memo, or a short written note.</li>
         </ul>
-
         <div class="shots">
           <figure>
-            <div class="frame"><img src="../images/geofield/screen-locate.png" alt="GeoField Locate screen showing GPS accuracy and the Locate Me control" loading="lazy" /></div>
+            <div class="frame"><img src="/images/geofield/screen-locate.png" alt="GeoField Locate screen showing GPS accuracy and the Locate Me control" loading="lazy" /></div>
             <figcaption>Locate, with offline status up front</figcaption>
           </figure>
           <figure>
-            <div class="frame"><img src="../images/geofield/screen-map.png" alt="Offline geological map of Ghana with coloured units and place labels" loading="lazy" /></div>
+            <div class="frame"><img src="/images/geofield/screen-map.png" alt="Offline geological map of Ghana with coloured units and place labels" loading="lazy" /></div>
             <figcaption>The geological map, offline</figcaption>
           </figure>
           <figure>
-            <div class="frame"><img src="../images/geofield/screen-log.png" alt="Log Observation screen with unit, position, accuracy, photo and voice capture" loading="lazy" /></div>
+            <div class="frame"><img src="/images/geofield/screen-log.png" alt="Log Observation screen with unit, position, accuracy, photo and voice capture" loading="lazy" /></div>
             <figcaption>Logging an observation</figcaption>
           </figure>
         </div>
-
         <h2>Making identification work offline</h2>
         <p>The identification engine carries the geological map of Ghana as GeoJSON bundled into the app: <strong>all 17 mapped units</strong>, from the Birimian volcanics and sediments that host most of the country's gold, through the Tarkwaian, Togo Series and Dahomeyan gneisses, to the Voltaian sequence and the recent coastal cover.</p>
         <p>A GPS fix becomes a point-in-polygon test run entirely on the phone. No request, no tiles to fetch, no waiting. Each unit carries its own field content: what it is also called, the rocks and structures to expect, plus engineering and mineral notes, so the answer is not just a name but something a student can actually use at the outcrop.</p>
         <p>Because GPS is the input, accuracy is treated as a first-class piece of information rather than hidden. The app surfaces the current fix accuracy, and every saved observation records it, so a log entry can be judged later on how well the position was known when it was taken.</p>
-
         <h2>The basemap problem</h2>
         <p>A geological map with nothing underneath it is hard to navigate. But a country-wide basemap is large, and downloading it repeatedly over field data is not viable.</p>
         <p>The solution was a <strong>92 MB PMTiles basemap of Ghana</strong>, hosted separately and downloaded once, deliberately, on the student's terms. It is fetched in ranged chunks so a dropped connection resumes instead of restarting, and it is written to durable device storage so clearing the app cache does not destroy it. After that one download, the map is permanently available offline.</p>
-
         <div class="callout">
           <div class="lbl">A decision that was tested and reversed</div>
           <p>An earlier "high precision" mode averaged GPS readings while standing still. Field testing showed it performed worse than simply letting the fix converge, because consecutive GPS errors are correlated rather than random. The feature was removed. Averaging correlated noise does not cancel it.</p>
         </div>
-
         <h2>Designing for the field, not the desk</h2>
         <p>Field conditions shaped the interface more than any style preference. Sunlight, one free hand, gloves, and a phone that must not waste battery all push in the same direction: large targets, high contrast, and short paths.</p>
         <ul>
@@ -191,11 +182,9 @@
           <li><strong>Context is automatic.</strong> Unit, position, accuracy and time are filled in by the app, so the student records observations rather than metadata.</li>
           <li><strong>Manual coordinate entry.</strong> When a fix cannot be acquired, coordinates can be typed in and identification still runs.</li>
         </ul>
-
         <h2>Build &amp; distribution</h2>
         <p>The app is React and TypeScript wrapped with Capacitor, so it ships as a native Android package while staying a single web codebase. The map renders with MapLibre GL. Field data is stored in durable native storage rather than the browser cache, because losing a day of observations is not an acceptable failure.</p>
         <p>Distribution is a signed APK published through GitHub Releases rather than the Play Store, which suits a tool aimed at a specific department: updates ship immediately, and students install directly.</p>
-
         <h2>Tools &amp; methods</h2>
         <div class="tools">
           <span>React</span>
@@ -207,7 +196,6 @@
           <span>Point-in-polygon geoprocessing</span>
           <span>Offline-first architecture</span>
         </div>
-
         <h2>Where it stands</h2>
         <p>GeoField is in active development and already usable in the field. The direction now is durability rather than features: cloud backup and restore, so a lost or reset phone does not take a semester of field notes with it.</p>
         <p>The project sits exactly where my two interests meet. The geology decides what is correct, and the software decides whether anyone will actually use it in the field.</p>

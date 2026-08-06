@@ -43,8 +43,14 @@ sign in with GitHub. You will see three groups in the sidebar.
 
 ### Journal Posts
 
-Your articles, one entry each. This is the only place with real **New Post** and
-**Delete entry** buttons, so adding and removing articles works properly here.
+Your articles, one entry each, with real **New Post** and **Delete entry**
+buttons.
+
+### Case Studies
+
+Your case study pages, one entry each, with **New Case Study** and **Delete
+entry** buttons. These used to be hand-written HTML that only a developer could
+add. They are ordinary CMS entries now.
 
 ### Eon Designs Site
 
@@ -85,6 +91,34 @@ Engineering Site → 5. Projects & Case Studies → add an item to the list.
 The **Link** field is optional. Leave it empty if the case study page does not
 exist yet, and the card will still display correctly without a dead link. Only
 one project should be set to the wide card.
+
+### Add a case study
+
+Two steps, both in the panel.
+
+1. **Case Studies → New Case Study.** Fill in the title, the category line, the
+   intro, and the body. The file name you give it becomes the web address, so
+   `trace-metals` becomes `edwingyasi.me/case-studies/trace-metals`. Keep it
+   short, lower case, words joined by hyphens.
+2. **Engineering Site → 5. Projects & Case Studies → add an item**, and set its
+   **Link** to `case-studies/` followed by that same file name. This is what
+   puts the card on your home page. Step 1 builds the page; step 2 is the only
+   thing that links to it.
+
+Writing the body, everything optional:
+
+| To get | Type |
+|---|---|
+| A section heading | `## The problem` |
+| Bold | `**like this**` |
+| A bulleted list | lines starting with `- ` |
+| A green callout box | lines starting with `> `, with `> **A label**` first |
+| The rounded tool chips | `tools: Python, QGIS, SQL` on its own line |
+| Two pictures side by side | two image lines together, no captions |
+| Framed phone screenshots | an image line, then an italic caption line, repeated |
+
+Leave a blank line between blocks. Everything else is filled in for you: the
+address, the share card, the sitemap entry, and the styling.
 
 ### Change your CV
 Contact → the CV link points at `/Edwin_Gyasi_Resume.pdf`. To replace the file
@@ -129,7 +163,8 @@ editing files directly.
   same repository.
 - **Anything between `<!-- CMS:START -->` and `<!-- CMS:END -->`** in the HTML
   files. Those blocks are regenerated on every deploy, so edits there vanish.
-- **`designs/js/data.js`** and **everything in `/journal/`** — generated files.
+- **`designs/js/data.js`**, **everything in `/journal/`**, and **everything in
+  `/case-studies/`** — generated files, rewritten on every build.
 - **`vercel.json`** — its format is strict. A stray comment breaks every future
   deploy.
 

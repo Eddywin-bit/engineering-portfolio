@@ -31,8 +31,10 @@ that forces him back into code to update content is the wrong change.
 3. **Never hand-edit between `<!-- CMS:START -->` and `<!-- CMS:END -->`.**
    `build.js` overwrites those regions, so the edit is lost on the next deploy.
    Change the JSON in `/content/`, or change the generator in `build.js`.
-4. **Never hand-edit `designs/js/data.js` or anything in `/journal/`.** Both are
-   generated, and `/journal/` is wiped and rewritten on every build.
+4. **Never hand-edit `designs/js/data.js`, `/journal/`, or `/case-studies/`.**
+   All three are generated. `/journal/` and `/case-studies/` are wiped and
+   rewritten on every build, so an edit there is gone on the next deploy.
+   Change the JSON in `/content/engineering/` instead.
 5. **Always run `node build.js` and confirm it exits 0 before pushing.** It
    fails loudly when a CMS marker goes missing, which is the main way this
    repository breaks.
