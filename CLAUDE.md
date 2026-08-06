@@ -387,6 +387,29 @@ Outside the repo, and only the owner can do these:
 
 ## Updates Log
 
+- 2026-08-06: **Body links were invisible.** The case study and journal
+  stylesheets inherit `a{color:inherit;text-decoration:none}` from the base
+  reset and never overrode it inside `.cs-body`, so a link written as
+  `[text](url)` rendered as ordinary body text. It was clickable, with nothing
+  to say so. Nothing in the repo had used one yet, which is why it went
+  unnoticed through the whole case study migration.
+
+  Found while answering where a data analytics portfolio should point: a case
+  study is meant to end with its data source, its GitHub repository and its
+  Tableau dashboard, and that closing line is the single most valuable thing on
+  the page for a technical reviewer. It would have shipped unreadable.
+
+  Links are emerald with a faint underline that firms up on hover, in both
+  `CASE_STUDY_CSS` and `JOURNAL_CSS`, and mirrored into the admin preview.
+  `ejInline` now gives **external** links `target="_blank" rel="noopener"`,
+  matched on `^https?://`, so a reader checking a repository does not lose the
+  page. Same-site links are untouched and still navigate in place.
+
+  Verified by adding four links to a case study, rendering, checking the
+  computed style really is `rgb(15,118,110)` with a 1px underline, confirming
+  only the three external ones carry `target`, then reverting the content and
+  re-diffing all three pages against the originals.
+
 - 2026-08-05: **`og-engineering.png` regenerated.** The old card had
   `edwingyasi.online` printed into the artwork, so every share showed the
   previous domain no matter what the tags said, and it was set in a serif the

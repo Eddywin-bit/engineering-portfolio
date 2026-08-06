@@ -116,9 +116,24 @@ Writing the body, everything optional:
 | The rounded tool chips | `tools: Python, QGIS, SQL` on its own line |
 | Two pictures side by side | two image lines together, no captions |
 | Framed phone screenshots | an image line, then an italic caption line, repeated |
+| A link | `[the words shown](https://the-address)` |
 
 Leave a blank line between blocks. Everything else is filled in for you: the
 address, the share card, the sitemap entry, and the styling.
+
+**End a case study with where the work lives.** A last paragraph like this is
+worth more than anything else you can add, because it is what a technical
+reviewer clicks:
+
+```
+Data from the [Ghana Statistical Service](https://statsghana.gov.gh).
+Full analysis in the [GitHub repository](https://github.com/Eddywin-bit/your-repo).
+Interactive dashboard on [Tableau Public](https://public.tableau.com/app/profile/you).
+```
+
+Square brackets hold the words people read, round brackets hold the address.
+Links to other sites open in a new tab automatically, so nobody loses your page
+by following one.
 
 ### Change your CV
 Contact → the CV link points at `/Edwin_Gyasi_Resume.pdf`. To replace the file

@@ -258,7 +258,10 @@ function renderMarkdown(src) {
 
 function ejInline(s) {
   return esc(s)
-    .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, '<a href="$2">$1</a>')
+    .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_, t, u) =>
+      /^https?:\/\//i.test(u)
+        ? `<a href="${u}" target="_blank" rel="noopener">${t}</a>`
+        : `<a href="${u}">${t}</a>`)
     .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
     .replace(/(^|[^*])\*([^*]+)\*(?!\*)/g, '$1<em>$2</em>');
 }
@@ -416,7 +419,16 @@ const JOURNAL_CSS = `
       .cs-body p.lede{font-size:1.06rem;}
       .cs-body h3{font-size:1.15rem;}
       .cs-foot{flex-direction:column;align-items:flex-start;}
-    }`;
+    }
+    /* Links inside a body. Without these the base a{color:inherit;
+       text-decoration:none} rule renders them as ordinary text: clickable but
+       with nothing to say so. Case studies end with source, repository and
+       dashboard links, so this is the difference between a reference and an
+       invisible one. The underline is deliberately faint until hover. */
+    .cs-body a{color:var(--emerald);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px;text-decoration-color:rgba(15,118,110,0.4);transition:text-decoration-color 0.2s var(--ease),color 0.2s var(--ease);}
+    .cs-body a:hover{color:var(--emerald-hi);text-decoration-color:currentColor;}
+    .callout a{color:var(--emerald-deep);text-decoration-color:rgba(10,89,82,0.45);}
+    .callout a:hover{color:var(--emerald-deep);}`;
 
 function buildJournalPages(journal, posts) {
   const dir = path.join(ROOT, 'journal');
@@ -1280,7 +1292,16 @@ const CASE_STUDY_CSS = `
     .shots figure{margin:0;}
     .shots .frame{border-radius:22px;background:#1C1C1C;padding:6px;box-shadow:0 14px 34px rgba(28,28,28,.16);}
     .shots .frame img{width:100%;display:block;border-radius:17px;}
-    .shots figcaption{font-size:0.82rem;color:var(--ink-mute);text-align:center;margin-top:0.6rem;}`;
+    .shots figcaption{font-size:0.82rem;color:var(--ink-mute);text-align:center;margin-top:0.6rem;}
+    /* Links inside a body. Without these the base a{color:inherit;
+       text-decoration:none} rule renders them as ordinary text: clickable but
+       with nothing to say so. Case studies end with source, repository and
+       dashboard links, so this is the difference between a reference and an
+       invisible one. The underline is deliberately faint until hover. */
+    .cs-body a{color:var(--emerald);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px;text-decoration-color:rgba(15,118,110,0.4);transition:text-decoration-color 0.2s var(--ease),color 0.2s var(--ease);}
+    .cs-body a:hover{color:var(--emerald-hi);text-decoration-color:currentColor;}
+    .callout a{color:var(--emerald-deep);text-decoration-color:rgba(10,89,82,0.45);}
+    .callout a:hover{color:var(--emerald-deep);}`;
 
 /* The body is markdown, deliberately a small subset, because it is typed
    into a CMS textarea by someone who does not write code:

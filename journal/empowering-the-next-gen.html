@@ -90,6 +90,15 @@
       .cs-body h3{font-size:1.15rem;}
       .cs-foot{flex-direction:column;align-items:flex-start;}
     }
+    /* Links inside a body. Without these the base a{color:inherit;
+       text-decoration:none} rule renders them as ordinary text: clickable but
+       with nothing to say so. Case studies end with source, repository and
+       dashboard links, so this is the difference between a reference and an
+       invisible one. The underline is deliberately faint until hover. */
+    .cs-body a{color:var(--emerald);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px;text-decoration-color:rgba(15,118,110,0.4);transition:text-decoration-color 0.2s var(--ease),color 0.2s var(--ease);}
+    .cs-body a:hover{color:var(--emerald-hi);text-decoration-color:currentColor;}
+    .callout a{color:var(--emerald-deep);text-decoration-color:rgba(10,89,82,0.45);}
+    .callout a:hover{color:var(--emerald-deep);}
   </style>
 </head>
 <body>
