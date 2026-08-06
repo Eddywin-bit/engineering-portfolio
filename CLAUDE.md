@@ -387,6 +387,27 @@ Outside the repo, and only the owner can do these:
 
 ## Updates Log
 
+- 2026-08-05: **`og-engineering.png` regenerated.** The old card had
+  `edwingyasi.online` printed into the artwork, so every share showed the
+  previous domain no matter what the tags said, and it was set in a serif the
+  site stopped using when Clash Display arrived. Rebuilt at 1200x630 in Clash
+  Display, naming Data Analyst beside Geological Engineer, since that is what
+  the owner is applying for.
+
+  Rendered by screenshotting a 1200x630 HTML page in headless Chromium, served
+  over **http://** from the repo root so the self-hosted `@font-face` resolves.
+  A `file://` page does not load the font and silently falls back.
+
+  **A share card carrying the domain as artwork is a hidden domain dependency.**
+  `buildDomainFiles()` cannot reach pixels. If the site moves again, this file
+  has to be redrawn by hand.
+
+  Still stale and not fixed here: `og-designs.png` is a screenshot of the Eon
+  site's **dark** theme, replaced by the light one on 2026-08-01, and it is
+  cropped mid-logo. It needs Playfair Display, which is loaded from Google
+  Fonts and unreachable from this sandbox, so redrawing it would have meant
+  substituting the wrong typeface.
+
 - 2026-08-05: **Case studies are a CMS folder collection now**, not three
   hand-written HTML pages. The owner can publish one from the panel, which
   matters because his coding-agent access is finite and a page that needs code
