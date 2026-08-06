@@ -586,9 +586,17 @@ Outside the repo, and only the owner can do these:
   DNS is worth remembering because it went wrong once. The records first pointed
   at **GitHub Pages** (`185.199.108-111.153`) rather than Vercel
   (`216.198.79.x`, `64.29.17.x`), so the name resolved while Vercel still called
-  the domain invalid. Nothing in this repo caused it; there is no `CNAME` file
-  and no Pages workflow. **Identify a misdirected domain by its IP range**, not
-  by whether it resolves.
+  the domain invalid. **Identify a misdirected domain by its IP range**, not by
+  whether it resolves.
+
+  Correction, 2026-08-06: this was first written as "nothing in this repo caused
+  it, there is no `CNAME` file and no Pages workflow." The second half was
+  wrong. **GitHub Pages has been enabled on this repository since 2026-05-04**
+  and publishes a second copy of the site at
+  `eddywin-bit.github.io/engineering-portfolio/`. Its workflow is
+  `dynamic/pages/pages-build-deployment`, which GitHub generates rather than
+  storing in `.github/workflows/`, so looking for a **file** found nothing. Ask
+  the Actions API what workflows exist, not the filesystem.
 
   Google Search Console verification is the **file** method,
   `google5e961fde5173da87.html` at the repo root, which the new domain serves
