@@ -395,8 +395,14 @@ Outside the repo, and only the owner can do these:
   the owner is applying for.
 
   Rendered by screenshotting a 1200x630 HTML page in headless Chromium, served
-  over **http://** from the repo root so the self-hosted `@font-face` resolves.
-  A `file://` page does not load the font and silently falls back.
+  over **http://** from the repo root so the self-hosted `@font-face` and the
+  logo artwork resolve. A `file://` page loads neither and silently falls back.
+
+  Both cards are on the **site's own palette**, not a card palette: the
+  engineering one on `--bg` #FAFAF8 with an emerald eyebrow, a gold rule and
+  the cube mark, the designs one on the Eon cream. A first pass drew the
+  engineering card near-black, which looked well enough on its own and nothing
+  like the page it links to.
 
   **A share card carrying the domain as artwork is a hidden domain dependency.**
   `buildDomainFiles()` cannot reach pixels. If the site moves again, this file
