@@ -402,11 +402,19 @@ Outside the repo, and only the owner can do these:
   `buildDomainFiles()` cannot reach pixels. If the site moves again, this file
   has to be redrawn by hand.
 
-  Still stale and not fixed here: `og-designs.png` is a screenshot of the Eon
-  site's **dark** theme, replaced by the light one on 2026-08-01, and it is
-  cropped mid-logo. It needs Playfair Display, which is loaded from Google
-  Fonts and unreachable from this sandbox, so redrawing it would have meant
-  substituting the wrong typeface.
+  `og-designs.png` was redrawn in the same pass, for the same reason: it was a
+  screenshot of the Eon site's **dark** theme, replaced by the light one on
+  2026-08-01, cropped mid-logo, and captioned with the old domain. It is a
+  designed card now, in the live cream palette, Playfair Display over Inter,
+  with the EON mark carrying the same `filter: brightness(0)` the site uses on
+  that white artwork.
+
+  Correction worth recording: this was first left undone on the assumption that
+  Google Fonts is blocked from this sandbox. **It is not.** `fonts.googleapis.com`
+  and `fonts.gstatic.com` both answer 200. The Tailwind CDN is what is blocked,
+  which is why the designs page cannot be screenshotted here, and that is the
+  reason the card is drawn rather than captured. Test a host before recording it
+  as unreachable.
 
 - 2026-08-05: **Case studies are a CMS folder collection now**, not three
   hand-written HTML pages. The owner can publish one from the panel, which
