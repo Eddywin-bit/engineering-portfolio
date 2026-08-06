@@ -387,7 +387,28 @@ Outside the repo, and only the owner can do these:
 
 ## Updates Log
 
-- 2026-08-06: **Body links were invisible.** The case study and journal
+- 2026-08-06: **A gallery came apart the first time a case study was edited in
+  the panel.** Two images that had been side by side stacked vertically. The
+  owner found it within an hour of the collection going live.
+
+  `csBody()` grouped images only within a single blank-line-delimited block,
+  which is how the migration script wrote them. **Decap's markdown editor
+  normalises block spacing**, so on save it puts a blank line between the two
+  image lines, and between an image and its caption. Each image then became its
+  own one-image `.gallery`.
+
+  The general lesson, and it applies to every syntax in `csBody()`: a rule
+  derived from machine-written content is not safe until it survives a round
+  trip through the editor that will actually maintain it. The migration proved
+  the renderer reproduced the old pages; it could not prove the format was
+  stable under editing.
+
+  Fixed by merging consecutive image-or-caption blocks before rendering, so
+  grouping no longer depends on spacing the editor is free to change. Verified
+  both ways: as the migration wrote it, and with a blank line forced between
+  every image and every caption. Both give one `.gallery` of two on
+  trace-metals and one framed `.shots` of three on geofield. The admin preview
+  now drops orphaned caption blocks for the same reason. The case study and journal
   stylesheets inherit `a{color:inherit;text-decoration:none}` from the base
   reset and never overrode it inside `.cs-body`, so a link written as
   `[text](url)` rendered as ordinary body text. It was clickable, with nothing

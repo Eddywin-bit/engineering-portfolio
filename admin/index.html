@@ -1734,9 +1734,21 @@
          understands. If that renderer gains a block type, mirror it here. */
       E.case_studies = function (d, props) {
         var hero = media(props, d.hero_image);
-        var blocks = String(d.body || '').split(/\n\s*\n/)
+        /* Decap normalises block spacing, so an image and its caption arrive
+           as separate blocks. Drop both: images render on the page itself, and
+           a caption left behind reads as a stray italic paragraph. Mirrors the
+           merging csBody() does in build.js. */
+        var isImg = function (b) { return /^!\[/.test(b); };
+        var isCap = function (b) { return /^\*[^*]+\*$/.test(b.replace(/\n/g, ' ').trim()); };
+        var blocks = [];
+        String(d.body || '').split(/\n\s*\n/)
           .map(function (b) { return b.trim(); })
-          .filter(Boolean);
+          .filter(Boolean)
+          .forEach(function (b, i, all) {
+            if (isImg(b)) return;
+            if (isCap(b) && i > 0 && (isImg(all[i - 1]) || isCap(all[i - 1]))) return;
+            blocks.push(b);
+          });
         return h('div', {},
           h('p', { className: 'cs-cat' }, h('span', { className: 'pin' }), d.category || 'Category'),
           h('h1', { className: 'cs-title' }, em(d.title, 'Untitled case study')),
@@ -1780,7 +1792,6 @@
                   return t ? h('span', { key: key() }, t) : null;
                 }));
             }
-            if (/^!\[/.test(b)) return null; /* images render on the page itself */
             return h('p', { key: key() }, b.replace(/\n/g, ' '));
           }))
         );

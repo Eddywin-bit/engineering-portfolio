@@ -114,7 +114,7 @@ Writing the body, everything optional:
 | A bulleted list | lines starting with `- ` |
 | A green callout box | lines starting with `> `, with `> **A label**` first |
 | The rounded tool chips | `tools: Python, QGIS, SQL` on its own line |
-| Two pictures side by side | two image lines together, no captions |
+| Two pictures side by side | two image lines in a row, no captions |
 | Framed phone screenshots | an image line, then an italic caption line, repeated |
 | A link | `[the words shown](https://the-address)` |
 
@@ -134,6 +134,10 @@ Interactive dashboard on [Tableau Public](https://public.tableau.com/app/profile
 Square brackets hold the words people read, round brackets hold the address.
 Links to other sites open in a new tab automatically, so nobody loses your page
 by following one.
+
+Blank lines between the images of a group do not matter. The editor adds them
+on its own, and they are ignored: pictures next to each other in the text end
+up next to each other on the page.
 
 ### Change your CV
 Contact → the CV link points at `/Edwin_Gyasi_Resume.pdf`. To replace the file

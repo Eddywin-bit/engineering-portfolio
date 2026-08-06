@@ -1328,13 +1328,38 @@ const CASE_STUDY_CSS = `
 const CS_IMG = /^!\[([^\]]*)\]\(([^)\s]+)\)$/;
 const CS_CAP = /^\*([^*].*)\*$/;
 
+/* True when a block is nothing but image lines and their caption lines. */
+function csImgBlock(block) {
+  const lines = String(block).split('\n').map((l) => l.trim()).filter(Boolean);
+  return lines.some((l) => CS_IMG.test(l)) &&
+         lines.every((l) => CS_IMG.test(l) || CS_CAP.test(l));
+}
+
 function csBody(src) {
-  const blocks = String(src || '').trim().split(/\n\s*\n/);
+  /* Decap's markdown editor normalises block spacing, so two image lines the
+     author typed on consecutive lines come back separated by a blank line, and
+     a caption is split from the image it belongs to. Grouping only within a
+     block therefore held for content written by the migration script and broke
+     the first time a page was edited in the panel: a two-image gallery became
+     two one-image galleries, stacked. Merge consecutive image-or-caption
+     blocks first, so a group survives the round trip either way. */
+  const blocks = [];
+  for (const raw of String(src || '').trim().split(/\n\s*\n/)) {
+    const t = raw.trim();
+    if (!t) continue;
+    const lines = t.split('\n').map((l) => l.trim()).filter(Boolean);
+    const capOnly = lines.length === 1 && CS_CAP.test(lines[0]);
+    const prev = blocks[blocks.length - 1];
+    if ((csImgBlock(t) || capOnly) && prev && csImgBlock(prev)) {
+      blocks[blocks.length - 1] = prev + '\n' + t;
+    } else {
+      blocks.push(t);
+    }
+  }
+
   const out = [];
 
-  for (const raw of blocks) {
-    const block = raw.trim();
-    if (!block) continue;
+  for (const block of blocks) {
     const lines = block.split('\n').map((l) => l.trim()).filter(Boolean);
 
     if (/^##\s+/.test(block)) {
