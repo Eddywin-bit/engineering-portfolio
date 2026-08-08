@@ -387,6 +387,32 @@ Outside the repo, and only the owner can do these:
 
 ## Updates Log
 
+- 2026-08-06: **AI-assisted development is disclosed on both software case
+  studies**, in the same two places on each: the `Role` cell of the facts
+  strip, and a paragraph where the build is first described.
+
+  It began as one line at the very bottom of CertiBatch. Two problems with
+  that. It sat at **92% down the page**, after the tools row, late enough to be
+  missed and late enough to read as an afterthought once found. And it was on
+  **one page only**, which is worse than silence: disclosing on CertiBatch
+  while GeoField says "Designer & Developer" and nothing else actively implies
+  GeoField was hand-written. A contrast carries meaning.
+
+  CertiBatch's now follows "So I wrote a Python script" directly, at 13%.
+  GeoField's sits in Build & distribution, which is where that page first
+  discusses how it was made, but that is 80% down, so the `Role` cell carries
+  it too on both pages for anyone who only skims the strip.
+
+  `(AI‑assisted)` in those cells uses a **non-breaking hyphen, U+2011**. With
+  an ordinary hyphen the cell wrapped as "Developer (AI-" / "assisted)".
+
+  The owner is a geology student and a self-described Python beginner. The
+  wording is deliberately plain about that while keeping the claim that is
+  true and worth making: the problem, the constraints, the architecture and
+  the interface were his. Do not soften it into "AI-assisted development" as a
+  tools chip alone, which is what it was, and which reads as a technology
+  rather than a disclosure.
+
 - 2026-08-06: **The CertiBatch screenshots were 1.08 MB, now 256 KB.** Five UI
   screenshots at 1600x900 shipped as PNG. WebP at quality 82 took them down by
   **76%** with no visible artefact, which is typical for flat interface capture:

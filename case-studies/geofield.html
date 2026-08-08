@@ -133,7 +133,7 @@
       </div>
 
       <div class="cs-meta">
-        <div class="cell"><div class="k">Role</div><div class="v">Designer &amp; Developer</div></div>
+        <div class="cell"><div class="k">Role</div><div class="v">Designer &amp; Developer (AI‑assisted)</div></div>
         <div class="cell"><div class="k">Platform</div><div class="v">Android, self-hosted</div></div>
         <div class="cell"><div class="k">Users</div><div class="v">KNUST geology students</div></div>
         <div class="cell"><div class="k">Status</div><div class="v">In active development</div></div>
@@ -193,6 +193,7 @@
         </ul>
         <h2>Build &amp; distribution</h2>
         <p>The app is React and TypeScript wrapped with Capacitor, so it ships as a native Android package while staying a single web codebase. The map renders with MapLibre GL. Field data is stored in durable native storage rather than the browser cache, because losing a day of observations is not an acceptable failure.</p>
+        <p>To be clear about how it was built: the code was written with AI coding tools rather than by hand. I am a geology student, not a developer by training. That changed how quickly the app existed, not what it had to do. The offline constraint, the geology behind the identification, and the way the screens work with one hand in the sun were the decisions, and those were mine.</p>
         <p>Distribution is a signed APK published through GitHub Releases rather than the Play Store, which suits a tool aimed at a specific department: updates ship immediately, and students install directly.</p>
         <h2>Tools &amp; methods</h2>
         <div class="tools">
@@ -204,6 +205,7 @@
           <span>PMTiles</span>
           <span>Point-in-polygon geoprocessing</span>
           <span>Offline-first architecture</span>
+          <span>AI-assisted development</span>
         </div>
         <h2>Where it stands</h2>
         <p>GeoField is in active development and already usable in the field. The direction now is durability rather than features: cloud backup and restore, so a lost or reset phone does not take a semester of field notes with it.</p>
