@@ -135,6 +135,10 @@ Square brackets hold the words people read, round brackets hold the address.
 Links to other sites open in a new tab automatically, so nobody loses your page
 by following one.
 
+Every picture in a case study or journal body can be clicked to open full
+size, with its caption underneath. That happens automatically, there is
+nothing to switch on.
+
 Blank lines between the images of a group do not matter. The editor adds them
 on its own, and they are ignored: pictures next to each other in the text end
 up next to each other on the page.

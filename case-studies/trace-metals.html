@@ -110,6 +110,21 @@
     .cs-body a:hover{color:var(--emerald-hi);text-decoration-color:currentColor;}
     .callout a{color:var(--emerald-deep);text-decoration-color:rgba(10,89,82,0.45);}
     .callout a:hover{color:var(--emerald-deep);}
+    /* Lightbox. The screenshots are the evidence on the software pages, and a
+       1600x900 interface capture shown 240px wide is unreadable, so every body
+       image opens full size on click. Progressive: with JS off the images still
+       render, they simply do not expand, and zoom-in only appears once the
+       script has wired them up. */
+    .cs-body img{cursor:default;}
+    .lb-ready .cs-body img{cursor:zoom-in;}
+    .lb{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;flex-direction:column;gap:0.9rem;padding:clamp(1rem,4vw,2.5rem);background:rgba(16,16,16,0.94);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}
+    .lb[open],.lb.is-open{display:flex;}
+    .lb img{max-width:100%;max-height:82vh;width:auto;height:auto;border-radius:10px;box-shadow:0 30px 90px rgba(0,0,0,0.55);}
+    .lb figcaption{color:#D8D5CF;font-size:0.9rem;text-align:center;max-width:60ch;}
+    .lb-close{position:absolute;top:clamp(0.8rem,3vw,1.6rem);right:clamp(0.8rem,3vw,1.6rem);width:44px;height:44px;border-radius:999px;border:1px solid rgba(255,255,255,0.25);background:rgba(255,255,255,0.08);color:#fff;font-size:1.5rem;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.2s var(--ease);}
+    .lb-close:hover{background:rgba(255,255,255,0.18);}
+    @media (prefers-reduced-motion:no-preference){.lb.is-open img{animation:lbIn 0.18s var(--ease);}}
+    @keyframes lbIn{from{opacity:0;transform:scale(0.98);}to{opacity:1;transform:none;}}
   </style>
 </head>
 <body>
@@ -196,6 +211,63 @@
       <span class="n">© 2026 · Kumasi, Ghana</span>
     </div>
   </footer>
+
+  <div class="lb" role="dialog" aria-modal="true" aria-label="Expanded image" hidden>
+    <button class="lb-close" type="button" aria-label="Close image">&times;</button>
+    <img alt="" />
+    <figcaption></figcaption>
+  </div>
+
+  <script>
+  /* Click any body image to see it full size. Caption comes from the figure's
+     own figcaption where there is one, otherwise the alt text. */
+  (function () {
+    var imgs = document.querySelectorAll('.cs-body img');
+    if (!imgs.length) return;
+    var lb = document.querySelector('.lb');
+    var big = lb.querySelector('img');
+    var cap = lb.querySelector('figcaption');
+    var close = lb.querySelector('.lb-close');
+    var last = null;
+
+    function open(src, alt, text) {
+      big.src = src; big.alt = alt || '';
+      cap.textContent = text || '';
+      cap.style.display = text ? '' : 'none';
+      lb.hidden = false; lb.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+      close.focus();
+    }
+    function shut() {
+      lb.classList.remove('is-open'); lb.hidden = true;
+      document.body.style.overflow = '';
+      big.removeAttribute('src');
+      if (last) { last.focus(); last = null; }
+    }
+
+    Array.prototype.forEach.call(imgs, function (img) {
+      img.tabIndex = 0;
+      img.setAttribute('role', 'button');
+      img.setAttribute('aria-label', 'Expand image');
+      function go() {
+        last = img;
+        var fig = img.closest('figure');
+        var fc = fig && fig.querySelector('figcaption');
+        open(img.currentSrc || img.src, img.alt, fc ? fc.textContent.trim() : '');
+      }
+      img.addEventListener('click', go);
+      img.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); }
+      });
+    });
+
+    lb.addEventListener('click', function (e) { if (e.target !== big) shut(); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !lb.hidden) shut();
+    });
+    document.documentElement.classList.add('lb-ready');
+  })();
+  </script>
 
 </body>
 </html>

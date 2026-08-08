@@ -391,6 +391,26 @@ Outside the repo, and only the owner can do these:
 
 ## Updates Log
 
+- 2026-08-06: **Body images open full size on click.** Reported as "the small
+  ones in the project pages aren't clickable to expand, how they are now no one
+  can see it too", which is exactly right: a 1600x900 interface capture shown
+  240px wide is decoration, not evidence, and the screenshots are the whole
+  argument on the two software case studies.
+
+  A lightbox is generated into both the case study and journal templates. No
+  dependency, about 40 lines of inline script. Caption comes from the figure's
+  own `figcaption` where there is one, otherwise the `alt`. Closes on Escape,
+  on the backdrop, or on the button; locks body scroll while open and restores
+  focus to the image on close.
+
+  **`zoom-in` is applied by a `.lb-ready` class the script adds**, not in the
+  base CSS, so with JavaScript off the images do not advertise an interaction
+  that will not happen. The page still renders and reads fine without it.
+
+  Measured on CertiBatch at 1440: a thumbnail 240px wide opens at **1312x738**,
+  and at 390 it opens at 358 wide, so the interface is legible on a phone too.
+  Portrait screenshots are capped by `max-height:82vh` rather than width.
+
 - 2026-08-06: **AI-assisted development is disclosed on both software case
   studies**, in the same two places on each: the `Role` cell of the facts
   strip, and a paragraph where the build is first described.
