@@ -368,7 +368,7 @@ const JOURNAL_CSS = `
     }
     /* Clash Display has no weight above 700; asking for 800 gets a synthesised
        fake bold, so the heavy headings below are capped at 700. */
-    @font-face{font-family:'Clash Display';src:url('/fonts/clash-display-var.woff2') format('woff2');font-weight:200 700;font-style:normal;font-display:swap;}
+    @font-face{font-family:'Clash Display';src:url('/fonts/clash-display-var.woff2') format('woff2');font-weight:200 700;font-style:normal;font-display:block;}
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
     html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
     body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:17px;line-height:1.7;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
@@ -1229,7 +1229,7 @@ const CASE_STUDY_CSS = `
       --font-heading:'Clash Display',system-ui,-apple-system,sans-serif;--font-body:'Clash Display',system-ui,-apple-system,sans-serif;
       --max:820px;--radius:16px;--ease:cubic-bezier(0.22,0.61,0.36,1);
     }
-    @font-face{font-family:'Clash Display';src:url('/fonts/clash-display-var.woff2') format('woff2');font-weight:200 700;font-style:normal;font-display:swap;}
+    @font-face{font-family:'Clash Display';src:url('/fonts/clash-display-var.woff2') format('woff2');font-weight:200 700;font-style:normal;font-display:block;}
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
     html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
     body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:17px;line-height:1.7;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}

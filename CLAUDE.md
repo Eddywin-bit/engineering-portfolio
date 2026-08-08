@@ -387,6 +387,30 @@ Outside the repo, and only the owner can do these:
 
 ## Updates Log
 
+- 2026-08-06: **The typeface visibly changed on every load**, fallback first,
+  then Clash Display. Reported as "I see a certain font before the clash
+  display briefly".
+
+  Not a bug so much as the wrong policy: all three `@font-face` blocks carried
+  **`font-display: swap`**, which is an explicit instruction to paint the
+  fallback face immediately and swap when the webfont lands. On a fast
+  connection that is a flash of the wrong typeface on every page.
+
+  All three now use **`font-display: block`**: index.html, `JOURNAL_CSS` and
+  `CASE_STUDY_CSS`. Text is briefly invisible instead of briefly wrong, and the
+  fallback never paints.
+
+  That is only safe because the font is **18KB and preloaded** on every page
+  type. Measured against a local server: the request is started by the preload
+  hint and completes in **29 to 40ms**, so the block period costs a few
+  hundredths of a second. If the file ever grows, or a page loses its
+  `<link rel="preload">`, reconsider: `block` gives up to three seconds of
+  invisible text before it gives up and falls back.
+
+  `optional` was the other candidate and is worse here. It never swaps, but it
+  will render a whole page in the fallback if the font is not ready in time,
+  which is the same wrong typeface the owner objected to, just for longer.
+
 - 2026-08-06: **A gallery came apart the first time a case study was edited in
   the panel.** Two images that had been side by side stacked vertically. The
   owner found it within an hour of the collection going live.
