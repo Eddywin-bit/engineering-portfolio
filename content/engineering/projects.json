@@ -20,6 +20,22 @@
       "category": "Mobile & Geospatial Software"
     },
     {
+      "image_alt": "CertiBatch field placement screen with a certificate previewed using real delegate data",
+      "href": "case-studies/certibatch",
+      "link_label": "Case Study",
+      "wide": false,
+      "title": "CertiBatch — Bulk Certificate Generation",
+      "image": "images/certibatch/hero.png",
+      "tools": [
+        "Python + FastAPI",
+        "Pillow",
+        "React + TypeScript",
+        "Docker"
+      ],
+      "description": "Built as PRO of the AusIMM Tarkwa Student Chapter, after producing 500+ certificates for our 11th Annual Conference. A spreadsheet and a design go in, hundreds of print-ready personalised certificates come out, with no scripting for whoever holds the role next.",
+      "category": "Web Applications & Automation"
+    },
+    {
       "image_alt": "Soil samples and geological mapping",
       "href": "case-studies/trace-metals",
       "link_label": "Case Study",
