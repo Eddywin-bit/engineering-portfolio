@@ -63,8 +63,12 @@ failure on a live site.
 6. **Always run `node build.js` and confirm it exits 0 before pushing.** It
    fails loudly if a CMS marker has gone missing, which is the main way this
    repo breaks.
-7. **Do not add a number to a heading that describes a count.** "Three case
-   studies" goes stale the moment a project is added. This has happened twice.
+7. **Do not add a number, or a list of domains, to a heading or subtitle.**
+   "Three case studies" goes stale the moment a project is added, and it has
+   happened twice. A subtitle naming the specific fields covered fails the
+   same way: "geospatial software, geostatistics, and geotechnical site
+   characterization" silently excluded the next project added. Describe the
+   kind of work, not its inventory.
 
 Rules 1, 3, 4 and 6 are enforced on every pull request by
 `.github/workflows/build.yml`, which runs `node build.js`, parses

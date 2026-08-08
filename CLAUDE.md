@@ -74,6 +74,10 @@ Planned for EON v2 and therefore **not present in this repository**: Cloudinary,
 - NEVER hand-edit anything in `/journal/` or `/case-studies/`. Both directories
   are regenerated on every build and stale files are deleted.
 - ALWAYS run `node build.js` and confirm it exits 0 before pushing
+- NEVER put a count OR a list of domains in a section heading or subtitle.
+  Both go stale the moment an item is added. "Three case studies" broke
+  twice; "geospatial software, geostatistics, and geotechnical site
+  characterization" orphaned CertiBatch the day it was published.
 - If EON v2 is ever revived: work inside `/eon/`, and do not copy visual
   structure or layout from `/designs/index.html` into it. Dormant, see
   Current Build.

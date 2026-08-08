@@ -1,7 +1,7 @@
 {
   "eyebrow": "Projects",
   "title": "Selected engineering work.",
-  "subtitle": "Case studies across geospatial software, geostatistics, and geotechnical site characterization.",
+  "subtitle": "Case studies across geology, spatial data, and software. Each one started as a problem somebody actually had.",
   "items": [
     {
       "image_alt": "GeoField Android app: Locate screen and offline Ghana geological map",
