@@ -20,7 +20,7 @@
       "category": "Mobile & Geospatial Software"
     },
     {
-      "image_alt": "CertiBatch field placement screen with a certificate previewed using real delegate data",
+      "image_alt": "CertiBatch field placement screen with a certificate previewed using a real student record",
       "href": "case-studies/certibatch",
       "link_label": "Case Study",
       "wide": false,
@@ -32,7 +32,7 @@
         "React + TypeScript",
         "Docker"
       ],
-      "description": "Built as PRO of the AusIMM Tarkwa Student Chapter, after producing 500+ certificates for our 11th Annual Conference. A spreadsheet and a design go in, hundreds of print-ready personalised certificates come out, with no scripting for whoever holds the role next.",
+      "description": "Built during my tenure as PRO of the AusIMM Tarkwa Student Chapter, after producing 500+ certificates for our 11th Annual Conference. A spreadsheet and a design go in, hundreds of print-ready personalised certificates come out, with no scripting for the next PRO.",
       "category": "Web Applications & Automation"
     },
     {

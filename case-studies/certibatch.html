@@ -127,7 +127,7 @@
       <div class="cs-header">
         <div class="cs-cat"><span class="pin"></span> Web Applications &amp; Automation</div>
         <h1 class="cs-title">CertiBatch, Bulk Certificate Generation for Events</h1>
-        <p class="cs-lede">As Public Relations Officer of the AusIMM Tarkwa Student Chapter, I had to produce over 500 personalised certificates for our 11th Annual Conference. I wrote a Python tool to do it, then rebuilt that tool as a web app so the next officer never has to write code at all.</p>
+        <p class="cs-lede">Built during my tenure as Public Relations Officer of the AusIMM Tarkwa Student Chapter. Our 11th Annual Conference needed over 500 personalised certificates, so I wrote a Python tool to produce them, then rebuilt that tool as a web app so the next PRO never has to write code at all.</p>
       </div>
 
       <div class="cs-meta">
@@ -138,13 +138,13 @@
       </div>
 
       <div class="cs-hero-img">
-        <img src="/images/certibatch/hero.png" alt="CertiBatch field placement screen, showing a certificate previewed with a real delegate's name and event" loading="lazy" />
+        <img src="/images/certibatch/hero.png" alt="CertiBatch field placement screen, showing a certificate previewed with a real student's name and event" loading="lazy" />
       </div>
 
       <div class="cs-body">
         <p>Live at <a href="https://bulk-cert-generator.vercel.app" target="_blank" rel="noopener">bulk-cert-generator.vercel.app</a>. Source on <a href="https://github.com/Eddywin-bit/Bulk-Cert-Generator-" target="_blank" rel="noopener">GitHub</a>.</p>
         <h2>The problem</h2>
-        <p>Every conference ends the same way. The talks finish, the photographs are taken, and someone has to produce a certificate for every person who attended. For the AusIMM Tarkwa Student Chapter's 11th Annual Conference, that was <strong>over 500 certificates</strong>, each carrying a different name, and all of them needed before delegates went home.</p>
+        <p>Every conference ends the same way. The talks finish, the photographs are taken, and someone has to produce a certificate for every person who attended. For the AusIMM Tarkwa Student Chapter's 11th Annual Conference, that was <strong>over 500 certificates</strong>, each carrying a different name, and all of them needed before students went home.</p>
         <p>Doing that by hand is not a small job, it is an impossible one. Editing a design file 500 times introduces mistakes into exactly the artefact nobody should get wrong: a person's name on a document they will keep.</p>
         <p>So I wrote a Python script. It read a spreadsheet, drew each name onto the certificate design, and wrote out the files. It worked, and the conference had its certificates.</p>
         <div class="callout">
@@ -152,7 +152,7 @@
           <p>The script was the easy half. The hard half is that the script only works if the person holding it can write Python, and the chapter elects a new PRO every year.</p>
         </div>
         <h2>Why a script was the wrong deliverable</h2>
-        <p>A one-off script solves one event. The next officer inherits a file they cannot read, for a design that has changed, with column headings that no longer match. In practice they do not inherit a tool at all, they inherit the same problem and a reason to feel bad about it.</p>
+        <p>A one-off script solves one event. The next PRO inherits a file they cannot read, for a design that has changed, with column headings that no longer match. In practice they do not inherit a tool at all, they inherit the same problem and a reason to feel bad about it.</p>
         <p>So I rebuilt it as <strong>CertiBatch</strong>: the same job, delivered as something an organiser can use without knowing what a script is.</p>
         <h2>What it does</h2>
         <p>Four steps, and nothing in between that needs explaining.</p>
@@ -190,7 +190,7 @@
           <li><strong>The owner can add certificate designs from inside the app</strong>, which commits them for the whole site. That was the last piece of the original problem: the tool cannot depend on its author staying available.</li>
         </ul>
         <h2>Privacy as an architectural constraint</h2>
-        <p>A delegate list is a list of real people who did not choose to be in my database, so the design goal was that <strong>there should be nothing to leak</strong>.</p>
+        <p>A list of students is a list of real people who did not choose to be in my database, so the design goal was that <strong>there should be nothing to leak</strong>.</p>
         <p>There are no accounts and no user database. A job is a random identifier and a temporary folder, with nothing recorded that ties a name to a person or a session. Everything auto-deletes: thirty minutes after the ZIP is downloaded, or within an hour if it never is. The grace window exists so a dropped download can be retried rather than forcing a re-run of the whole batch.</p>
         <p>The container that runs it mounts job storage in memory rather than on disk, so the retention promise is enforced by the platform and not only by code.</p>
         <h2>Tools &amp; methods</h2>
