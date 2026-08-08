@@ -25,7 +25,7 @@
       "link_label": "Case Study",
       "wide": false,
       "title": "CertiBatch — Bulk Certificate Generation",
-      "image": "images/certibatch/hero.png",
+      "image": "images/certibatch/hero.webp",
       "tools": [
         "Python + FastAPI",
         "Pillow",

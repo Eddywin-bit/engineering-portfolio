@@ -387,6 +387,25 @@ Outside the repo, and only the owner can do these:
 
 ## Updates Log
 
+- 2026-08-06: **The CertiBatch screenshots were 1.08 MB, now 256 KB.** Five UI
+  screenshots at 1600x900 shipped as PNG. WebP at quality 82 took them down by
+  **76%** with no visible artefact, which is typical for flat interface capture:
+  large areas of one colour and crisp text are what PNG is worst at and WebP is
+  best at. On mobile data in Ghana that is most of a megabyte per visitor.
+
+  **The hero needed a second file, not just a conversion.** `hero.png` was
+  doubling as the share card, and WhatsApp and most scrapers will not render
+  WebP, so converting it alone would have silently dropped the case study back
+  to the generic site card. `images/og/certibatch.jpg` is generated from it at
+  1200x630, which `buildCaseStudyPages()` already prefers over the hero.
+
+  So the pattern for any future case study with real screenshots: **WebP for
+  the page, a JPEG at `images/og/<slug>.jpg` for sharing.**
+
+  One trap this leaves: that og file wins over the hero unconditionally. Replace
+  the hero in the panel and the share card will keep showing the old picture
+  until `images/og/certibatch.jpg` is regenerated or deleted.
+
 - 2026-08-06: **The typeface visibly changed on every load**, fallback first,
   then Clash Display. Reported as "I see a certain font before the clash
   display briefly".
