@@ -1527,6 +1527,12 @@
       }
 
       function buttons(items) {
+        // A button with neither a Link nor an uploaded file is hidden on the
+        // live site, so the preview must hide it too or the panel will show a
+        // button the visitor never sees. Mirrors target() in build.js.
+        items = items.filter(function (b) {
+          return b && String(b.href || b.file || '').trim();
+        });
         if (!items.length) return null;
         return h('div', { className: 'btns', key: key() }, items.map(function (b) {
           var style = (b && b.style) || 'ghost';

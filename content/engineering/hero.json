@@ -23,7 +23,8 @@
     },
     {
       "label": "Resume",
-      "href": "/Edwin_Gyasi_Resume.pdf",
+      "href": "",
+      "file": "",
       "style": "ghost",
       "icon": "arrow-up-right",
       "new_tab": true,

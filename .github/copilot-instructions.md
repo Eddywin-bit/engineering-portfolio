@@ -190,8 +190,18 @@ Animation travel expressed as a percentage of a small element looks reasonable
 in code and can work out to about one pixel. **Measure motion in pixels.**
 
 ### `cleanUrls` only strips `.html`
-It will not rescue a wrong path to a PDF or an image. The CV is
-`/Edwin_Gyasi_Resume.pdf`; a link to `resume.pdf` 404s silently.
+It will not rescue a wrong path to a PDF or an image. A link to `resume.pdf`
+404s silently. The CV buttons are empty as of 2026-08-09 and the owner
+re-supplies the file through the panel; `Edwin_Gyasi_Resume.pdf` is still in
+the repository but nothing links to it.
+
+### A button with no target must not render
+Hero and Contact buttons point at `href` **or** an uploaded `file`. `target()`
+in `build.js` picks whichever is set and `button()` returns nothing when
+neither is, because `<a href="">` reloads the current page and reads as a live
+button that does nothing. `admin/index.html` filters the same way. Keep both
+`href` and `file` `required: false` in `admin/config.yml`, or the panel cannot
+save a button that is waiting for its file.
 
 ### Media over 1 MB looks broken in the panel but is fine on the site
 Decap's GitHub backend loads media through the Contents API, which only returns

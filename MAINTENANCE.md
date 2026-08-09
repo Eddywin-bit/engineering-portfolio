@@ -144,9 +144,23 @@ on its own, and they are ignored: pictures next to each other in the text end
 up next to each other on the page.
 
 ### Change your CV
-Contact → the CV link points at `/Edwin_Gyasi_Resume.pdf`. To replace the file
-itself you need to upload a new PDF to the repository, which is a code-side job.
-The simplest path is to keep the same filename so nothing else has to change.
+You can upload it yourself now, it is no longer a code job.
+
+The CV appears in three places: the **Resume** button in the hero, the **CV**
+button in Contact, and the **Download CV** pill beside Experience. All three are
+currently empty and therefore hidden. To bring them back:
+
+1. **Contact → Buttons → CV → Or upload a file.** Upload your PDF. This lights
+   up the Contact button and the Experience pill together, because the pill
+   reads its file from here.
+2. **Hero → Buttons → Resume → Or upload a file.** Pick the same PDF from the
+   media library. It is already uploaded from step 1, so you are choosing it,
+   not uploading it twice.
+
+Every button on those two entries has both a **Link** field and an **Or upload
+a file** field. Use one or the other, not both. A button with neither is simply
+not shown on the site, so it can sit in the panel waiting for the file without
+anyone seeing a dead button.
 
 ### Change your photo
 Hero → Portrait Photo. Upload an upright picture, roughly 3 wide by 4 tall.

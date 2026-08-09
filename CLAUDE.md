@@ -391,6 +391,43 @@ Outside the repo, and only the owner can do these:
 
 ## Updates Log
 
+- 2026-08-09: **The CV is unlinked, and buttons can carry an uploaded file.**
+  Asked for as "remove my CV or resume keep it empty, button won't work I'll
+  upload that through decap myself".
+
+  The CV was in three places: the hero **Resume** button, the Contact **CV**
+  button, and the **Download CV** pill beside Experience, the last derived from
+  Contact. All three are empty now and none of them renders.
+
+  Emptying a target was not enough on its own, for two reasons. `href` was a
+  **required** field in `admin/config.yml`, so the panel would have refused to
+  save it blank. And an empty `href` renders `<a href="">`, which resolves to
+  the current page: a button that looks live and reloads the homepage, which is
+  worse than one that is missing.
+
+  So a button's destination is now `target(item)` = `href || file`, and
+  `button()` returns nothing when that is empty, with both call sites
+  filtering. This is the same optional-link pattern the project cards already
+  use. `admin/index.html` filters the same way in `buttons()`, or the preview
+  would show a button the visitor never sees.
+
+  **`file` is a `widget: file`, which is the point.** The owner cannot upload a
+  PDF into a `widget: string`, so "I'll upload it through Decap myself" was not
+  actually possible before this. Every button on Hero and Contact now has both
+  fields, use one or the other. Uploads land in `/images/` via the global
+  `media_folder`.
+
+  The experience pill matches `\.pdf` against the **effective** target rather
+  than `href`, so an uploaded CV lights it up the same way a typed path did.
+
+  `Edwin_Gyasi_Resume.pdf` is **deliberately still in the repository**, just
+  unlinked. It may have been sent out with job applications, and deleting it
+  would 404 a URL someone already holds. Delete it only on the owner's say-so.
+
+  Verified both directions: with the fields empty all three disappear and
+  nothing else in `index.html` changes, and with a path set in both entries all
+  three come back.
+
 - 2026-08-06: **Body images open full size on click.** Reported as "the small
   ones in the project pages aren't clickable to expand, how they are now no one
   can see it too", which is exactly right: a 1600x900 interface capture shown

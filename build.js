@@ -83,6 +83,15 @@ const linkAttrs = (item) => {
   return out;
 };
 
+/**
+ * Where a button points. `href` is typed (a URL, #anchor or mailto:), `file`
+ * is uploaded through the panel's media library, and a button may use either.
+ * Empty means the button has no target yet and is not rendered at all, which
+ * is how a CV button can sit in the panel waiting for a PDF without shipping
+ * a dead link to the live site.
+ */
+const target = (item) => String(item.href || item.file || '').trim();
+
 /* ============================================================
    Icon registry — inline SVGs kept out of the CMS so an editor
    can pick an icon by name without ever seeing markup.
@@ -640,9 +649,11 @@ function buildEngineering() {
   const footer = json('content', 'engineering', 'footer.json');
 
   const button = (b) => {
+    const to = target(b);
+    if (!to) return '';
     const sw = b.style === 'primary' ? '2.2' : '2';
     return (
-      `<a class="btn ${attr(b.style)}" href="${attr(b.href)}"${linkAttrs(b)}>\n` +
+      `<a class="btn ${attr(b.style)}" href="${attr(to)}"${linkAttrs(b)}>\n` +
       `            ${esc(b.label)}\n` +
       `            ${icon(b.icon, sw)}\n` +
       `          </a>`
@@ -798,7 +809,7 @@ function buildEngineering() {
     `          ${esc(hero.subline)}\n` +
     `        </p>\n\n` +
     `        <div class="hero-buttons reveal" data-d="4">\n` +
-    `          ${hero.buttons.map(button).join('\n          ')}\n` +
+    `          ${hero.buttons.map(button).filter(Boolean).join('\n          ')}\n` +
     `        </div>`;
 
   /* ---- about ---- */
@@ -942,8 +953,10 @@ function buildEngineering() {
   };
 
   // Both pills are optional and both are read from Contact, so the CV path
-  // and the LinkedIn URL live in exactly one place in the whole repo.
-  const cvLink = (navContact.find((l) => /\.pdf($|\?)/i.test(l.href || '')) || {}).href;
+  // and the LinkedIn URL live in exactly one place in the whole repo. The
+  // match is on the button's effective target, so an uploaded PDF lights this
+  // pill up the same way a typed path does.
+  const cvLink = navContact.map(target).find((h) => /\.pdf($|\?)/i.test(h));
 
   regions['e-experience'] =
     `        <div class="exp-head">\n` +
@@ -998,7 +1011,7 @@ function buildEngineering() {
     `          <h2>${esc(contact.title)}</h2>\n` +
     `          <p>${esc(contact.intro)}</p>\n` +
     `          <div class="contact-links">\n` +
-    `            ${contact.links.map(button).join('\n            ')}\n` +
+    `            ${contact.links.map(button).filter(Boolean).join('\n            ')}\n` +
     `          </div>\n        </div>`;
 
   /* ---- footer ---- */

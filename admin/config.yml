@@ -153,7 +153,21 @@ collections:
             summary: '{{fields.label}} ({{fields.style}})'
             fields:
               - { label: Label, name: label, widget: string }
-              - { label: Link, name: href, widget: string }
+              - label: Link
+                name: href
+                widget: string
+                required: false
+                hint: >-
+                  A web address, or #work to jump to a section on this page.
+                  Leave empty if you are uploading a file below instead.
+              - label: Or upload a file
+                name: file
+                widget: file
+                required: false
+                hint: >-
+                  For a CV or any other document. Use this instead of Link, not
+                  as well. A button with neither is hidden from the site, so it
+                  can wait here until you have the file.
               - {
                   label: Style,
                   name: style,
@@ -342,12 +356,21 @@ collections:
             summary: '{{fields.label}}'
             fields:
               - { label: Label, name: label, widget: string }
-              - {
-                  label: Link,
-                  name: href,
-                  widget: string,
-                  hint: 'Use mailto:you@example.com for email.',
-                }
+              - label: Link
+                name: href
+                widget: string
+                required: false
+                hint: >-
+                  Use mailto:you@example.com for email. Leave empty if you are
+                  uploading a file below instead.
+              - label: Or upload a file
+                name: file
+                widget: file
+                required: false
+                hint: >-
+                  For a CV or any other document. Use this instead of Link, not
+                  as well. A button with neither is hidden from the site, so it
+                  can wait here until you have the file.
               - {
                   label: Style,
                   name: style,
