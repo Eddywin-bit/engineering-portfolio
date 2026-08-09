@@ -192,8 +192,9 @@ in code and can work out to about one pixel. **Measure motion in pixels.**
 ### `cleanUrls` only strips `.html`
 It will not rescue a wrong path to a PDF or an image. A link to `resume.pdf`
 404s silently. The CV buttons are empty as of 2026-08-09 and the owner
-re-supplies the file through the panel; `Edwin_Gyasi_Resume.pdf` is still in
-the repository but nothing links to it.
+re-supplies the file through the panel. `Edwin_Gyasi_Resume.pdf` was deleted
+the same day, so do not reintroduce a link to it; a CV uploaded from the panel
+lands in `/images/` under whatever name it is given.
 
 ### A button with no target must not render
 Hero and Contact buttons point at `href` **or** an uploaded `file`. `target()`

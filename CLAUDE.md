@@ -420,9 +420,12 @@ Outside the repo, and only the owner can do these:
   The experience pill matches `\.pdf` against the **effective** target rather
   than `href`, so an uploaded CV lights it up the same way a typed path did.
 
-  `Edwin_Gyasi_Resume.pdf` is **deliberately still in the repository**, just
-  unlinked. It may have been sent out with job applications, and deleting it
-  would 404 a URL someone already holds. Delete it only on the owner's say-so.
+  `Edwin_Gyasi_Resume.pdf` was left in the repository at first, unlinked, on the
+  reasoning that it may have gone out with job applications and deleting it
+  would 404 a URL someone already holds. The owner was told that and asked for
+  it deleted anyway, so it is **gone** as of the same day. It is recoverable
+  from git history if that call is ever reversed. Nothing referenced it: the
+  build output was unchanged by the deletion.
 
   Verified both directions: with the fields empty all three disappear and
   nothing else in `index.html` changes, and with a path set in both entries all
