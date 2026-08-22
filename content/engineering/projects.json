@@ -20,12 +20,12 @@
       "category": "Mobile & Geospatial Software"
     },
     {
-      "image_alt": "AusIMM Tarkwa Student Chapter certificate studio: a participation certificate previewed with a real attendee's name",
+      "image_alt": "AusIMM Tarkwa Student Chapter Certificate Studio, with the chapter's appreciation and participation certificates",
       "href": "case-studies/certibatch",
       "link_label": "Case Study",
       "wide": false,
       "title": "AusIMM Certificate Studio — Bulk Certificate Generation",
-      "image": "images/certibatch/hero.webp",
+      "image": "images/certibatch/card.webp",
       "tools": [
         "Python + FastAPI",
         "Pillow + ReportLab",
