@@ -196,6 +196,13 @@ re-supplies the file through the panel. `Edwin_Gyasi_Resume.pdf` was deleted
 the same day, so do not reintroduce a link to it; a CV uploaded from the panel
 lands in `/images/` under whatever name it is given.
 
+### This repository is public, so never commit personal documents
+A CV or anything else carrying a phone number or a home address must not go in
+here. `Edwin_Gyasi_Resume.pdf` did, and removing it on 2026-08-09 cost a full
+`filter-branch` rewrite of all 114 commits plus a force-push of `main` and two
+stale branches. A CV supplied through the panel lands in `/images/`, which is
+the same problem, so raise it with the owner rather than committing one.
+
 ### A button with no target must not render
 Hero and Contact buttons point at `href` **or** an uploaded `file`. `target()`
 in `build.js` picks whichever is set and `button()` returns nothing when

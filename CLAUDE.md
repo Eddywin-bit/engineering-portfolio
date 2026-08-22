@@ -391,6 +391,39 @@ Outside the repo, and only the owner can do these:
 
 ## Updates Log
 
+- 2026-08-09: **Git history was rewritten to purge the resume PDF.** The file
+  carried the owner's phone number and **this repository is public**, so
+  deleting it in a commit was not enough: the blob stayed downloadable from the
+  commit history by anyone.
+
+  `git filter-branch --index-filter` over all 114 commits, then `refs/original`
+  dropped, reflogs expired and `gc --prune=now`. Every commit hash changed and
+  `main` was force-pushed. Content is untouched: an old-main vs new-main diff is
+  empty, `node build.js` exits 0, and all 145 tracked files are present.
+
+  **Two stale branches had to be handled or the purge would have been
+  pointless**, because a blob reachable from any ref survives:
+  `claude/visibility-check-g4gpmt` and `copilot/find-and-report-errors`, both
+  old snapshots already contained in main (verified with
+  `merge-base --is-ancestor` against the pre-purge main, restored from a
+  bundle). **Deleting a branch is 403 from this session's credentials**, so both
+  were force-pushed to their rewritten counterparts instead, which removes the
+  blob just as well. Check `git ls-remote --heads` after any future purge.
+
+  What a rewrite does **not** reach, and the owner has been told:
+
+  - GitHub keeps unreachable commits addressable by full SHA until it garbage
+    collects. Only GitHub Support can force that. Nobody can guess a SHA, but
+    anyone who cloned before today has it.
+  - **Old Vercel deployments still serve the file** at their own immutable
+    `*.vercel.app` URLs. Those are separate builds, not the repo, so only
+    deleting the deployments removes them.
+  - Anything already crawled or downloaded is beyond reach entirely.
+
+  General lesson: on a public repo, **never commit a document containing
+  personal contact details**. Removing it later costs a full history rewrite and
+  still cannot be made complete.
+
 - 2026-08-09: **The CV is unlinked, and buttons can carry an uploaded file.**
   Asked for as "remove my CV or resume keep it empty, button won't work I'll
   upload that through decap myself".

@@ -144,7 +144,24 @@ on its own, and they are ignored: pictures next to each other in the text end
 up next to each other on the page.
 
 ### Change your CV
-You can upload it yourself now, it is no longer a code job.
+
+**Read this first.** Your repository is public, and anything you upload through
+the panel is committed to it. A CV with your phone number on it becomes public
+the moment you upload it, and it stays in the history even if you delete it
+later. That is exactly what happened on 2026-08-09 and it took a full history
+rewrite to undo.
+
+So before you upload, pick one:
+
+- **Take the phone number off the CV** and upload that version. Email and
+  LinkedIn are enough for an employer to reach you.
+- **Keep the number, host the file elsewhere.** Put the PDF in Google Drive, set
+  it to "anyone with the link", and paste that link into the **Link** field
+  instead of uploading. Nothing then touches the repository.
+- **Make the repository private.** Then uploading is safe. This breaks only the
+  GitHub Pages copy of the site, not your real site and not the panel.
+
+Once you have decided, the upload itself is no longer a code job.
 
 The CV appears in three places: the **Resume** button in the hero, the **CV**
 button in Contact, and the **Download CV** pill beside Experience. All three are
