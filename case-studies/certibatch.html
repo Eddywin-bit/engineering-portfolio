@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CertiBatch, Bulk Certificate Generation, Edwin Gyasi Owusu</title>
-  <meta name="description" content="CertiBatch: a web app that turns a spreadsheet and a certificate design into hundreds of personalised, print-ready certificates, built for the AusIMM Tarkwa Student Chapter." />
+  <title>AusIMM Certificate Studio, Edwin Gyasi Owusu</title>
+  <meta name="description" content="A web app that turns a spreadsheet and a certificate design into hundreds of personalised, print-ready certificates, built for and branded to the AusIMM Tarkwa Student Chapter." />
 
   <link rel="canonical" href="https://edwingyasi.me/case-studies/certibatch" />
 
@@ -15,15 +15,15 @@
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="Edwin Gyasi Owusu" />
   <meta property="og:url" content="https://edwingyasi.me/case-studies/certibatch" />
-  <meta property="og:title" content="CertiBatch, Bulk Certificate Generation" />
-  <meta property="og:description" content="CertiBatch: a web app that turns a spreadsheet and a certificate design into hundreds of personalised, print-ready certificates, built for the AusIMM Tarkwa Student Chapter." />
+  <meta property="og:title" content="AusIMM Certificate Studio" />
+  <meta property="og:description" content="A web app that turns a spreadsheet and a certificate design into hundreds of personalised, print-ready certificates, built for and branded to the AusIMM Tarkwa Student Chapter." />
   <meta property="og:image" content="https://edwingyasi.me/images/og/certibatch.jpg" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="CertiBatch, Bulk Certificate Generation" />
+  <meta property="og:image:alt" content="AusIMM Certificate Studio" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="CertiBatch, Bulk Certificate Generation" />
-  <meta name="twitter:description" content="CertiBatch: a web app that turns a spreadsheet and a certificate design into hundreds of personalised, print-ready certificates, built for the AusIMM Tarkwa Student Chapter." />
+  <meta name="twitter:title" content="AusIMM Certificate Studio" />
+  <meta name="twitter:description" content="A web app that turns a spreadsheet and a certificate design into hundreds of personalised, print-ready certificates, built for and branded to the AusIMM Tarkwa Student Chapter." />
   <meta name="twitter:image" content="https://edwingyasi.me/images/og/certibatch.jpg" />
 
   <link rel="preload" href="/fonts/clash-display-var.woff2" as="font" type="font/woff2" crossorigin />
@@ -143,79 +143,96 @@
     <div class="wrap">
       <div class="cs-header">
         <div class="cs-cat"><span class="pin"></span> Web Applications &amp; Automation</div>
-        <h1 class="cs-title">CertiBatch, Bulk Certificate Generation for Events</h1>
-        <p class="cs-lede">Built during my tenure as Public Relations Officer of the Australasian Institute of Mining and Metallurgy (AusIMM) Tarkwa Student Chapter. Our 11th Annual Conference needed over 500 personalised certificates, so I wrote a Python tool to produce them, then rebuilt that tool as a web app so the next PRO never has to write code at all.</p>
+        <h1 class="cs-title">AusIMM Certificate Studio, Bulk Certificate Generation for Events</h1>
+        <p class="cs-lede">Built during my tenure as Public Relations Officer of the Australasian Institute of Mining and Metallurgy (AusIMM) Tarkwa Student Chapter. Our 11th Annual Conference needed over 500 personalised certificates, so I wrote a Python tool to produce them, then rebuilt it as a web app carrying the chapter's own branding and certificate designs, so the next PRO never has to write code at all.</p>
       </div>
 
       <div class="cs-meta">
         <div class="cell"><div class="k">Role</div><div class="v">Architect, Designer &amp; Developer (AI‑assisted)</div></div>
         <div class="cell"><div class="k">Context</div><div class="v">AusIMM Tarkwa Student Chapter, PRO</div></div>
-        <div class="cell"><div class="k">Scale</div><div class="v">500+ certificates per event</div></div>
+        <div class="cell"><div class="k">Scale</div><div class="v">500 certificates in under 2 minutes</div></div>
         <div class="cell"><div class="k">Status</div><div class="v">Live, in use</div></div>
       </div>
 
       <div class="cs-hero-img">
-        <img src="/images/certibatch/hero.webp" alt="CertiBatch field placement screen, showing a certificate previewed with a real student's name and event" loading="lazy" />
+        <img src="/images/certibatch/hero.webp" alt="The chapter's certificate studio, previewing a participation certificate with a real attendee's name in place" loading="lazy" />
       </div>
 
       <div class="cs-body">
-        <p>Live at <a href="https://bulk-cert-generator.vercel.app" target="_blank" rel="noopener">bulk-cert-generator.vercel.app</a>. Source on <a href="https://github.com/Eddywin-bit/Bulk-Cert-Generator-" target="_blank" rel="noopener">GitHub</a>.</p>
+        <p>Live at <a href="https://bulk-cert-generator-7lt8.vercel.app" target="_blank" rel="noopener">the chapter's studio</a>, which opens with the chapter's code. An open version anyone can try, with sample data and designs built in, is at <a href="https://bulk-cert-generator.vercel.app" target="_blank" rel="noopener">bulk-cert-generator.vercel.app</a>. Source on <a href="https://github.com/Eddywin-bit/Bulk-Cert-Generator-" target="_blank" rel="noopener">GitHub</a>.</p>
         <h2>The problem</h2>
         <p>Every conference ends the same way. The talks finish, the photographs are taken, and someone has to produce a certificate for every person who attended. For the AusIMM Tarkwa Student Chapter's 11th Annual Conference, that was <strong>over 500 certificates</strong>, each carrying a different name, and all of them needed before students went home.</p>
         <p>Doing that by hand is not a small job, it is an impossible one. Editing a design file 500 times introduces mistakes into exactly the artefact nobody should get wrong: a person's name on a document they will keep.</p>
         <p>So I wrote a Python script. It read a spreadsheet, drew each name onto the certificate design, and wrote out the files. It worked, and the conference had its certificates.</p>
-        <p>To be clear about how it was built: the Python was written with AI coding tools rather than by hand. I can read and adapt code, but I am not a developer by training. That changed how fast the code appeared, not what had to be decided, and the deciding is what the rest of this page is about.</p>
+        <p>To be clear about how it was built: the code was written with AI coding tools rather than by hand. I can read and adapt code, but I am not a developer by training. That changed how fast the code appeared, not what had to be decided, and the deciding is what the rest of this page is about.</p>
         <div class="callout">
           <div class="lbl">The part that actually needed solving</div>
           <p>The script was the easy half. The hard half is that the script only works if the person holding it can write Python, and the chapter elects a new PRO every year.</p>
         </div>
         <h2>Why a script was the wrong deliverable</h2>
         <p>A one-off script solves one event. The next PRO inherits a file they cannot read, for a design that has changed, with column headings that no longer match. In practice they do not inherit a tool at all, they inherit the same problem and a reason to feel bad about it.</p>
-        <p>So I rebuilt it as <strong>CertiBatch</strong>: the same job, delivered as something an organiser can use without knowing what a script is.</p>
+        <p>So I rebuilt it as a web app: the same job, delivered as something an organiser can use without knowing what a script is. Then I built a second edition of it that belongs to the chapter rather than to me.</p>
         <h2>What it does</h2>
         <p>Four steps, and nothing in between that needs explaining.</p>
         <ul>
           <li><strong>Upload data.</strong> A CSV or Excel file, one row per certificate. Column headings are matched loosely, so a heading typed Full Name, full name or FULL_NAME all resolves to the same field, and the spreadsheet is shown back as a preview so mistakes surface before 500 files are made.</li>
-          <li><strong>Upload template.</strong> Any PNG or JPG design, or one of the built-in certificate layouts.</li>
+          <li><strong>Pick a design.</strong> One of the chapter's own certificates, or any PNG or JPG artwork for a one-off event.</li>
           <li><strong>Place fields.</strong> Drag each column onto the artwork, set the typeface, size and colour, and preview it with a real record so you see the finished certificate rather than a placeholder.</li>
-          <li><strong>Generate.</strong> Every certificate is rendered at print resolution and packaged as a ZIP, each file named after the person on it.</li>
+          <li><strong>Generate.</strong> Every certificate is rendered at print resolution and arrives named after the person on it.</li>
         </ul>
         <div class="shots">
           <figure>
-            <div class="frame"><img src="/images/certibatch/screen-data.webp" alt="CertiBatch data upload, showing the spreadsheet preview in a cell grid" loading="lazy" /></div>
-            <figcaption>Uploaded data shown back before anything is generated</figcaption>
+            <div class="frame"><img src="/images/certibatch/screen-templates.webp" alt="The chapter's certificate designs in the template gallery" loading="lazy" /></div>
+            <figcaption>The chapter's own certificates, ready to use</figcaption>
           </figure>
           <figure>
-            <div class="frame"><img src="/images/certibatch/screen-templates.webp" alt="CertiBatch template gallery with ready-made certificate designs" loading="lazy" /></div>
-            <figcaption>Built-in designs, or bring your own artwork</figcaption>
+            <div class="frame"><img src="/images/certibatch/screen-data.webp" alt="Uploaded spreadsheet shown back as a grid before anything is generated" loading="lazy" /></div>
+            <figcaption>The data shown back before 500 files are made</figcaption>
           </figure>
           <figure>
-            <div class="frame"><img src="/images/certibatch/screen-place.webp" alt="CertiBatch field placement screen with draggable data fields on the certificate" loading="lazy" /></div>
+            <div class="frame"><img src="/images/certibatch/screen-place.webp" alt="Field placement screen with draggable data fields on the chapter certificate" loading="lazy" /></div>
             <figcaption>Placing fields once, for the whole batch</figcaption>
           </figure>
         </div>
+        <h2>Making it the chapter's own</h2>
+        <p>The general tool works for anybody, which is precisely why it does not feel like it belongs to the chapter. The second edition carries their colours, their logo and their certificates, and three decisions came out of that.</p>
+        <p><strong>The chapter's real certificates are in it, and they are editable.</strong> Both designs were taken apart from the original Photoshop files, so every line of text is a field with the same typeface, size and letter-spacing the designer chose, and only the signatures and the frame are baked into the artwork. That matters for the line nobody thinks about until the year turns: the conference theme. It is a field, so next year's PRO sets this year's theme instead of asking a designer for a new file.</p>
+        <p><strong>There is no sign-up, only a chapter code.</strong> Accounts would mean holding personal data, and a chapter that elects new officers every year does not want an account tied to whoever set it up. One code opens the tool, and it is handed to the office rather than to a person. The code is never compared in the browser, because a string checked in front-end code ships inside the page where anyone can read it, and a lock like that only looks like a lock. It is verified server-side, so nothing checkable ever reaches the client.</p>
+        <p><strong>It locks itself after half an hour unused.</strong> The site carries the chapter's logo, so a tab left open on a shared computer is enough for a stranger to produce something that looks official. A batch still running counts as the tool being in use, so nobody is locked out of a download they are waiting for.</p>
         <h2>The engineering problem underneath</h2>
         <p>The interesting constraint is that the browser and the server have to agree about a certificate neither of them can see at the same size.</p>
         <p>The editor shows the design scaled down to fit a laptop screen. The server renders it at full print resolution, often several thousand pixels across. If field positions were stored as screen pixels, every certificate would print with the text in the wrong place.</p>
-        <p>So <strong>positions are stored as fractions of the artwork</strong>, from 0 to 1, and never as pixels. A name placed halfway across and just under halfway down sits at the same point on a 900-pixel preview and a 3500-pixel print file. The same principle governs type size, which is stored as a fraction of the artwork's height. The eight bundled typefaces are loaded twice, once as web fonts for the canvas and once as font files for the renderer, so that the face you place with is the face that prints.</p>
+        <p>So <strong>positions are stored as fractions of the artwork</strong>, from 0 to 1, and never as pixels. A name placed halfway across and just under halfway down sits at the same point on a 900-pixel preview and a 3500-pixel print file. The same principle governs type size, which is stored as a fraction of the artwork's height. The typefaces are loaded twice, once as web fonts for the canvas and once as font files for the renderer, so that the face you place with is the face that prints.</p>
         <p>The second constraint is time. Five hundred certificates take minutes to render, and every proxy between a browser and a server will drop a request long before that. Generation therefore does not happen inside the request: submitting a batch returns immediately, the work runs on a background worker, and the browser polls for progress and then downloads. That boundary is a single interface, so the thread pool behind it can become a proper job queue without touching a route.</p>
+        <h2>Choosing an output that fits the job</h2>
+        <p>A certificate is a thing you print, or email to one person. That makes PDF the right default, but only if a PDF batch is actually cheap, and the obvious implementation is not: saving each rendered certificate as a page embeds the artwork once per certificate, and 500 of those is a download nobody can receive.</p>
+        <p>Two things fix it. The artwork is prepared <strong>once for the whole batch</strong> rather than once per certificate, and it is embedded as JPEG, so the PDF library copies those bytes in instead of re-compressing pixels. Only the background is ever compressed; every name is drawn over it as vector type, which is why the text stays sharp at any zoom and can be selected and searched.</p>
+        <p>Measured on the chapter's 500 participation certificates at 300 DPI:</p>
+        <ul>
+          <li><strong>One PDF per person</strong>, named after them: 1.9 minutes, 300 MB</li>
+          <li><strong>The whole batch as one document</strong>, a page each, for printing: 6 seconds, 1 MB</li>
+          <li>The same batch as PNG images: 7.2 minutes, 707 MB</li>
+        </ul>
+        <p>So the default output is both the fastest to produce and the smallest to send, which is not a trade-off I expected to find.</p>
         <h2>Designing for people, not for me</h2>
         <p>The app is aimed at an organiser the week before an event, so several decisions went against what would have been easier to build.</p>
         <ul>
           <li><strong>Every step is reachable from the start.</strong> Nothing is locked behind an upload. Each screen is a real page that renders its full layout with nothing loaded and explains inline what it still needs, because being able to look around before committing is how people decide whether to trust a tool.</li>
           <li><strong>No controls that do nothing.</strong> Anything shown is either wired up or clearly marked as unavailable.</li>
           <li><strong>Errors are written for the person reading them</strong>, who is an event organiser and not a developer, so they say what to do rather than what failed.</li>
-          <li><strong>The owner can add certificate designs from inside the app</strong>, which commits them for the whole site. That was the last piece of the original problem: the tool cannot depend on its author staying available.</li>
+          <li><strong>Big artwork is never refused.</strong> A design tool exporting a certificate at 78 megapixels is normal, and the person uploading it has no idea what a megapixel is. Oversized artwork is shrunk in the browser before upload, and again on the server, rather than being handed back an error that is really a dead end.</li>
+          <li><strong>The chapter can add its own designs from inside the app</strong>, which commits them for the whole site, with a downloadable folder as the fallback for the day a credential expires. That was the last piece of the original problem: the tool cannot depend on its author staying available.</li>
         </ul>
         <h2>Privacy as an architectural constraint</h2>
         <p>A list of students is a list of real people who did not choose to be in my database, so the design goal was that <strong>there should be nothing to leak</strong>.</p>
-        <p>There are no accounts and no user database. A job is a random identifier and a temporary folder, with nothing recorded that ties a name to a person or a session. Everything auto-deletes: thirty minutes after the ZIP is downloaded, or within an hour if it never is. The grace window exists so a dropped download can be retried rather than forcing a re-run of the whole batch.</p>
+        <p>There are no accounts and no user database. A job is a random identifier and a temporary folder, with nothing recorded that ties a name to a person or a session. Everything auto-deletes: thirty minutes after the download, or within an hour if it never happens. The grace window exists so a dropped download can be retried rather than forcing a re-run of the whole batch.</p>
         <p>The container that runs it mounts job storage in memory rather than on disk, so the retention promise is enforced by the platform and not only by code.</p>
         <h2>Tools &amp; methods</h2>
         <div class="tools">
           <span>Python</span>
           <span>FastAPI</span>
           <span>Pillow</span>
+          <span>ReportLab</span>
           <span>pandas</span>
           <span>React</span>
           <span>TypeScript</span>
@@ -227,9 +244,8 @@
           <span>AI-assisted development</span>
         </div>
         <h2>Where it stands</h2>
-        <p>CertiBatch is live and in use, with the four-step flow, a gallery of ready-made designs, background generation and ZIP delivery all working end to end. It is covered by an automated test suite that includes a full 500-row run, because the failure I care about is the one that appears only at scale, the night before an event.</p>
-        <p>What it replaced was a script that solved one conference. What it is now is a tool the chapter keeps.</p>
-        <p>Try it at <a href="https://bulk-cert-generator.vercel.app" target="_blank" rel="noopener">bulk-cert-generator.vercel.app</a>, sample data and designs are built in, so it runs without uploading anything.</p>
+        <p>The chapter's edition is live and in use, carrying their branding and both of their certificate designs, with PDF, JPG and PNG output, background generation and packaged delivery all working end to end. It is covered by an automated test suite of 117 tests that includes a full 500-row run, because the failure I care about is the one that appears only at scale, the night before an event.</p>
+        <p>What it replaced was a script that solved one conference. What it is now is a tool the chapter keeps, and hands on.</p>
       </div>
 
       <div class="cs-foot">
