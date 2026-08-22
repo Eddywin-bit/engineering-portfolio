@@ -36,21 +36,6 @@
       "category": "Web Applications & Automation"
     },
     {
-      "image_alt": "Soil samples and geological mapping",
-      "href": "case-studies/trace-metals",
-      "link_label": "Case Study",
-      "wide": false,
-      "title": "Spatial Distribution of Trace Metals in Soil",
-      "image": "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80&auto=format&fit=crop",
-      "tools": [
-        "QGIS",
-        "Python",
-        "Kriging"
-      ],
-      "description": "Mapping As, Pb, Cd, and Ni contamination patterns across Abuakwa South using kriging and spline geostatistics.",
-      "category": "Geostatistics"
-    },
-    {
       "image_alt": "Geotechnical borehole drilling on site",
       "href": "case-studies/geotechnical",
       "link_label": "Case Study",
