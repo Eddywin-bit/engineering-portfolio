@@ -87,6 +87,11 @@
       "category": "Food",
       "title": "Silver & Gold Store",
       "src": "/designs/images/silver-gold-store.webp"
+    },
+    {
+      "category": "Academic",
+      "title": "General Meeting Design",
+      "src": "/designs/images/fmcesa-general-meeting.webp"
     }
   ]
 }
