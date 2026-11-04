@@ -112,6 +112,16 @@
       "category": "Academic",
       "src": "/designs/images/ausimm-eid-2x.webp",
       "title": "Eid-Ul-Adha"
+    },
+    {
+      "title": "Sip & Paint",
+      "category": "Food",
+      "src": "/designs/images/sip-paint-gess-2x.webp"
+    },
+    {
+      "category": "Social Media",
+      "title": "Vintage Cars",
+      "src": "/designs/images/vintage-cars.webp"
     }
   ]
 }
